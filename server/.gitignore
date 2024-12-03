@@ -1,0 +1,8 @@
+/node_modules
+/database
+.db.js
+.config.js
+.env
+
+./INVENTARY-PROJECT.docx
+./AI-ideas.txt

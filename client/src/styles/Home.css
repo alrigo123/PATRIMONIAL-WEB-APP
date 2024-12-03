@@ -1,0 +1,57 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  .App {
+    text-align: center;
+    background-color: #f1f1f1;
+    min-height: 100vh;
+
+  }
+  
+  .App-header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    margin: 0;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    color: #f1f1f1;
+  }
+  
+  .cta-container {
+    margin-top: 30px;
+  }
+  
+  .cta-button {
+    background-color: #ffffff;
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .cta-button:hover {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+ 
+  

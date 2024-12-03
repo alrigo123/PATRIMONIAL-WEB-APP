@@ -1,0 +1,62 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.5.4",
+    "@popperjs/core": "^2.11.8",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "ag-grid-community": "^32.3.3",
+    "ag-grid-react": "^32.3.3",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
+    "flowbite-react": "^0.10.2",
+    "formik": "^2.4.6",
+    "lodash-es": "^4.17.21",
+    "lottie-react": "^2.4.0",
+    "mdb-react-ui-kit": "^9.0.0",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.5",
+    "react-burger-menu": "^3.0.9",
+    "react-datasheet-grid": "^4.11.4",
+    "react-datepicker": "^7.5.0",
+    "react-dom": "^18.3.1",
+    "react-modal": "^3.16.1",
+    "react-router-dom": "^6.27.0",
+    "react-scripts": "^5.0.1",
+    "react-spreadsheet": "^0.9.5",
+    "react-spreadsheet-grid": "^2.3.1",
+    "scheduler": "^0.23.2",
+    "sweetalert2": "^11.14.5",
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
+    "yup": "^1.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
