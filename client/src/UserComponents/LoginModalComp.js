@@ -56,7 +56,7 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>🔒 Iniciar sesión</Modal.Title>
+        <Modal.Title className='fw-bold'>🔒 Iniciar sesión</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {errorMessage && <Alert variant="danger" aria-live="assertive">{errorMessage}</Alert>}
@@ -75,14 +75,13 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
             <Form.Control.Feedback type="invalid">Por favor ingresa tu DNI.</Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId="formPassword">
-            <Form.Label>🔑 Contraseña</Form.Label>
-            <div className="d-flex">
+          <Form.Group controlId="formPassword" >
+            <Form.Label className='mt-2'>🔑 Contraseña</Form.Label>
+            <div className="d-flex mb-4">
               <Form.Control
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Ingresa tu contraseña"
                 value={password}
-                className='mb-2'
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />

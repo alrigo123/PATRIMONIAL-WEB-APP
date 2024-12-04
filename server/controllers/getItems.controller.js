@@ -91,8 +91,16 @@ export const getConservationStatus = async (req, res) => {
 
 export const getItemsQtyByWorker = async (req, res, next) => {
     try {
-        // const trabajador = req.query.q;
-        const trabajador = `%${req.query.q}%`;
+        const input = req.query.q;
+        if (!input) return res.status(400).json({ message: 'No se proporcionó el término de búsqueda' });
+
+        // Divide el input en palabras
+        const palabras = input.split(' ');
+
+        // Construye dinámicamente la consulta WHERE
+        const condiciones = palabras.map(() => `TRABAJADOR LIKE ?`).join(' AND ');
+        const parametros = palabras.map((palabra) => `%${palabra}%`);
+
         const [rows] = await pool.query(`
             SELECT 
                 TRABAJADOR,
@@ -102,26 +110,35 @@ export const getItemsQtyByWorker = async (req, res, next) => {
             FROM 
                 item
             WHERE 
-                TRABAJADOR LIKE ?
+                ${condiciones}
             GROUP BY 
                 TRABAJADOR,
                 DESCRIPCION,
                 DEPENDENCIA
             ORDER BY
                 DESCRIPCION
-        `, [trabajador]); // Aplicamos la búsqueda por coincidencia
+        `, parametros); // Aplicamos la búsqueda por coincidencia
 
+        // console.log("ROWS: ",rows);
         if (!rows.length) return res.status(404).json({ message: 'No se encontraron ítems para el trabajador especificado' });
         res.json(rows);
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(500).json(error.message);
     }
 };
 
 export const getItemsQtyByDependece = async (req, res, next) => {
     try {
-        const dependece = `%${req.query.q}%`; // Parche para que la búsqueda sea parcial con el operador LIKE
-        // const dependece = req.query.q; 
+        const input = req.query.q;
+        if (!input) return res.status(400).json({ message: 'No se proporcionó el término de búsqueda' });
+
+        // Divide el input en palabras
+        const palabras = input.split(' ');
+
+        // Construye dinámicamente la consulta WHERE
+        const condiciones = palabras.map(() => `DEPENDENCIA LIKE ?`).join(' AND ');
+        const parametros = palabras.map((palabra) => `%${palabra}%`);
+
         const [rows] = await pool.query(`
             SELECT 
                 TRABAJADOR,
@@ -131,18 +148,19 @@ export const getItemsQtyByDependece = async (req, res, next) => {
             FROM 
                 item
             WHERE 
-            DEPENDENCIA LIKE ?
+                ${condiciones}
             GROUP BY 
                 TRABAJADOR,
                 DESCRIPCION,
                 DEPENDENCIA
             ORDER BY
                 DESCRIPCION
-        `, [dependece]); // Aplicamos la búsqueda por coincidencia
+        `, parametros); // Aplicamos la búsqueda por coincidencia
 
-        if (!rows.length) return res.status(404).json({ message: 'No se encontraron ítems para la dependencia especificada' });
+        // console.log("ROWS: ",rows);
+        if (!rows.length) return res.status(404).json({ message: 'No se encontraron ítems para el trabajador especificado' });
         res.json(rows);
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(500).json(error.message);
     }
 };

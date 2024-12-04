@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { parseDate } from '../../utils/datesUtils';
+import { exportarItems } from '../../utils/exportReportWorker';
 
-const URL = process.env.REACT_APP_API_URL_ITEMS
+const URL = process.env.REACT_APP_API_URL_ITEMS;
 
 const WorkerSearchMod1 = () => {
     const [searchTerm1, setSearchTerm1] = useState(''); // Valor del primer buscador
     const [results1, setResults1] = useState([]); // Resultados de la primera búsqueda
     const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
     const debounceTimeout = useRef(null); // Referencia para el setTimeout
+
+    const fechaFormateada = new Date().toISOString().split("T")[0];
 
     // Maneja el cambio en el primer input
     const handleInputChange1 = (e) => {
@@ -36,12 +40,12 @@ const WorkerSearchMod1 = () => {
                 }
                 fetchItems1();
             } else {
-                setResults1([])
+                setResults1([]);
             }
         }, 700)
         return () => {
             if (debounceTimeout.current) {
-                clearTimeout(debounceTimeout.current)
+                clearTimeout(debounceTimeout.current);
             }
         }
     }, [searchTerm1]);
@@ -52,8 +56,20 @@ const WorkerSearchMod1 = () => {
             return; // Evita seguir si no hay un código válido
         }
         console.log("Editando CODIGO_PATRIMONIAL:", item.CODIGO_PATRIMONIAL, "CON DATOS:", item);
-        // Lógica de edición
     };
+
+    const exportPatrimonizado = () => {
+        exportarItems(results1, 1, "Bienes Trabajador", "Bienes_Patrimonizados", searchTerm1, fechaFormateada);
+    };
+
+    const exportNoPatrimonizado = () => {
+        exportarItems(results1, 0, "Bienes Trabajador", "Bienes_No_Patrimonizados", searchTerm1, fechaFormateada);
+    };
+
+    const exportConsolidado = () => {
+        exportarItems(results1, undefined, "Bienes Trabajador", "Bienes_Consolidado", searchTerm1, fechaFormateada);
+    };
+
 
     return (
         <div>
@@ -75,10 +91,19 @@ const WorkerSearchMod1 = () => {
                         <span className="visually-hidden">Buscando...</span>
                     </div>
                 </div>
-
             ) : results1.length > 0 ? (
                 <div>
                     <h3 className='fw-semibold'>BIENES EN PODER DE <strong>{searchTerm1}</strong> </h3>
+                    <div>
+                        {/* Botón para exportar Patrimonizado */}
+                        <button className="btn btn-success mb-3 me-2" onClick={exportPatrimonizado}>Exportar Patrimonizados</button>
+
+                        {/* Botón para exportar No Patrimonizado */}
+                        <button className="btn btn-success mb-3 me-2" onClick={exportNoPatrimonizado}>Exportar No Patrimonizados</button>
+
+                        {/* Botón para exportar todos los items (Consolidado) */}
+                        <button className="btn btn-success mb-3" onClick={exportConsolidado}>Exportar Consolidado</button>
+                    </div>
                     <table className="w-auto table table-striped table-bordered align-middle" style={{ width: '100%', tableLayout: 'fixed' }}>
                         <thead className="thead-dark">
                             <tr>
@@ -88,6 +113,7 @@ const WorkerSearchMod1 = () => {
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Dependencia</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Compra</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Alta</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Ultimo Registro</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado Conservación</th>
@@ -102,13 +128,21 @@ const WorkerSearchMod1 = () => {
                                     <td>{item.DESCRIPCION}</td>
                                     <td>{item.TRABAJADOR}</td>
                                     <td>{item.DEPENDENCIA}</td>
-                                    <td >{item.FECHA_COMPRA ? item.FECHA_COMPRA : 'No Registra'}</td>
+                                    <td>{item.FECHA_COMPRA ? item.FECHA_COMPRA : 'No Registra'}</td>
                                     <td>{item.FECHA_ALTA ? item.FECHA_ALTA : 'No Registra'}</td>
+                                    <td>{parseDate(item.FECHA_REGISTRO)}</td>
                                     <td>
                                         {item.ESTADO === 0 ? (
                                             <span style={{ color: 'red', fontWeight: 'bold' }}> No Patrimonizado</span>
                                         ) : (
                                             <span style={{ color: 'green', fontWeight: 'bold' }}>Patrimonizado</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {item.SITUACION === 0 ? (
+                                            <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
+                                        ) : (
+                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
                                         )}
                                     </td>
                                     <td>
@@ -134,13 +168,6 @@ const WorkerSearchMod1 = () => {
                                         {item.EST_CONSERVACION}
                                     </td>
                                     <td>
-                                        {item.SITUACION === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
-                                        ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
-                                        )}
-                                    </td>
-                                    <td>
                                         <Link
                                             to={`/edit/${item.CODIGO_PATRIMONIAL}`}
                                             onClick={() => handleEdit(item)}
@@ -148,7 +175,6 @@ const WorkerSearchMod1 = () => {
                                         >
                                             ✏️ Editar
                                         </Link>
-
                                     </td>
                                 </tr>
                             ))}
@@ -156,10 +182,10 @@ const WorkerSearchMod1 = () => {
                     </table>
                 </div>
             ) : (
-                searchTerm1 && <p className="text-center text-danger ">No se encontraron bienes con los datos del trabajador.</p>
+                searchTerm1 && <p className="text-center text-danger">No se encontraron bienes con los datos del trabajador.</p>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default WorkerSearchMod1
+export default WorkerSearchMod1;

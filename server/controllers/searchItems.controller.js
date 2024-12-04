@@ -25,59 +25,6 @@ export const searchGeneral = async (req, res, next) => {
     }
 };
 
-// export const searchItemsByWorker = async (req, res, next) => {
-//     try {
-//         const trabajador = req.query.q;
-//         const [rows] = await pool.query(
-//             `SELECT * FROM item 
-//             WHERE MATCH(TRABAJADOR) AGAINST 
-//             (? IN NATURAL LANGUAGE MODE)`,
-//             [trabajador]
-//         );
-
-//         if (!rows.length) return res.status(404).json({ message: 'No se encontraron ítems para el trabajador especificado' });
-//         res.json(rows);
-//     } catch (error) {
-//         return res.status(500).json(error);
-//     }
-// };
-
-
-// export const searchItemsByWorker = async (req, res, next) => {
-//     try {
-//         const trabajador = `%${req.query.q}%`;
-
-//         // Ejecutar la consulta y desestructurar para obtener solo las filas
-//         const [rows] = await pool.query(
-//             `
-//             SELECT 
-//                 I.N, I.CODIGO_PATRIMONIAL, I.DESCRIPCION, I.TRABAJADOR, 
-//                 I.DEPENDENCIA, I.UBICACION, I.FECHA_REGISTRO, 
-//                 I.FECHA_ALTA, I.FECHA_COMPRA, I.ESTADO, I.DISPOSICION,
-//                 I.SITUACION, I.CONSERV, C.CONSERV AS EST_CONSERVACION
-//             FROM item AS I
-//             INNER JOIN conservacion AS C
-//                 ON I.CONSERV = C.id
-//             WHERE I.TRABAJADOR LIKE ?
-//             ORDER BY I.DESCRIPCION ASC;
-//             `, [trabajador]
-//         );
-
-//         // console.log(rows)
-
-//         // Verificar si hay resultados
-//         if (rows.length === 0) {
-//             return res.status(404).json({ message: 'No se encontraron ítems para el trabajador especificado' });
-//         }
-
-//         // Devolver los datos encontrados
-//         res.json(rows);
-//     } catch (error) {
-//         // Manejo de errores
-//         return res.status(500).json({ error: error.message });
-//     }
-// };
-
 export const searchItemsByWorker = async (req, res, next) => {
     try {
         const input = req.query.q;
@@ -121,23 +68,6 @@ export const searchItemsByWorker = async (req, res, next) => {
         return res.status(500).json({ error: error.message });
     }
 };
-
-// export const searchItemsByDependece = async (req, res, next) => {
-//     try {
-//         const dependece = req.query.q;
-//         const [rows] = await pool.query(
-//             `SELECT * FROM item 
-//              WHERE MATCH(DEPENDENCIA) AGAINST 
-//              (? IN NATURAL LANGUAGE MODE)`,
-//             [dependece]
-//         );
-
-//         if (!rows.length) return res.status(404).json({ message: 'No se encontraron ítems para la dependencia especificada' });
-//         res.json(rows);
-//     } catch (error) {
-//         return res.status(500).json(error);
-//     }
-// };
 
 export const searchItemsByDependece = async (req, res, next) => {
     try {
