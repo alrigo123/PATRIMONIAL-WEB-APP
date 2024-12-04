@@ -1,47 +1,3 @@
-// import React, { useState } from "react";
-// import { slide as Menu } from "react-burger-menu";
-// import "../styles/Navbar.css";
-
-// const NavBarComp = () => {
-//     return (
-//         <>
-//             <Menu>
-//                 <a className="menu-item" href="/">
-//                     🏠 Home
-//                 </a>
-//                 <a className="menu-item" href="/items">
-//                     📊 Ver Items
-//                 </a>
-//                 <a className="menu-item" href="/search">
-//                     📂 Búsqueda General
-//                 </a>
-//                 <a className="menu-item" href="/codigo-patrimonial" >
-//                     🗃️ Búsqueda por Código Patrimonial
-//                 </a>
-//                 <a className="menu-item" href="/trabajador">
-//                     👨‍🌾 Búsqueda por Trabajador
-//                 </a>
-//                 <a className="menu-item" href="/dependencia">
-//                     🏢 Búsqueda por Dependencia
-//                 </a>
-//                 <a className="menu-item" href="/doble-busqueda">
-//                     🔎 Doble Busqueda (Trabajador & Item)
-//                 </a>
-//                 <a className="menu-item" href="/import-excel">
-//                     📚 Importar Datos
-//                 </a>
-//                 <a className="menu-item" href="/user-register">
-//                     👨‍💻 Registro Usuario Autorizado
-//                 </a>
-//             </Menu>
-//         </>
-//     );
-// };
-
-// export default NavBarComp;
-
-
-
 import React, { useState } from "react";
 import { slide as Menu } from "react-burger-menu";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
@@ -85,8 +41,8 @@ const NavBarComp = () => {
                 </a>
                 <a
                     className="menu-item"
-                    href="/codigo-patrimonial"
                     onClick={(e) => handleLoginClick(e, "/codigo-patrimonial")} // Especifica la URL objetivo
+                    href="/codigo-patrimonial"
                 >
                     🗃️ Búsqueda por Código Patrimonial
                 </a>

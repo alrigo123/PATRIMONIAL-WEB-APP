@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const URL = process.env.REACT_APP_API_URL_ITEMS
@@ -45,6 +46,15 @@ const WorkerSearchMod1 = () => {
         }
     }, [searchTerm1]);
 
+    const handleEdit = (item) => {
+        if (!item.CODIGO_PATRIMONIAL) {
+            console.error('El CODIGO_PATRIMONIAL está indefinido:', item);
+            return; // Evita seguir si no hay un código válido
+        }
+        console.log("Editando CODIGO_PATRIMONIAL:", item.CODIGO_PATRIMONIAL, "CON DATOS:", item);
+        // Lógica de edición
+    };
+
     return (
         <div>
             {/* Primer buscador */}
@@ -55,7 +65,7 @@ const WorkerSearchMod1 = () => {
                 value={searchTerm1}
                 onChange={handleInputChange1}
                 className="form-control mb-3 fw-bold"
-                style={{ marginBottom: '20px',  padding: '10px' }}
+                style={{ marginBottom: '20px', padding: '10px' }}
             />
 
             {/* Muestra un spinner de carga cuando se está realizando la búsqueda */}
@@ -80,7 +90,9 @@ const WorkerSearchMod1 = () => {
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Alta</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado Conservación</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Situación</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>ACCION</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,12 +118,37 @@ const WorkerSearchMod1 = () => {
                                             <span style={{ color: 'green', fontWeight: 'bold' }}>Funcional</span>
                                         )}
                                     </td>
+                                    <td
+                                        style={{
+                                            fontWeight: 'bold',
+                                            color:
+                                                item.EST_CONSERVACION === "Bueno"
+                                                    ? "blue"
+                                                    : item.EST_CONSERVACION === "Malo"
+                                                        ? "#790303"
+                                                        : item.EST_CONSERVACION === "Regular"
+                                                            ? "purple"
+                                                            : "black", // Color por defecto
+                                        }}
+                                    >
+                                        {item.EST_CONSERVACION}
+                                    </td>
                                     <td>
                                         {item.SITUACION === 0 ? (
                                             <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
                                         ) : (
                                             <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
                                         )}
+                                    </td>
+                                    <td>
+                                        <Link
+                                            to={`/edit/${item.CODIGO_PATRIMONIAL}`}
+                                            onClick={() => handleEdit(item)}
+                                            className="btn btn-primary bt-sm d-flex align-items-center gap-2"
+                                        >
+                                            ✏️ Editar
+                                        </Link>
+
                                     </td>
                                 </tr>
                             ))}

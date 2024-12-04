@@ -189,7 +189,9 @@ export const insertExcelData = async (req, res) => {
     } catch (error) {
         // Rollback en caso de error
         await pool.query('ROLLBACK');
+        console.log("DATOS ERRADOS EN EL BACKEND")
         res.status(500).json({ message: 'Error al importar datos.', error });
+
     }
 };
 
@@ -239,7 +241,6 @@ export const addItem = async (req, res) => {
         // Insertar nuevo bien patrimonial con el valor único para N
         await pool.query(
             `INSERT INTO item (
-                N,
                 CODIGO_PATRIMONIAL,
                 DESCRIPCION,
                 TRABAJADOR,
@@ -250,9 +251,8 @@ export const addItem = async (req, res) => {
                 CONSERV,
                 DISPOSICION,
                 SITUACION
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                randomN,
                 codigoPatrimonial,
                 descripcion,
                 trabajador,
@@ -268,7 +268,6 @@ export const addItem = async (req, res) => {
 
         res.json({
             message: 'Bien patrimonial agregado correctamente.',
-            N: randomN, // Retornar el valor de N generado
         });
     } catch (error) {
         res.status(500).json({

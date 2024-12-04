@@ -86,6 +86,13 @@ const EditItemComp = () => {
             // Convertir el valor a formato de base de datos antes de guardar
             const formattedValue = formatToDatabase(value);
             setFormData({ ...formData, [name]: formattedValue });
+        } else if (name === 'DISPOSICION') {
+            // Si el switch es "No Funcional" (valor 0), actualizar el estado y deshabilitar el select
+            setFormData({ ...formData, [name]: parseInt(value) });
+            // Si es no funcional, asignamos "Mala" como valor por defecto en la conservación
+            if (parseInt(value) === 0) {
+                setFormData({ ...formData, CONSERV: 2 });  // 2 representa "Mala"
+            }
         } else {
             setFormData({ ...formData, [name]: value });
         }
@@ -366,3 +373,197 @@ const EditItemComp = () => {
 };
 
 export default EditItemComp;
+
+// import { useState, useEffect } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import Swal from 'sweetalert2'; // Importa SweetAlert2
+// import axios from 'axios';
+// import { APIgetItemById } from "../services/item.service";
+// import { formatToDatabase } from "../utils/datesUtils";
+
+// const API_URL = process.env.REACT_APP_API_URL_ITEMS;
+
+// const EditItemComp = () => {
+//     const [conservacion, setConservacion] = useState([]);
+//     const [loadingConservacion, setLoadingConservacion] = useState(true);
+
+//     // Estados para los inputs editables
+//     const [formData, setFormData] = useState({
+//         CODIGO_PATRIMONIAL: '',
+//         DESCRIPCION: '',
+//         TRABAJADOR: '',
+//         DEPENDENCIA: '',
+//         UBICACION: '',
+//         FECHA_REGISTRO: '',
+//         FECHA_ALTA: '',
+//         FECHA_COMPRA: '',
+//         ESTADO: '',
+//         DISPOSICION: 1,  // Asumimos que es funcional por defecto
+//         CONSERV: '',  // Conservación, que será 1 (buena), 2 (mala), o 3 (regular)
+//     });
+
+//     const { id } = useParams();
+//     const [loading, setLoading] = useState(true);
+//     const [error, setError] = useState(null);
+
+//     const navigate = useNavigate();
+
+//     // Cargar las opciones de conservación al montar el componente
+//     useEffect(() => {
+//         const fetchConservacion = async () => {
+//             try {
+//                 const response = await axios.get(`${API_URL}/conservation`);
+//                 setConservacion(response.data); // Suponiendo que la respuesta es un array con las opciones
+//                 setLoadingConservacion(false);
+//             } catch (err) {
+//                 setLoadingConservacion(false);
+//                 console.error("Error al cargar las calificaciones:", err);
+//             }
+//         };
+
+//         fetchConservacion();
+//     }, []);
+
+//     // Cargar datos del artículo al montar el componente
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             try {
+//                 const data = await APIgetItemById(id);
+//                 setFormData({
+//                     CODIGO_PATRIMONIAL: data.CODIGO_PATRIMONIAL,
+//                     DESCRIPCION: data.DESCRIPCION || '',
+//                     TRABAJADOR: data.TRABAJADOR || '',
+//                     DEPENDENCIA: data.DEPENDENCIA || '',
+//                     UBICACION: data.UBICACION || '',
+//                     FECHA_REGISTRO: data.FECHA_REGISTRO,
+//                     FECHA_ALTA: data.FECHA_ALTA || '',
+//                     FECHA_COMPRA: data.FECHA_COMPRA || '',
+//                     ESTADO: data.ESTADO,
+//                     DISPOSICION: data.DISPOSICION || '',  // Funcional o No Funcional
+//                     CONSERV: data.CONSERV || '',  // Conservación (1, 2, 3)
+//                 });
+//                 setLoading(false);
+//             } catch (err) {
+//                 setError('Error fetching data');
+//                 setLoading(false);
+//             }
+//         };
+
+//         fetchData();
+//     }, [id]);
+
+//     // Manejar cambios en los inputs
+//     const handleInputChange = (e) => {
+//         const { name, value } = e.target;
+
+//         if (name === 'FECHA_COMPRA' || name === 'FECHA_ALTA') {
+//             // Convertir el valor a formato de base de datos antes de guardar
+//             const formattedValue = formatToDatabase(value);
+//             setFormData({ ...formData, [name]: formattedValue });
+//         } else if (name === 'DISPOSICION') {
+//             // Si el switch es "No Funcional" (valor 0), actualizar el estado y deshabilitar el select
+//             setFormData({ ...formData, [name]: parseInt(value) });
+//             // Si es no funcional, asignamos "Mala" como valor por defecto en la conservación
+//             if (parseInt(value) === 0) {
+//                 setFormData({ ...formData, CONSERV: 2 });  // 2 representa "Mala"
+//             }
+//         } else {
+//             setFormData({ ...formData, [name]: value });
+//         }
+//     };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault(); // Evita que la página se recargue -- Prevenir el comportamiento por defecto del formulario
+//         try {
+//             const payload = {
+//                 ...formData,
+//                 FECHA_COMPRA: formData.FECHA_COMPRA ? formData.FECHA_COMPRA.toString() : 'Sin Registro',
+//                 FECHA_ALTA: formData.FECHA_ALTA ? formData.FECHA_ALTA.toString() : 'Sin Registro',
+//             };
+//             console.log("Datos enviados a la base de datos:", payload);
+//             const response = await axios.put(`${API_URL}/edit/${payload.CODIGO_PATRIMONIAL}`, payload);
+
+//             if (response.status === 200) {
+//                 Swal.fire({
+//                     title: '¡Datos Actualizados!',
+//                     text: 'Los datos se han actualizado correctamente.',
+//                     icon: 'success',
+//                     confirmButtonText: 'Aceptar'
+//                 }).then(() => {
+//                     navigate('/codigo-patrimonial');
+//                 });
+//             } else {
+//                 Swal.fire({
+//                     title: 'Error',
+//                     text: 'Hubo un error al actualizar los datos.',
+//                     icon: 'error',
+//                     confirmButtonText: 'Aceptar'
+//                 });
+//             }
+//         } catch (err) {
+//             Swal.fire({
+//                 title: 'Error',
+//                 text: 'Hubo un error al intentar actualizar los datos.',
+//                 icon: 'error',
+//                 confirmButtonText: 'Aceptar'
+//             });
+//             console.error('Error:', err);
+//         }
+//     };
+
+//     if (loading) return <div>Loading...</div>;
+//     if (error) return <div>{error}</div>;
+
+//     return (
+//         <div className="container mt-5">
+//             <div className="card shadow-sm">
+//                 <div className="card-header bg-primary text-white text-center">
+//                     <h3 className="mb-0">Editar Información de <strong>"{formData.DESCRIPCION}"</strong></h3>
+//                 </div>
+//                 <div className="card-body">
+//                     <form method="post" onSubmit={handleSubmit}>
+//                         <div className="row">
+//                             <div className="col-md-6 mb-3">
+//                                 <label className="form-label fw-bold">Funcional</label>
+//                                 <select
+//                                     className="form-select"
+//                                     name="DISPOSICION"
+//                                     value={formData.DISPOSICION}
+//                                     onChange={handleInputChange}
+//                                 >
+//                                     <option value={1}>Funcional</option>
+//                                     <option value={0}>No Funcional</option>
+//                                 </select>
+//                             </div>
+
+//                             <div className="col-md-6 mb-3">
+//                                 <label className="form-label fw-bold">Estado de Conservación</label>
+//                                 <select
+//                                     className="form-select"
+//                                     name="CONSERV"
+//                                     value={formData.CONSERV || ''}
+//                                     onChange={handleInputChange}
+//                                     disabled={formData.DISPOSICION === 0} // Deshabilitar si el item es no funcional
+//                                     required
+//                                 >
+//                                     <option value="">Seleccionar</option>
+//                                     {conservacion.map((option) => (
+//                                         <option key={option.id} value={option.id}>
+//                                             {option.CONSERV}
+//                                         </option>
+//                                     ))}
+//                                 </select>
+//                             </div>
+//                         </div>
+
+//                         {/* Otros campos del formulario aquí */}
+
+//                         <button type="submit" className="btn btn-primary">Guardar Cambios</button>
+//                     </form>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default EditItemComp;

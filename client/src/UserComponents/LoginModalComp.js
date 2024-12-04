@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Spinner, Alert } from 'react-bootstrap';
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 import axios from 'axios';
 
 const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
@@ -26,7 +27,12 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
       const response = await axios.post(`${URL}/login`, { dni, password });
 
       if (response.status === 200) {
-        alert('Inicio de sesión exitoso');
+        Swal.fire({
+          icon: "success",
+          title: "Inicio de sesión correcta",
+          showConfirmButton: false,
+          timer: 1000
+        });
         // Aquí puedes guardar datos como token o redirigir al usuario
         // localStorage.setItem('authToken', response.data.token || '');
 

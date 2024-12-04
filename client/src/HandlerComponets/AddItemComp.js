@@ -241,7 +241,6 @@ const AddItemComp = () => {
                             </div>
                         </div>
 
-
                         <div className="col-md-6 mt-3">
                             <div className="mb-3 text-center">
                                 <label
@@ -270,33 +269,6 @@ const AddItemComp = () => {
                             </div>
                             <div className="mb-3 text-center">
                                 <label
-                                    htmlFor="disposicionSwitch"
-                                    className="form-label me-2 fw-bold"
-                                >
-                                    Disposición:
-                                </label>
-                                <div className="form-check form-switch d-inline-flex align-items-center">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id="disposicionSwitch"
-                                        name="disposicion"
-                                        checked={formData.disposicion}
-                                        onChange={handleChange}
-                                    //   onChange={toggleDisposicion}
-                                    />
-                                    <label
-                                        className="form-check-label fw-bolder ms-2"
-                                        htmlFor="disposicionSwitch"
-                                    >
-                                        {/* {disposicion ? "Funcional" : "No Funcional"} */}
-                                        {formData.disposicion ? 'Funcional' : 'No Funcional'}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="mb-3 text-center">
-                                <label
                                     htmlFor="situacionSwitch"
                                     className="form-label me-2 fw-bold"
                                 >
@@ -310,14 +282,38 @@ const AddItemComp = () => {
                                         name="situacion"
                                         checked={formData.situacion}
                                         onChange={handleChange}
-                                    //   onChange={toggleSituacion}
-                                    />
+                                        disabled />
                                     <label
                                         className="form-check-label fw-bolder ms-2"
                                         htmlFor="situacionSwitch"
                                     >
                                         {formData.situacion ? 'Verificado' : 'Faltante'}
                                         {/* {situacion ? "Verificado" : "Faltante"} */}
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="mb-3 text-center">
+                                <label
+                                    htmlFor="disposicionSwitch"
+                                    className="form-label me-2 fw-bold"
+                                >
+                                    Disposición:
+                                </label>
+                                <div className="form-check form-switch d-inline-flex align-items-center">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="disposicionSwitch"
+                                        name="disposicion"
+                                        checked={formData.disposicion}
+                                        onChange={handleChange}
+                                    />
+                                    <label
+                                        className="form-check-label fw-bolder ms-2"
+                                        htmlFor="disposicionSwitch"
+                                    >
+                                        {/* {disposicion ? "Funcional" : "No Funcional"} */}
+                                        {formData.disposicion ? 'Funcional' : 'No Funcional'}
                                     </label>
                                 </div>
                             </div>
