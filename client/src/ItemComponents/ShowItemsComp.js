@@ -159,7 +159,6 @@ const ShowItemsComp = () => {
                     <table className="w-auto table table-striped table-bordered align-middle mt-3">
                         <thead className="table-primary">
                             <tr>
-                                <th>N</th>
                                 <th>Codigo Patrimonial</th>
                                 <th>Descripcion</th>
                                 <th>Dependencia</th>
@@ -175,7 +174,6 @@ const ShowItemsComp = () => {
                         <tbody>
                             {filteredItems.map((item) => (
                                 <tr key={item.id}>
-                                    <td>{item.N}</td>
                                     <td>{item.CODIGO_PATRIMONIAL}</td>
                                     <td>{item.DESCRIPCION}</td>
                                     <td>{item.DEPENDENCIA}</td>

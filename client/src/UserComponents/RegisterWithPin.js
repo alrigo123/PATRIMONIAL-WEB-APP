@@ -11,10 +11,8 @@ const API_URL = process.env.REACT_APP_API_URL_USER;
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object({
-    user: Yup.string().required('Usuario es requerido'),
-    name: Yup.string().required('Nombre es requerido'),
-    last_name: Yup.string().required('Apellidos son requeridos'),
-    email: Yup.string().email('Dirección de correo electronico invalido').required('Email es requerido'),
+    dni: Yup.string().required('DNI es requerido'),
+    name_and_last: Yup.string().required('Nombre Y Apellidos es requerido'),
     password: Yup.string()
         .min(6, 'La contraseña debe contener al menos 6 caracteres')
         .required('Contraseña es requerida'),
@@ -65,14 +63,12 @@ const RegisterWithPin = () => {
         try {
             console.log("USUAARIO: ", {
                 ...values,
-                name: values.name.toUpperCase(),
-                last_name: values.last_name.toUpperCase() // Extraemos el primer apellido
+                name_and_last: values.name_and_last.toUpperCase()
             })
             // throw Error
             const response = await axios.post(`${API_URL}/register`, {
                 ...values,
-                name: values.name.toUpperCase(),
-                last_name: values.last_name.toUpperCase() // Extraemos el primer apellido
+                name_and_last: values.name_and_last.toUpperCase()
             });
             if (response.status === 201) {
                 Swal.fire({
@@ -137,10 +133,8 @@ const RegisterWithPin = () => {
                                 <h2 className="text-center fw-bold mb-4">Registrar Usuario</h2>
                                 <Formik
                                     initialValues={{
-                                        user: '',
-                                        name: '',
-                                        last_name: '',
-                                        email: '',
+                                        dni: '',
+                                        name_and_last: '',
                                         password: '',
                                         confirmPassword: '',
                                     }}
@@ -151,53 +145,27 @@ const RegisterWithPin = () => {
                                         <Form>
                                             <div className="row mb-3">
                                                 <div className="col-md-6 form-group">
-                                                    <label htmlFor="user" className="fw-bold mb-1">Nombre de Usuario</label>
+                                                    <label htmlFor="dni" className="fw-bold mb-1">DNI</label>
                                                     <Field
                                                         type="text"
-                                                        id="user"
-                                                        name="user"
+                                                        id="dni"
+                                                        name="dni"
                                                         className="form-control"
-                                                        placeholder="Ingrese nombre de usuario"
+                                                        placeholder="Ingrese DNI de usuario"
                                                     />
-                                                    <ErrorMessage name="user" component="div" className="text-danger" />
+                                                    <ErrorMessage name="dni" component="div" className="text-danger" />
                                                 </div>
 
                                                 <div className="col-md-6 form-group">
-                                                    <label htmlFor="name" className="fw-bold mb-1">Nombre(s)</label>
+                                                    <label htmlFor="name_and_last" className="fw-bold mb-1">Nombre(s) y Apellidos</label>
                                                     <Field
                                                         type="text"
-                                                        id="name"
-                                                        name="name"
+                                                        id="name_and_last"
+                                                        name="name_and_last"
                                                         className="form-control"
                                                         placeholder="Ingrese Nombre(s)"
                                                     />
-                                                    <ErrorMessage name="name" component="div" className="text-danger" />
-                                                </div>
-                                            </div>
-
-                                            <div className="row mb-3">
-                                                <div className="col-md-6 form-group">
-                                                    <label htmlFor="last_name" className="fw-bold mb-1">Apellidos</label>
-                                                    <Field
-                                                        type="text"
-                                                        id="last_name"
-                                                        name="last_name"
-                                                        className="form-control"
-                                                        placeholder="Ingrese sus apellidos"
-                                                    />
-                                                    <ErrorMessage name="last_name" component="div" className="text-danger" />
-                                                </div>
-
-                                                <div className="col-md-6 form-group">
-                                                    <label htmlFor="email" className="fw-bold mb-1">Correo Electrónico</label>
-                                                    <Field
-                                                        type="email"
-                                                        id="email"
-                                                        name="email"
-                                                        className="form-control"
-                                                        placeholder="Ingrese correo electronico"
-                                                    />
-                                                    <ErrorMessage name="email" component="div" className="text-danger" />
+                                                    <ErrorMessage name="name_and_last" component="div" className="text-danger" />
                                                 </div>
                                             </div>
 

@@ -72,7 +72,7 @@ export const getItemByCodePatAndUpdate = async (req, res, next) => {
         if (updateResult.affectedRows === 0) {
             console.log('No se actualizó ningún registro.');
         } else {
-            console.log('Registro, estado y situacion actualizado correctamente.');
+            // console.log('Registro, estado y situacion actualizado correctamente.');
         }
 
         // Retornar el item con sus datos actualizados

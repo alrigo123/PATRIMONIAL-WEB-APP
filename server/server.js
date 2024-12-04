@@ -21,6 +21,7 @@ const app = express();
 // Configuración CORS para permitir accesos desde cualquier origen
 app.use(cors({ origin: '*' }));
 app.use(express.json()) //process data to send to the backend
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(limiter);
 

@@ -1,81 +1,107 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner, Alert } from 'react-bootstrap';
+import axios from 'axios';
 
-const LoginModalComp = ({ show, handleClose }) => {
-  const [emailOrUsername, setEmailOrUsername] = useState('');
+const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
+  const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [validated, setValidated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // Función para validar el formulario
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
-      // Aquí agregarías la lógica para la API más tarde
-      alert("Formulario válido");
+  const URL = process.env.REACT_APP_API_URL_USER;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!dni || !password) {
+      setErrorMessage('Todos los campos son obligatorios');
+      return;
     }
-    setValidated(true);
+
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const response = await axios.post(`${URL}/login`, { dni, password });
+
+      if (response.status === 200) {
+        alert('Inicio de sesión exitoso');
+        // Aquí puedes guardar datos como token o redirigir al usuario
+        // localStorage.setItem('authToken', response.data.token || '');
+
+        // Llama a la función para notificar éxito y cerrar el modal
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
+
+        // Limpiar mensajes de error antes de cerrar
+        setErrorMessage('');
+        handleClose();
+      }
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || 'Error al iniciar sesión.';
+      setErrorMessage(errorMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton className="text-center">
-        <Modal.Title><span role="img" aria-label="login">🔒</span> Iniciar sesión</Modal.Title>
+      <Modal.Header closeButton>
+        <Modal.Title>🔒 Iniciar sesión</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Group controlId="formEmailOrUsername">
-            <Form.Label><span role="img" aria-label="user">👤</span> Usuario o Email</Form.Label>
+        {errorMessage && <Alert variant="danger" aria-live="assertive">{errorMessage}</Alert>}
+
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formDni">
+            <Form.Label>👤 DNI</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Ingresa tu usuario o correo electrónico"
-              value={emailOrUsername}
-              onChange={(e) => setEmailOrUsername(e.target.value)}
+              placeholder="Ingresa tu DNI"
+              value={dni}
+              className='mb-2'
+              onChange={(e) => setDni(e.target.value)}
               required
-              className="mb-3"
             />
-            <Form.Control.Feedback type="invalid">
-              Este campo es obligatorio.
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">Por favor ingresa tu DNI.</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formPassword">
-            <Form.Label><span role="img" aria-label="password">🔑</span> Contraseña</Form.Label>
-            <div className="d-flex mb-3">
+            <Form.Label>🔑 Contraseña</Form.Label>
+            <div className="d-flex">
               <Form.Control
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Ingresa tu contraseña"
                 value={password}
+                className='mb-2'
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
               <Button
                 variant="outline-secondary"
-                onClick={() => setShowPassword(!showPassword)}
-                className="ml-2 bg-red"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="ml-2"
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 {showPassword ? 'Ocultar' : 'Ver'}
               </Button>
             </div>
-            <Form.Control.Feedback type="invalid">
-              Este campo es obligatorio.
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">Por favor ingresa tu contraseña.</Form.Control.Feedback>
           </Form.Group>
 
-          <Button variant="primary" type="submit" block className="mb-3">
-            <span role="img" aria-label="login">🚀</span> Iniciar sesión
+          <Button variant="primary" type="submit" block disabled={loading}>
+            {loading ? <Spinner animation="border" size="sm" aria-label="Cargando..." /> : '🚀 Iniciar sesión'}
           </Button>
-
-          <div className="text-center">
-            <p>¿No tienes cuenta? <a href="/user-register">Regístrate</a></p>
-          </div>
         </Form>
+        <div className="text-center mt-3">
+          <p>¿No tienes cuenta? <a href="/user-register">Regístrate</a></p>
+        </div>
       </Modal.Body>
     </Modal>
   );
-};
+}
 
 export default LoginModalComp;

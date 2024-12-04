@@ -338,6 +338,7 @@ const EditItemComp = () => {
                                                     SITUACION: e.target.checked ? 1 : 0,
                                                 })
                                             }
+                                            disabled
                                         />
                                         <label className="form-check-label fw-bolder ms-2" htmlFor="situacionSwitch">
                                             {formData.SITUACION === 1 ? 'Verificado' : 'Faltante'}
