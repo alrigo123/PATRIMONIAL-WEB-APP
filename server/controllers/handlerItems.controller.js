@@ -280,9 +280,7 @@ export const addItem = async (req, res) => {
 export const addObservation = async (req, res) => {
     const { id } = req.params;
     const { observacion } = req.body;
-
-    console.log('Datos recibidos:', { id, observacion });
-
+    // console.log('Datos recibidos:', { id, observacion });
     try {
         // Actualiza el campo OBSERVACION en la base de datos
         await pool.query('UPDATE item SET OBSERVACION = ? WHERE CODIGO_PATRIMONIAL = ?', [observacion, id]);

@@ -25,6 +25,14 @@ config(); //Cargar las variables del archivo .env
 //     queueLimit: 0
 // })
 
+// // Hostgator 
+// const pool = new createPool({
+//     host: process.env.DB_HOST_HGATOR,
+//     user: process.env.DB_USER_HGATOR,
+//     password: process.env.DB_PASSWORD_HGATOR,
+//     database: process.env.DB_NAME_HGATOR
+// })
+
 // Docker VM server
 // const pool = new createPool({
 //     host: process.env.DB_HOST_DOCKER,
@@ -51,10 +59,11 @@ const pool = new createPool({
 async function checkConnection() {
     try {
         const connection = await pool.getConnection(); // Intentar obtener una conexión
-        console.log(`Connected to BD`)
+        // console.log(`Connected to BD`)
+        console.log('Conexión establecida como id ' + connection.threadId);
         connection.release(); // Liberar la conexión al pool
     } catch (error) {
-        console.error('Error in the database connection:', error.message);
+        console.error('Error in the database connection:', error.stack);
     }
 }
 
