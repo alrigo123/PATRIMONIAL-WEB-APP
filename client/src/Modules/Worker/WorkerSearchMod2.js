@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import * as XLSX from 'xlsx';
 
 const URL = process.env.REACT_APP_API_URL_ITEMS
 
@@ -8,6 +9,8 @@ const WorkerSearchMod2 = () => {
     const [results2, setResults2] = useState([]); // Resultados de la segunda búsqueda
     const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
     const debounceTimeout = useRef(null); // Referencia para el setTimeout
+
+    const fechaFormateada = new Date().toISOString().split("T")[0];
 
     // Maneja el cambio en el segundo input
     const handleInputChange2 = (e) => {
@@ -45,6 +48,32 @@ const WorkerSearchMod2 = () => {
         }
     }, [searchTerm2]);
 
+    // Función para exportar los datos a Excel
+    const exportToExcel = () => {
+        if (results2.length === 0) {
+            alert('No hay datos para exportar.');
+            return;
+        }
+
+        // Preparar los datos para exportar
+        const exportData = results2.map(item => ({
+            "Descripción": item.DESCRIPCION,
+            "Dependencia": item.DEPENDENCIA,
+            "Trabajador": item.TRABAJADOR,
+            "Cantidad de Bienes": item.CANTIDAD_ITEMS,
+            "Bienes Patrimonizados": item.CANTIDAD_PATRIMONIZADOS,
+            "Bienes No Patrimonizados": item.CANTIDAD_NO_PATRIMONIZADOS,
+        }));
+
+        // Crear un libro de Excel
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Bienes');
+
+        // Descargar el archivo Excel
+        XLSX.writeFile(workbook, `Bienes_Trabajador_${searchTerm2}_${fechaFormateada}.xlsx`);
+    };
+
     return (
         <div>
             {/* Segundo buscador */}
@@ -68,13 +97,21 @@ const WorkerSearchMod2 = () => {
             ) : results2.length > 0 ? (
                 <div>
                     <h3 className='fw-semibold'>CANTIDAD DE BIENES EN PODER DE <strong>{searchTerm2}</strong> </h3>
+                    <button
+                        className="btn btn-success mb-3"
+                        onClick={exportToExcel}
+                    >
+                        Exportar a Excel
+                    </button>
                     <table className="w-auto table table-striped table-bordered align-middle" style={{ width: '100%', tableLayout: 'fixed' }}>
                         <thead className="thead-dark">
                             <tr>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD ITEMS</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD Bienes</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Patrimonizados</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Patrimonizados</th>
                                 {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
                             </tr>
                         </thead>
@@ -85,6 +122,8 @@ const WorkerSearchMod2 = () => {
                                     <td>{item.DEPENDENCIA}</td>
                                     <td>{item.TRABAJADOR}</td>
                                     <td>{item.CANTIDAD_ITEMS}</td>
+                                    <td>{item.CANTIDAD_PATRIMONIZADOS}</td>
+                                    <td>{item.CANTIDAD_NO_PATRIMONIZADOS}</td>
                                 </tr>
                             ))}
                         </tbody>
