@@ -86,7 +86,7 @@ export const searchItemsByDependece = async (req, res, next) => {
             `
             SELECT 
                 I.N, I.CODIGO_PATRIMONIAL, I.DESCRIPCION, I.TRABAJADOR, 
-                I.DEPENDENCIA, I.UBICACION, I.FECHA_REGISTRO, 
+                I.DEPENDENCIA, I.UBICACION, I.FECHA_REGISTRO, I.OBSERVACION,
                 I.FECHA_ALTA, I.FECHA_COMPRA, I.ESTADO, I.DISPOSICION,
                 I.SITUACION, I.CONSERV, C.CONSERV AS EST_CONSERVACION
             FROM item AS I

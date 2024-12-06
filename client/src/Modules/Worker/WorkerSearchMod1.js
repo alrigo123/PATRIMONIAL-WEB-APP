@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { parseDate } from '../../utils/datesUtils';
 import { exportarItems } from '../../utils/exportReportBySearch';
+import { Modal, Button } from 'react-bootstrap'; // Usaremos react-bootstrap para el modal.
 
 const URL = process.env.REACT_APP_API_URL_ITEMS;
 
@@ -10,6 +11,9 @@ const WorkerSearchMod1 = () => {
     const [searchTerm1, setSearchTerm1] = useState(''); // Valor del primer buscador
     const [results1, setResults1] = useState([]); // Resultados de la primera búsqueda
     const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
+    const [selectedItem, setSelectedItem] = useState(null); // Para guardar el item seleccionado
+    const [modalVisible, setModalVisible] = useState(false); // Para controlar el modal
+    const [newObservation, setNewObservation] = useState(''); // Para el contenido del textarea
     const debounceTimeout = useRef(null); // Referencia para el setTimeout
 
     const fechaFormateada = new Date().toISOString().split("T")[0];
@@ -69,7 +73,7 @@ const WorkerSearchMod1 = () => {
     const exportConsolidado = () => {
         exportarItems(results1, undefined, "Bienes Trabajador", "Bienes_Consolidado", searchTerm1, fechaFormateada);
     };
-    
+
     const handleObservationChange = async (codigoPatrimonial, observacion) => {
         // Actualiza la observación localmente
         setResults1((prevResults) =>
@@ -89,6 +93,32 @@ const WorkerSearchMod1 = () => {
         }
     };
 
+    ////--- 
+    const handleEditObservation = (item) => {
+        setSelectedItem(item);
+        setNewObservation(item.OBSERVACION || ''); // Prellenar con la observación actual
+        setModalVisible(true);
+    };
+
+    const saveObservation = async () => {
+        try {
+            // Llamada al endpoint con el código patrimonial
+            await axios.put(`${URL}/observation/${selectedItem.CODIGO_PATRIMONIAL}`, {
+                observacion: newObservation,
+            });
+            // Actualizar la tabla con la nueva observación
+            setResults1((prev) =>
+                prev.map((item) =>
+                    item.CODIGO_PATRIMONIAL === selectedItem.CODIGO_PATRIMONIAL
+                        ? { ...item, OBSERVACION: newObservation }
+                        : item
+                )
+            );
+            setModalVisible(false); // Cerrar el modal
+        } catch (error) {
+            console.error('Error al guardar la observación:', error);
+        }
+    };
 
     return (
         <div>
@@ -197,13 +227,23 @@ const WorkerSearchMod1 = () => {
                                         </Link>
                                     </td>
                                     <td>
-                                        <input
-                                            type="text"
-                                            value={item.OBSERVACION || ''}
-                                            onChange={(e) => handleObservationChange(item.CODIGO_PATRIMONIAL, e.target.value)}
-                                            className="form-control fw-bold"
-                                            placeholder="Añadir observación"
-                                        />
+                                        <span
+                                            style={{
+                                                fontWeight: item.OBSERVACION ? 'bold' : 'normal',
+                                                fontStyle: item.OBSERVACION ? 'normal' : 'italic',
+                                                color: item.OBSERVACION ? '#000' : '#666', // Opcional: color diferenciado
+                                            }}
+                                        >
+                                            {item.OBSERVACION ? item.OBSERVACION : 'Sin observación'}
+                                        </span>
+                                        <Button
+                                            variant="link"
+                                            size="sm"
+                                            className='fw-bold'
+                                            onClick={() => handleEditObservation(item)}
+                                        >
+                                            📝 Añadir Observación
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}
@@ -213,6 +253,29 @@ const WorkerSearchMod1 = () => {
             ) : (
                 searchTerm1 && <p className="text-center text-danger">No se encontraron bienes con los datos del trabajador.</p>
             )}
+
+            {/* Modal */}
+            <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar Observación</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <textarea
+                        className="form-control"
+                        rows={5}
+                        value={newObservation}
+                        onChange={(e) => setNewObservation(e.target.value)}
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setModalVisible(false)}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={saveObservation}>
+                        Guardar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

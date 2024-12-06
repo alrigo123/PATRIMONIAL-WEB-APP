@@ -52,9 +52,9 @@ const NavBarComp = () => {
                 <a className="menu-item" href="/dependencia">
                     🏢 Búsqueda por Dependencia
                 </a>
-                <a className="menu-item" href="/doble-busqueda">
+                {/* <a className="menu-item" href="/doble-busqueda">
                     🔎 Doble Busqueda (Trabajador & Item)
-                </a>
+                </a> */}
                 <a className="menu-item" href="/import-excel">
                     📚 Importar Datos
                 </a>
