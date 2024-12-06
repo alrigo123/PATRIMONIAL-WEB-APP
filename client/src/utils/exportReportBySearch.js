@@ -1,6 +1,6 @@
 import { parseDate } from "./datesUtils";
 import * as XLSX from 'xlsx';  // Importa la librería xlsx
- 
+
 const mapEstado = (estado) => {
     if (estado === 1) return "Patrimonizado";
     if (estado === 0) return "No Patrimonizado";
@@ -40,6 +40,7 @@ export const exportarItems = (results1, estado, nombreHoja, nombreArchivo, searc
         DISPOSICION: mapDisposicion(item.DISPOSICION),
         EST_CONSERVACION: item.EST_CONSERVACION,
         SITUACION: mapSituacion(item.SITUACION),
+        OBSERVACION: item.OBSERVACION || 'Sin observación'
     }));
 
     // Crea y exporta el archivo Excel

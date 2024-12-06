@@ -276,3 +276,19 @@ export const addItem = async (req, res) => {
         });
     }
 };
+
+export const addObservation = async (req, res) => {
+    const { id } = req.params;
+    const { observacion } = req.body;
+
+    console.log('Datos recibidos:', { id, observacion });
+
+    try {
+        // Actualiza el campo OBSERVACION en la base de datos
+        await pool.query('UPDATE item SET OBSERVACION = ? WHERE CODIGO_PATRIMONIAL = ?', [observacion, id]);
+        res.status(200).json({ message: 'Observación actualizada correctamente' });
+    } catch (error) {
+        console.error('Error al actualizar la observación:', error);
+        res.status(500).json({ message: 'Error al actualizar la observación' });
+    }
+};

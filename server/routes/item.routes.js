@@ -22,7 +22,8 @@ import {
   insertExcelData,
   getItemByCodePatAndUpdate,
   updateItem,
-  addItem
+  addItem,
+  addObservation
 } from "../controllers/handlerItems.controller.js";
 
 const router = Router();
@@ -49,6 +50,7 @@ router.get("/dependency/qty", getItemsQtyByDependece);
 router.put("/disposition/:id", updateDisposition);
 router.put("/situation/:id", updateSituation);
 router.put("/edit/:id", updateItem);
+router.put('/observation/:id', addObservation)
 
 //POST REQUEST
 router.post("/imported", insertExcelData);

@@ -69,6 +69,25 @@ const WorkerSearchMod1 = () => {
     const exportConsolidado = () => {
         exportarItems(results1, undefined, "Bienes Trabajador", "Bienes_Consolidado", searchTerm1, fechaFormateada);
     };
+    
+    const handleObservationChange = async (codigoPatrimonial, observacion) => {
+        // Actualiza la observación localmente
+        setResults1((prevResults) =>
+            prevResults.map((item) =>
+                item.CODIGO_PATRIMONIAL === codigoPatrimonial
+                    ? { ...item, OBSERVACION: observacion }
+                    : item
+            )
+        );
+
+        // Enviar la observación al backend
+        try {
+            await axios.put(`${URL}/observation/${codigoPatrimonial}`, { observacion });
+            console.log('Observación actualizada exitosamente');
+        } catch (error) {
+            console.error('Error al actualizar la observación:', error);
+        }
+    };
 
 
     return (
@@ -119,6 +138,7 @@ const WorkerSearchMod1 = () => {
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado Conservación</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Situación</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>ACCION</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Observación</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -175,6 +195,15 @@ const WorkerSearchMod1 = () => {
                                         >
                                             ✏️ Editar
                                         </Link>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            value={item.OBSERVACION || ''}
+                                            onChange={(e) => handleObservationChange(item.CODIGO_PATRIMONIAL, e.target.value)}
+                                            className="form-control fw-bold"
+                                            placeholder="Añadir observación"
+                                        />
                                     </td>
                                 </tr>
                             ))}
