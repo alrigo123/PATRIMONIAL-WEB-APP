@@ -47,5 +47,5 @@ export const exportarItems = (results1, estado, nombreHoja, nombreArchivo, searc
     const ws = XLSX.utils.json_to_sheet(mappedResults);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, nombreHoja);
-    XLSX.writeFile(wb, `${nombreArchivo}_${searchTerm1}_${fechaFormateada}.xlsx`);
+    XLSX.writeFile(wb, `${nombreArchivo}_${searchTerm1.toUpperCase()}_${fechaFormateada}.xlsx`);
 };

@@ -159,6 +159,7 @@ const ShowItemsComp = () => {
                     <table className="w-auto table table-striped table-bordered align-middle mt-3">
                         <thead className="table-primary">
                             <tr>
+                                <th>#</th>
                                 <th>Codigo Patrimonial</th>
                                 <th>Descripcion</th>
                                 <th>Dependencia</th>
@@ -172,8 +173,9 @@ const ShowItemsComp = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredItems.map((item) => (
+                            {filteredItems.map((item, index) => (
                                 <tr key={item.id}>
+                                    <td>{index + 1}</td> {/* Número iterativo */}
                                     <td>{item.CODIGO_PATRIMONIAL}</td>
                                     <td>{item.DESCRIPCION}</td>
                                     <td>{item.DEPENDENCIA}</td>

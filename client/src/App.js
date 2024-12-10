@@ -26,7 +26,7 @@ import EditItemComp from './HandlerComponets/EditItemComp.js';
 import AddItemComp from './HandlerComponets/AddItemComp.js';
 
 //CHAT BOT
-import ChatBotComp from './ChatBotComp.js';
+import ChatBotComp from './chat-test/ChatBotComp.js';
 
 //USER
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
@@ -36,7 +36,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter basename="/inventory">
         <Header />
         <NavBarComp pageWrapID={"page-wrap"} outerContainerId={"outer-container"} />
         <main>

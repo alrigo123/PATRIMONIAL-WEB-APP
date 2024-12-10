@@ -145,7 +145,9 @@ export const getItemsQtyByDependece = async (req, res, next) => {
                 TRABAJADOR,
                 DESCRIPCION,
                 DEPENDENCIA,
-                COUNT(*) AS CANTIDAD_ITEMS
+                COUNT(*) AS CANTIDAD_ITEMS,
+                SUM(CASE WHEN ESTADO = 1 THEN 1 ELSE 0 END) AS CANTIDAD_PATRIMONIZADOS,
+                SUM(CASE WHEN ESTADO = 0 THEN 1 ELSE 0 END) AS CANTIDAD_NO_PATRIMONIZADOS
             FROM 
                 item
             WHERE 

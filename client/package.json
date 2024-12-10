@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/inventory",
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@popperjs/core": "^2.11.8",
