@@ -11,9 +11,10 @@ import {
 
 import {
   searchGeneral,
+  searchItemByPartial,
   searchItemsByWorkerAndDescription,
   searchItemsByWorker,
-  searchItemsByDependece,
+  searchItemsByDependece
 } from "../controllers/searchItems.controller.js";
 
 import {
@@ -34,6 +35,7 @@ const router = Router();
 // router.get("/", getAllItemsLimited); // GET ALL ITEMS
 router.get("/", getAllItemsAndConservationLimited); // GET ALL ITEMS AND THEI CONSERVATION STATE
 router.get("/search", searchGeneral); // Endpoint para la búsqueda en tiempo real
+router.get("/partial", searchItemByPartial); // Endpoint para la búsqueda en tiempo real
 router.get("/worker", searchItemsByWorker); //GET ITEMS BY WORKER
 router.get("/dependency", searchItemsByDependece); //GET ITEMS BY DEPENDENCY
 router.get("/filter", searchItemsByWorkerAndDescription); // GET ITEMS BY WORKER AND DESCRIPTION

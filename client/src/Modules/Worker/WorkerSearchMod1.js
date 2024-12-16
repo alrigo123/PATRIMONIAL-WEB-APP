@@ -128,6 +128,23 @@ const WorkerSearchMod1 = () => {
         return estadoFilter && disposicionFilter && situacionFilter && conservationFilter;
     });
 
+
+    const [exportOption, setExportOption] = useState("");
+
+    const handleExportChange = (event) => {
+        const selectedOption = event.target.value;
+        setExportOption(selectedOption);
+        if (selectedOption === "patrimonizado") {
+            exportPatrimonizado();
+        } else if (selectedOption === "no_patrimonizado") {
+            exportNoPatrimonizado();
+        } else if (selectedOption === "consolidado") {
+            exportConsolidado();
+        }
+    };
+
+
+
     return (
         <div>
             {/* Primer buscador */}
@@ -151,6 +168,25 @@ const WorkerSearchMod1 = () => {
             ) : results1.length > 0 ? (
                 <div>
                     <h3 className='fw-semibold'>BIENES EN PODER DE <strong>{searchTerm1.toUpperCase()}</strong> </h3>
+
+
+                    {/* Menú desplegable para seleccionar el tipo de reporte */}
+                    <div className="row">
+                    <div className="col-md-3 mb-3">
+                        <h5 className='fw-semibold'>Seleccionar reporte para exportar</h5>
+                        <select
+                            className="form-select fw-bolder"
+                            value={exportOption}
+                            onChange={handleExportChange}
+                        >
+                            <option value="">Seleccione un tipo de reporte</option>
+                            <option value="patrimonizado">Exportar Patrimonizados</option>
+                            <option value="no_patrimonizado">Exportar No Patrimonizados</option>
+                            <option value="consolidado">Exportar Consolidado</option>
+                        </select>
+                    </div>
+                    </div>
+
                     <div>
                         {/* Botón para exportar Patrimonizado */}
                         <button className="btn btn-success mb-3 me-2" onClick={exportPatrimonizado}>Exportar Patrimonizados</button>
@@ -161,6 +197,8 @@ const WorkerSearchMod1 = () => {
                         {/* Botón para exportar todos los items (Consolidado) */}
                         <button className="btn btn-success mb-3" onClick={exportConsolidado}>Exportar Consolidado</button>
                     </div>
+
+
                     {/* Controles para seleccionar los filtros */}
                     <div className="row mt-2">
                         <div className="mb-3 col-3 text-start">
@@ -329,7 +367,7 @@ const WorkerSearchMod1 = () => {
                                 className="form-control"
                                 rows={5}
                                 value={newObservation}
-                                onChange    ={(e) => setNewObservation(e.target.value)}
+                                onChange={(e) => setNewObservation(e.target.value)}
                             />
                         </Modal.Body>
                         <Modal.Footer>

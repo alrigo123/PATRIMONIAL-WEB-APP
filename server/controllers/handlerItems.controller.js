@@ -34,54 +34,142 @@ export const updateSituation = async (req, res) => {
     }
 };
 
+// export const getItemByCodePatAndUpdate = async (req, res, next) => {
+//     try {
+//         const id = req.params.id;
+//         // // Log para verificar el parámetro recibido
+//         // console.log('ID recibido:', id);
+
+// // ###### AQUI HACER LA VALIDACION DEL TRBAJADOR ,PARA QUE LUEGO SE UPDATEEE EL COD PATRIMONIAL :)
+
+//         // Intento de búsqueda del item
+//         const [rows] = await pool.query("SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?", [id]);
+
+//         // // Log para verificar si el item fue encontrado
+//         // console.log('Resultado de búsqueda:', rows);
+
+//         if (!rows.length) {
+//             console.log('Item no encontrado.');
+//             return res.status(404).json({ message: 'Item not found' });
+//         }
+
+//         // Aquí se obtiene el item
+//         const item = rows[0];
+//         const fechaRegistro = new Date(); // Fecha actual
+
+//         // // Log para verificar valores antes de actualizar
+//         // console.log('Preparando para actualizar item con ID:', id);
+//         // console.log('Fecha Registro:', fechaRegistro);
+
+//         // Intento de actualizar estado y fecha
+//         const [updateResult] = await pool.query(
+//             "UPDATE item SET ESTADO = 1, SITUACION = 1, FECHA_REGISTRO = ? WHERE CODIGO_PATRIMONIAL = ?",
+//             [fechaRegistro, id]
+//         );
+
+//         // Log para verificar si la actualización fue exitosa
+//         // console.log('Resultado de la actualización:', updateResult);
+
+//         // // Verifica si la actualización afectó alguna fila
+//         if (updateResult.affectedRows === 0) {
+//             console.log('No se actualizó ningún registro.');
+//         } else {
+//             // console.log('Registro, estado y situacion actualizado correctamente.');
+//         }
+
+//         // Retornar el item con sus datos actualizados
+//         res.json({ ...item, ESTADO: 1, SITUACION: 1, FECHA_REGISTRO: fechaRegistro });
+//     } catch (error) {
+//         console.error('Error en la actualización:', error);
+//         return res.status(500).json(error);
+//     }
+// };
+
+
 export const getItemByCodePatAndUpdate = async (req, res, next) => {
     try {
-        const id = req.params.id;
-        // // Log para verificar el parámetro recibido
-        // console.log('ID recibido:', id);
+        const id = req.params.id;  // Código patrimonial del item
+        const { trabajador_data } = req.query; // Nombre y apellido del trabajador
+        // const { trabajador_data } = req.body; // Nombre y apellido del trabajador
 
-        // Intento de búsqueda del item
+        // 1. Verificar si el código patrimonial existe en la base de datos
         const [rows] = await pool.query("SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?", [id]);
-
-        // // Log para verificar si el item fue encontrado
-        // console.log('Resultado de búsqueda:', rows);
 
         if (!rows.length) {
             console.log('Item no encontrado.');
-            return res.status(404).json({ message: 'Item not found' });
+            return res.status(404).json({ message: 'El código patrimonial no existe en la base de datos' });
         }
 
-        // Aquí se obtiene el item
         const item = rows[0];
+
+
+        // 2. Verificar si el código patrimonial pertenece al trabajador
+
+        const [trabajador] = await pool.query(
+            "SELECT * FROM item WHERE TRABAJADOR = ? AND CODIGO_PATRIMONIAL = ?",
+            [trabajador_data, id]
+        );
+
+        // // Si no se encuentra el trabajador con el código patrimonial proporcionado
+        // if (trabajador.length === 0) {  // Verificar si el array 'trabajador' está vacío
+        //     // console.log("data del worker el front", trabajador);
+        //     // console.log('El código patrimonial no pertenece a este trabajador');
+        //     return res.status(400).json({ message: 'El código patrimonial no pertenece a este trabajador' });
+        // } else {
+        //     console.log("data del worker el front", trabajador);
+        //     console.log('El código patrimonial sí pertenece a este trabajador');
+        // }
+
+
+        if (trabajador.length === 0) {
+            // Verificar si el código pertenece a otro trabajador
+            const [otroTrabajador] = await pool.query(
+              "SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?",
+              [id]
+            );
+      
+            if (otroTrabajador.length > 0) {
+              console.log('El código patrimonial pertenece a otro trabajador:', otroTrabajador[0]);
+              return res.status(400).json({
+                message: 'El código patrimonial pertenece a otro trabajador',
+                otroTrabajador: {
+                    TRABAJADOR: otroTrabajador[0].TRABAJADOR,
+                    DEPENDENCIA: otroTrabajador[0].DEPENDENCIA,
+                    UBICACION: otroTrabajador[0].UBICACION, // Incluye más campos si es necesario
+                  },
+              });
+            }
+      
+            console.log('El código patrimonial no pertenece a este trabajador');
+            return res.status(400).json({ message: 'El código patrimonial no pertenece a este trabajador' });
+          }
+
+        // throw new Error
+
+
+        // 3. Si el código pertenece al trabajador, proceder con la actualización
         const fechaRegistro = new Date(); // Fecha actual
 
-        // // Log para verificar valores antes de actualizar
-        // console.log('Preparando para actualizar item con ID:', id);
-        // console.log('Fecha Registro:', fechaRegistro);
-
-        // Intento de actualizar estado y fecha
         const [updateResult] = await pool.query(
             "UPDATE item SET ESTADO = 1, SITUACION = 1, FECHA_REGISTRO = ? WHERE CODIGO_PATRIMONIAL = ?",
             [fechaRegistro, id]
         );
 
-        // Log para verificar si la actualización fue exitosa
-        // console.log('Resultado de la actualización:', updateResult);
-
-        // // Verifica si la actualización afectó alguna fila
+        // Verificar si se actualizó algún registro
         if (updateResult.affectedRows === 0) {
             console.log('No se actualizó ningún registro.');
-        } else {
-            // console.log('Registro, estado y situacion actualizado correctamente.');
+            return res.status(400).json({ message: 'No se pudo actualizar el registro' });
         }
 
-        // Retornar el item con sus datos actualizados
+        // Retornar el item actualizado
         res.json({ ...item, ESTADO: 1, SITUACION: 1, FECHA_REGISTRO: fechaRegistro });
+
     } catch (error) {
-        console.error('Error en la actualización:', error);
-        return res.status(500).json(error);
+        console.error('Error en la actualización:', error.message);
+        return res.status(500).json({ message: 'Error en el servidor', error });
     }
 };
+
 
 export const updateItem = async (req, res) => {
     const { id } = req.params;
@@ -109,18 +197,18 @@ export const updateItem = async (req, res) => {
         // Consulta SQL para actualizar el item, incluyendo la actualización del campo CONSERV
         const [result] = await pool.query(
             `
-            UPDATE item 
-            SET 
+            UPDATE item
+            SET
                 DESCRIPCION = ?,
-                TRABAJADOR = ?, 
-                DEPENDENCIA = ?, 
-                UBICACION = ?, 
-                FECHA_ALTA = ?, 
-                FECHA_COMPRA = ?, 
-                DISPOSICION = ?, 
+                TRABAJADOR = ?,
+                DEPENDENCIA = ?,
+                UBICACION = ?,
+                FECHA_ALTA = ?,
+                FECHA_COMPRA = ?,
+                DISPOSICION = ?,
                 SITUACION = ?,
                 CONSERV = ?
-            WHERE 
+            WHERE
                 CODIGO_PATRIMONIAL = ?
             `,
             [

@@ -34,26 +34,26 @@ config(); //Cargar las variables del archivo .env
 // })
 
 // Docker VM server
-// const pool = new createPool({
-//     host: process.env.DB_HOST_DOCKER,
-//     user: process.env.DB_USER_DOCKER,
-//     password: process.env.DB_PASSWORD_DOCKER,
-//     database: process.env.DB_NAME_DOCKER,
-//     waitForConnections: true,
-//     connectionLimit: 10,
-//     queueLimit: 0
-// })
-
-// Docker VM server GERAGRI
 const pool = new createPool({
-    host: process.env.DB_HOST_DOCKER_G,
-    user: process.env.DB_USER_DOCKER_G,
-    password: process.env.DB_PASSWORD_DOCKER_G,
-    database: process.env.DB_NAME_DOCKER_G,
+    host: process.env.DB_HOST_DOCKER,
+    user: process.env.DB_USER_DOCKER,
+    password: process.env.DB_PASSWORD_DOCKER,
+    database: process.env.DB_NAME_DOCKER,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 })
+
+// Docker VM server GERAGRI
+// const pool = new createPool({
+//     host: process.env.DB_HOST_DOCKER_G,
+//     user: process.env.DB_USER_DOCKER_G,
+//     password: process.env.DB_PASSWORD_DOCKER_G,
+//     database: process.env.DB_NAME_DOCKER_G,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// })
 
 // Check database connection
 async function checkConnection() {

@@ -23,7 +23,39 @@ export const searchGeneral = async (req, res, next) => {
     } catch (error) {
         return res.status(500).json(error);
     }
+};    
+
+export const searchItemByPartial = async (req, res, next) => {
+    try {
+        const searchTerm = req.query.search;  // Usar 'search' que es el nombre correcto del parámetro en la URL
+
+        // Verificar que el término de búsqueda esté presente
+        if (!searchTerm) {
+            return res.status(400).json({ message: 'El parámetro de búsqueda es requerido.' });
+        }
+
+        // Realizamos la búsqueda con el término de búsqueda en los campos deseados
+        const [rows] = await pool.query(`
+            SELECT DISTINCT DEPENDENCIA, TRABAJADOR 
+            FROM item
+            WHERE DEPENDENCIA LIKE ? 
+            OR TRABAJADOR LIKE ?
+            LIMIT 10;`, [`%${searchTerm}%`, `%${searchTerm}%`]);
+
+        // Si no se encuentra nada, devolver un mensaje
+        if (!rows.length) {
+            return res.status(404).json({ message: 'No se encontraron resultados' });
+        }
+
+        // Devolvemos las sugerencias encontradas
+        res.json(rows);
+        // console.log(rows)
+    } catch (error) {
+        console.error('Error en la búsqueda:', error);  // Agregar un log más específico para el error
+        return res.status(500).json({ message: 'Hubo un error interno en el servidor', error });
+    }
 };
+
 
 export const searchItemsByWorker = async (req, res, next) => {
     try {
@@ -134,30 +166,3 @@ export const searchItemsByWorkerAndDescription = async (req, res, next) => {
         return res.status(500).json({ message: "Error en el servidor" });
     }
 };
-
-// export const searchItemsByWorkerAndDescription = async (req, res, next) => {
-// CREAR UN FULLTEXT ESPECIFICO PARA LOS DOS ??? , PRIMERO PROBAR SIN CREAR EL FULLTEXT Y LUEGO YA
-//     try {
-//         // Extraemos los valores de trabajador y descripción de la consulta
-//         const trabajador = req.query.trabajador || '';
-//         const descripcion = req.query.descripcion || '';
-
-//         // Realizamos la consulta SQL con MATCH ... AGAINST
-//         const [rows] = await pool.query(`
-//             SELECT *
-//             FROM item
-//             WHERE MATCH(TRABAJADOR) AGAINST(? IN BOOLEAN MODE)
-//               AND MATCH(DESCRIPCION) AGAINST(? IN BOOLEAN MODE)
-//             ORDER BY DESCRIPCION
-//         `, [trabajador, descripcion]);
-
-//         // Validamos si hay resultados
-//         if (!rows.length)
-//             return res.status(404).json({ message: 'No se encontraron ítems con los criterios especificados' });
-
-//         res.json(rows); // Enviamos los resultados
-//     } catch (error) {
-//         console.error("Error en la consulta:", error);
-//         return res.status(500).json({ message: "Error en el servidor" });
-//     }
-// };

@@ -167,3 +167,37 @@ export const getItemsQtyByDependece = async (req, res, next) => {
         return res.status(500).json(error.message);
     }
 };
+
+export const searchItemByCodeAndWorker = async (req, res) => {
+    try {
+      // Extraer los parámetros de la solicitud
+      const { code } = req.params; // Código patrimonial desde la URL
+      const { worker } = req.query; // Nombre completo del trabajador desde la query string
+  
+      // Validar los parámetros
+      if (!code || !worker) {
+        return res.status(400).json({ message: 'El código patrimonial y el nombre del trabajador son requeridos.' });
+      }
+  
+      // Consulta a la base de datos para buscar el ítem
+      const [rows] = await pool.query(
+        `
+        SELECT * FROM item
+        WHERE CODIGO_PATRIMONIAL = ? AND TRABAJADOR = ?
+        LIMIT 1;
+        `,
+        [code, worker]
+      );
+  
+      // Verificar si se encontró un resultado
+      if (rows.length === 0) {
+        return res.status(404).json({ message: 'No se encontró ningún ítem para el código y trabajador especificados.' });
+      }
+  
+      // Devolver el resultado
+      res.json(rows[0]);
+    } catch (error) {
+      console.error('Error en la búsqueda:', error);
+      res.status(500).json({ message: 'Error interno del servidor.' });
+    }
+  };

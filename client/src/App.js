@@ -1,5 +1,7 @@
 import './App.css';
 import './styles/styles.css'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //LANDING PAGE
 import HomePageComp from './LandingPage/HomePageComp.js';
@@ -36,6 +38,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <BrowserRouter basename="/inventory">
         <Header />
         <NavBarComp pageWrapID={"page-wrap"} outerContainerId={"outer-container"} />
