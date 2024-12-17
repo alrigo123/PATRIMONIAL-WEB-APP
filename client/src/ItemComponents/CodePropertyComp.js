@@ -29,7 +29,7 @@ const CodePropertyComp = () => {
                 navigate('/import-excel');
             }
         });
-    };  
+    };
 
     return (
         <div className="container my-4">

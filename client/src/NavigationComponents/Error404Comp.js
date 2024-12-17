@@ -15,7 +15,7 @@ const Error404 = () => {
                 style={{ height: '300px', width: '300px' }}
             />
             <h1 className='mb-2'>¡Oops! Página no encontrada</h1>
-            <button className="mt-2 home-button" onClick={() => navigate('/home ')}>
+            <button className="mt-2 home-button" onClick={() => navigate('/ ')}>
                 Volver al inicio
             </button>
         </div>

@@ -25,7 +25,7 @@ export const searchGeneral = async (req, res, next) => {
     }
 };    
 
-export const searchItemByPartial = async (req, res, next) => {
+export const searchItemByPartialWorker = async (req, res, next) => {
     try {
         const searchTerm = req.query.search;  // Usar 'search' que es el nombre correcto del parámetro en la URL
 
@@ -38,9 +38,8 @@ export const searchItemByPartial = async (req, res, next) => {
         const [rows] = await pool.query(`
             SELECT DISTINCT DEPENDENCIA, TRABAJADOR 
             FROM item
-            WHERE DEPENDENCIA LIKE ? 
-            OR TRABAJADOR LIKE ?
-            LIMIT 10;`, [`%${searchTerm}%`, `%${searchTerm}%`]);
+            WHERE TRABAJADOR LIKE ?
+            LIMIT 10;`, [`%${searchTerm}%`]);
 
         // Si no se encuentra nada, devolver un mensaje
         if (!rows.length) {
@@ -56,6 +55,35 @@ export const searchItemByPartial = async (req, res, next) => {
     }
 };
 
+export const searchItemByPartialDependency = async (req, res, next) => {
+    try {
+        const searchTerm = req.query.search;  // Usar 'search' que es el nombre correcto del parámetro en la URL
+
+        // Verificar que el término de búsqueda esté presente
+        if (!searchTerm) {
+            return res.status(400).json({ message: 'El parámetro de búsqueda es requerido.' });
+        }
+
+        // Realizamos la búsqueda con el término de búsqueda en los campos deseados
+        const [rows] = await pool.query(`
+            SELECT DISTINCT DEPENDENCIA 
+            FROM item
+            WHERE DEPENDENCIA LIKE ? 
+            LIMIT 10;`, [`%${searchTerm}%`]);
+
+        // Si no se encuentra nada, devolver un mensaje
+        if (!rows.length) {
+            return res.status(404).json({ message: 'No se encontraron resultados' });
+        }
+
+        // Devolvemos las sugerencias encontradas
+        res.json(rows);
+        // console.log(rows)
+    } catch (error) {
+        console.error('Error en la búsqueda:', error);  // Agregar un log más específico para el error
+        return res.status(500).json({ message: 'Hubo un error interno en el servidor', error });
+    }
+};
 
 export const searchItemsByWorker = async (req, res, next) => {
     try {

@@ -11,7 +11,8 @@ import {
 
 import {
   searchGeneral,
-  searchItemByPartial,
+  searchItemByPartialWorker,
+  searchItemByPartialDependency,
   searchItemsByWorkerAndDescription,
   searchItemsByWorker,
   searchItemsByDependece
@@ -35,7 +36,8 @@ const router = Router();
 // router.get("/", getAllItemsLimited); // GET ALL ITEMS
 router.get("/", getAllItemsAndConservationLimited); // GET ALL ITEMS AND THEI CONSERVATION STATE
 router.get("/search", searchGeneral); // Endpoint para la búsqueda en tiempo real
-router.get("/partial", searchItemByPartial); // Endpoint para la búsqueda en tiempo real
+router.get("/partial/worker", searchItemByPartialWorker); // Endpoint para la búsqueda en tiempo real worker
+router.get("/partial/dependency", searchItemByPartialDependency); // Endpoint para la búsqueda en tiempo real dependency
 router.get("/worker", searchItemsByWorker); //GET ITEMS BY WORKER
 router.get("/dependency", searchItemsByDependece); //GET ITEMS BY DEPENDENCY
 router.get("/filter", searchItemsByWorkerAndDescription); // GET ITEMS BY WORKER AND DESCRIPTION

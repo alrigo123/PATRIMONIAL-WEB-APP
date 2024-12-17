@@ -123,7 +123,8 @@ const DependencySearchMod1 = () => {
             filterConservation === 'all' ||
             (filterConservation === 'good' && item.CONSERV === 1) ||
             (filterConservation === 'bad' && item.CONSERV === 2) ||
-            (filterConservation === 'regular' && item.CONSERV === 3);
+            (filterConservation === 'regular' && item.CONSERV === 3) ||
+            (filterConservation === 'inha' && item.CONSERV === 4);
         return estadoFilter && disposicionFilter && situacionFilter && conservationFilter;
     });
 
@@ -214,6 +215,7 @@ const DependencySearchMod1 = () => {
                                 <option value="good">Buena</option>
                                 <option value="bad">Mala</option>
                                 <option value="regular">Regular</option>
+                                <option value="inha">INHABILITADO</option>
                             </select>
                         </div>
                     </div>

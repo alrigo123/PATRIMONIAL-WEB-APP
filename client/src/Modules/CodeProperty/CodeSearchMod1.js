@@ -8,42 +8,55 @@ const URL = process.env.REACT_APP_API_URL_ITEMS;
 const CodeSearchMod1 = () => {
   const [barcode, setBarcode] = useState('');
   const [itemData, setItemData] = useState(null);
-  const [selectedPerson, setSelectedPerson] = useState(null); // Estado para la persona o dependencia seleccionada
-  const [personsList, setPersonsList] = useState([]); // Lista de sugerencias de personas o dependencias
-  const [workerSearch, setWorkerSearch] = useState(''); // Para controlar lo que el usuario escribe en el input
+
+  const [searchType, setSearchType] = useState('TRABAJADOR'); // Select: TRABAJADOR o DEPENDENCIA
+  const [selectedPerson, setSelectedPerson] = useState(null); // Estado para la selección
+  const [personsList, setPersonsList] = useState([]); // Lista de sugerencias
+  const [searchInput, setSearchInput] = useState(''); // Controla el input
+
   const inputRef = useRef(null);
 
-  // Manejo de búsqueda de la persona o dependencia
-  const handlePersonSearch = async (e) => {
-    const worker_or_dependency = e.target.value;
-    setWorkerSearch(worker_or_dependency); // Actualiza el valor del input mientras el usuario escribe
-    if (worker_or_dependency.length > 2) {
-      try {
-        const response = await axios.get(`${URL}/partial?search=${worker_or_dependency}`);
-        setPersonsList(response.data);
-      } catch (error) {
-        console.log('Error al buscar personas:', error);
-      }
-    }
-  };
-
-  const handlePersonSelect = (person) => {
-    setSelectedPerson(person);
-    setPersonsList([]); // Limpiar la lista de sugerencias
-    setWorkerSearch(person.TRABAJADOR); // Poner el nombre de la persona seleccionada en el input
-    // Agrega este console.log para ver la persona seleccionada
-    console.log('Persona seleccionada:', person);
+  // Manejo de cambio en el select
+  const handleSearchTypeChange = (e) => {
+    setSearchType(e.target.value);
+    setSelectedPerson(null); // Limpiar selección
+    setSearchInput('');
+    setPersonsList([]);
   };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
       setBarcode(value);
-
       if (value.length === 12) {
         fetchItem(value);
       }
     }
+  };
+
+  // Buscar Trabajador o Dependencia según el select
+  const handleSearch = async (e) => {
+    const query = e.target.value;
+    setSearchInput(query);
+
+    if (query.length > 2) {
+      try {
+        const endpoint =
+          searchType === 'TRABAJADOR'
+            ? `${URL}/partial/worker?search=${query}`
+            : `${URL}/partial/dependency?search=${query}`; // Ruta específica
+        const response = await axios.get(endpoint);
+        setPersonsList(response.data);
+      } catch (error) {
+        console.log('Error en la búsqueda:', error);
+      }
+    }
+  };
+
+  const handleSelect = (person) => {
+    setSelectedPerson(person);
+    setPersonsList([]);
+    setSearchInput(searchType === 'TRABAJADOR' ? person.TRABAJADOR : person.DEPENDENCIA);
   };
 
   const fetchItem = async (code) => {
@@ -51,56 +64,82 @@ const CodeSearchMod1 = () => {
       alert('Primero debe seleccionar una persona o dependencia');
       return;
     }
-
-    // Mostrar el nombre de la persona seleccionada en consola
-    console.log('Trabajador seleccionado:', selectedPerson.TRABAJADOR);
-
     try {
-      const response = await axios.get(`${URL}/${code}`, {
-        params: {
-          trabajador_data: selectedPerson.TRABAJADOR
-        }
-      });
+      const params =
+        searchType === 'TRABAJADOR'
+          ? { trabajador_data: selectedPerson.TRABAJADOR }
+          : { dependencia_data: selectedPerson.DEPENDENCIA }; // Parámetros dinámicos
 
-
+      const response = await axios.get(`${URL}/${code}`, { params });
 
       if (response.status === 200) {
-        toast.success('✅ El código patrimonial fue actualizado correctamente', {
-          position: 'top-right',
-          autoClose: 5000,
+        toast.success('El bien patrimonial fue registrado correctamente', {
+          position: 'top-center',
+          autoClose: 1500,             // Tiempo de cierre automático
           hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
+          closeOnClick: false,         // No cerrar con click
+          pauseOnHover: false,         // No pausar al pasar el cursor
+          pauseOnFocusLoss: false,     // No pausar al cambiar de ventana o pestaña
           draggable: true,
           progress: undefined,
         });
         setItemData(response.data);
       }
-
     } catch (error) {
       if (error.response) {
         const { status, data } = error.response;
-
         if (status === 404) {
-          toast.error(`❌ ${data.message || 'El código patrimonial no existe en la base de datos'}`, {
-            position: 'top-right',
-            autoClose: 5000,
+          toast.error(`${data.message || 'El bien patrimonial no existe en la base de datos'}`, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,         // No cerrar con click
+            pauseOnHover: false,         // No pausar al pasar el cursor
+            pauseOnFocusLoss: false,     // No pausar al cambiar de ventana o pestaña
+            draggable: true,
+            progress: undefined,
           });
         } else if (status === 400) {
           if (data.otroTrabajador) {
             const { TRABAJADOR, DEPENDENCIA, UBICACION } = data.otroTrabajador;
             toast.warning(
-              `⚠️ El código patrimonial pertenece a otro trabajador: ${TRABAJADOR}. Dependencia: ${DEPENDENCIA}`,
+              <div>
+                El bien patrimonial pertenece a: <strong>{TRABAJADOR}</strong>
+                <br />
+                Dependencia: <strong>{DEPENDENCIA}</strong>
+              </div>,
               {
-                position: 'top-right',
+                position: 'top-center',
                 autoClose: 7000,
+                hideProgressBar: false,
+                closeOnClick: false,         // No cerrar con click
+                pauseOnHover: false,         // No pausar al pasar el cursor
+                pauseOnFocusLoss: false,     // No pausar al cambiar de ventana o pestaña
+                draggable: true,
+                progress: undefined,
+              }
+            );
+          } else if (data.otraDependencia) {
+            const { TRABAJADOR, DEPENDENCIA, UBICACION } = data.otraDependencia;
+            toast.warning(
+              <div>
+                El bien patrimonial pertenece a dependencia: <strong>{DEPENDENCIA}</strong>
+                <br />
+                Trabajador: <strong>{TRABAJADOR}</strong>
+              </div>,
+              {
+                position: 'top-center',
+                autoClose: 7000,
+                hideProgressBar: false,
+                closeOnClick: false,         // No cerrar con click
+                pauseOnHover: false,         // No pausar al pasar el cursor
+                pauseOnFocusLoss: false,     // No pausar al cambiar de ventana o pestaña
+                draggable: true,
+                progress: undefined,
               }
             );
           } else {
-            toast.error(`❌ ${data.message || 'El código patrimonial no pertenece a este trabajador'}`, {
-              position: 'top-right',
-              autoClose: 5000,
-            });
+            toast.error(`${data.message || 'Error Inesperado'}`);
           }
         } else {
           alert(data.message || 'Ocurrió un error desconocido');
@@ -108,50 +147,54 @@ const CodeSearchMod1 = () => {
       } else {
         console.error('Error de red o servidor:', error);
         toast.error('❌ No se pudo conectar con el servidor', {
-          position: 'top-right',
+          position: 'top-center',
           autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,         // No cerrar con click
+          pauseOnHover: false,         // No pausar al pasar el cursor
+          pauseOnFocusLoss: false,     // No pausar al cambiar de ventana o pestaña
+          draggable: true,
+          progress: undefined,
         });
       }
-
       setItemData(null); // Limpiar los datos del item si hubo un error
     }
-  }
-
-
-  //     if (response.data) {
-  //       setItemData(response.data);
-  //     } else {
-  //       setItemData(null);
-  //       alert('El item no pertenece a la persona o dependencia seleccionada');
-  //     }
-  //   } catch (error) {
-  //     console.log('Error al obtener el item:', error);
-  //     setItemData(null);
-  //   }
-  // };
-
+  };
 
   const clearInput = () => {
     setBarcode('');
     setItemData(null);
     // setSelectedPerson(null);
-    // setWorkerSearch(''); // Limpiar la búsqueda de la persona también
+    // setSearchInput('');
     inputRef.current.focus();
   };
 
   return (
     <div>
-      <h5 className="text-lg-start fw-bold">REGISTRAR BIEN PATRIMONIAL</h5>
+      <h5 className="text-lg-start fw-bold mb-3">REGISTRAR BIEN PATRIMONIAL</h5>
       <div className="row g-3">
-        {/* Input para seleccionar persona o dependencia */}
-        <div className="col-10">
+        {/* Select para elegir entre Trabajador o Dependencia */}
+        <div className="col-3">
+          <select
+            className="form-select fw-bold"
+            value={searchType}
+            onChange={handleSearchTypeChange}
+            style={{ fontSize: '1.2rem', padding: '10px' }}
+          >
+            <option value="TRABAJADOR">Trabajador</option>
+            <option value="DEPENDENCIA">Dependencia</option>
+          </select>
+        </div>
+
+        {/* Input para buscar */}
+        <div className="col-6">
           <input
             type="text"
-            placeholder="Buscar persona o dependencia"
-            onChange={handlePersonSearch}
-            value={workerSearch} // Controlar el input con el valor de workerSearch
-            className="form-control mb-3 fw-bold"
-            style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
+            placeholder={`Buscar ${searchType}`}
+            value={searchInput}
+            onChange={handleSearch}
+            className="form-control fw-bold"
+            style={{ fontSize: '1.2rem', padding: '10px' }}
           />
           {personsList.length > 0 && (
             <ul className="list-group">
@@ -159,36 +202,44 @@ const CodeSearchMod1 = () => {
                 <li
                   key={person.id}
                   className="list-group-item"
-                  onClick={() => handlePersonSelect(person)} // Seleccionar persona al hacer clic
+                  onClick={() => handleSelect(person)}
                   style={{ cursor: 'pointer' }}
                 >
-                  {person.TRABAJADOR} - {person.DEPENDENCIA}
+                  {searchType === 'TRABAJADOR' ? person.TRABAJADOR : person.DEPENDENCIA}
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        {/* Input para buscar el código patrimonial */}
+        {/* Input de código patrimonial */}
         <div className="col-10">
           <input
             type="text"
             placeholder="Escanear código (barras) patrimonial"
             value={barcode}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Permitir solo dígitos y un máximo de 12 caracteres
+              if (/^\d{0,12}$/.test(value)) {
+                handleInputChange(e); // Actualizar el estado si pasa la validación
+              }
+            }}
             ref={inputRef}
             className="form-control mb-3 fw-bold"
             style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
             disabled={!selectedPerson} // Deshabilitar si no se ha seleccionado una persona
+            pattern="\d{12}" // Validar en el submit para asegurarse de que tiene exactamente 12 dígitos
+            title="Debe contener exactamente 12 dígitos"
           />
         </div>
 
-        {/* Botón para limpiar el formulario */}
+        {/* Botón de limpiar */}
         <div className="col-2">
           <button
             onClick={clearInput}
-            className="btn btn-dark mb-3 fw-bold"
-            style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
+            className="btn btn-dark fw-bold"
+            style={{ fontSize: '1.2rem', padding: '10px' }}
           >
             🧹 Limpiar
           </button>
@@ -196,7 +247,7 @@ const CodeSearchMod1 = () => {
       </div>
 
       {/* Mostrar información del item */}
-      {itemData ? (
+      {itemData && (
         <div className="d-flex justify-content-center mt-3">
           <div className="row g-5 align-items-center">
             <div className="col-auto text-start">
@@ -233,8 +284,6 @@ const CodeSearchMod1 = () => {
             </div>
           </div>
         </div>
-      ) : (
-        barcode && <p className="text-center text-danger">No se encontró ningún bien con el CODIGO PATRIMONIAL ingresado.</p>
       )}
     </div>
   );
