@@ -1,26 +1,6 @@
 import pool from '../db.js';
 
-// export const getItemsGeneralState = async (req, res) => {
-//     try {
-//         const [rows] = await pool.query(
-//             `SELECT N, CODIGO_PATRIMONIAL, DESCRIPCION, DEPENDENCIA, UBICACION, 
-//             TRABAJADOR, FECHA_COMPRA, FECHA_ALTA, FECHA_REGISTRO, ESTADO 
-//             FROM item`
-//         );
-
-//         // Validar si hay resultados
-//         if (rows.length === 0) {
-//             return res.status(404).json({ message: "No se encontraron elementos" });
-//         }
-//         res.json(rows);
-//         // console.log(rows)
-
-//     } catch (error) {
-//         console.error("Error en la consulta a la base de datos:", error.message);
-//         return res.status(500).json({ error: "Error al obtener los datos de la base de datos" });
-//     }
-// };
-
+// FUNCTION to get all data including the conservation state
 export const getItemsGeneralState = async (req, res) => {
     try {
         const [rows] = await pool.query(
@@ -34,10 +14,11 @@ export const getItemsGeneralState = async (req, res) => {
         ON I.CONSERV = C.id`
         );
 
-        // Validar si hay resultados
+        // Check if there are results
         if (rows.length === 0) {
             return res.status(404).json({ message: "No se encontraron elementos" });
         }
+
         res.json(rows);
         // console.log(rows)
 
@@ -47,6 +28,7 @@ export const getItemsGeneralState = async (req, res) => {
     }
 };
 
+// FUNCTION to get disposition of the item
 export const getItemsGeneralDisposition = async (req, res) => {
     try {
         const [rows] = await pool.query(
@@ -62,6 +44,7 @@ export const getItemsGeneralDisposition = async (req, res) => {
     }
 };
 
+// FUNCTION to get disposition of the item
 export const getItemsStateTrue = async (req, res) => {
     try {
         const [rows] = await pool.query(

@@ -1,23 +1,34 @@
 import pool from '../db.js';
 
-//FUNCTIONS TO GET DATA
+//FUNCTION TO GET CONSERVATION STATUS DATA
+export const getConservationStatus = async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            `select * FROM conservacion`
+        );
+        res.json(rows)
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+}
+
+//FUNCTION TO GET DATA FROM A SINGLE ITEM BY THEIR "CODIGO_PATRIMONIAL"
 export const getItemByCodePat = async (req, res, next) => {
     try {
         const id = req.params.id
-        const [row] = await pool.query("SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?", [id]); //with the [] just get an array with the components neede, without that give us more rows
+        const [row] = await pool.query("SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?", [id]); 
+        //with the [] just get an array with the components neede, without that give us more rows
 
-        // console.log("DEL BACKEND:", row)
-
-        // if (!row.length) return res.status(404).json({ message: 'Item not found' })
+        // Check if the item exist
         if (!row.length) return res.status(404).json({ message: 'Item not found' })
         res.json(row[0])
-        // res.json(row)  //LLAMA A TODOS LOS ITEMS , PERO COMO E REPITE SU COD NO PUEDE PRINTEAR EN EL FORM
         // res.json({ item :  row[0].id })
     } catch (error) {
         return res.status(500).json(error)
     }
 }
 
+//FUNCTION TO GET ALL DATA INCLUDING CONSERVATION STATE LIMITED TO SHOW n SAMPLES
 export const getAllItemsAndConservationLimited = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1; // Página actual, por defecto 1
@@ -37,21 +48,21 @@ export const getAllItemsAndConservationLimited = async (req, res, next) => {
             ORDER BY I.TRABAJADOR ASC
             LIMIT ? OFFSET ?
             `,
-            [limit, offset] // Parámetros correctamente pasados
+            [limit, offset] // Query parameters
         );
-
-        // console.log("BACKEND SALIDA:", rows);
 
         const [totalRows] = await pool.query('SELECT COUNT(*) as total FROM item');
         const total = totalRows[0].total;
 
         res.json({ total, page, limit, items: rows });
+
     } catch (error) {
         console.error("ERROR EN getAllItemsAndConservationLimited:", error);
         return res.status(500).json(error);
     }
 };
 
+//FUNCTION TO GET ALL DATA INCLUDING CONSERVATION STATE FROM A SINGLE CODIGO_PATRIMONIAL
 export const getItemByCodePatAndConservation = async (req, res, next) => {
     try {
         const id = req.params.id
@@ -66,8 +77,6 @@ export const getItemByCodePatAndConservation = async (req, res, next) => {
             WHERE I.CODIGO_PATRIMONIAL = ?
             `, [id]); //with the [] just get an array with the components neede, without that give us more rows
 
-        // console.log("DEL BACKEND:", row)
-
         // if (!row.length) return res.status(404).json({ message: 'Item not found' })
         if (!row.length) return res.status(404).json({ message: 'Item not found' })
         res.json(row[0])
@@ -78,17 +87,7 @@ export const getItemByCodePatAndConservation = async (req, res, next) => {
     }
 }
 
-export const getConservationStatus = async (req, res) => {
-    try {
-        const [rows] = await pool.query(
-            `select * FROM conservacion`
-        );
-        res.json(rows)
-    } catch (error) {
-        return res.status(500).json(error);
-    }
-}
-
+//FUNCTION TO GET ITEMS QUANTITY OF A "TRABAJADOR" BY THEIR NAME AND LAST NAME 
 export const getItemsQtyByWorker = async (req, res, next) => {
     try {
         const input = req.query.q;
@@ -170,34 +169,34 @@ export const getItemsQtyByDependece = async (req, res, next) => {
 
 export const searchItemByCodeAndWorker = async (req, res) => {
     try {
-      // Extraer los parámetros de la solicitud
-      const { code } = req.params; // Código patrimonial desde la URL
-      const { worker } = req.query; // Nombre completo del trabajador desde la query string
-  
-      // Validar los parámetros
-      if (!code || !worker) {
-        return res.status(400).json({ message: 'El código patrimonial y el nombre del trabajador son requeridos.' });
-      }
-  
-      // Consulta a la base de datos para buscar el ítem
-      const [rows] = await pool.query(
-        `
+        // Extraer los parámetros de la solicitud
+        const { code } = req.params; // Código patrimonial desde la URL
+        const { worker } = req.query; // Nombre completo del trabajador desde la query string
+
+        // Validar los parámetros
+        if (!code || !worker) {
+            return res.status(400).json({ message: 'El código patrimonial y el nombre del trabajador son requeridos.' });
+        }
+
+        // Consulta a la base de datos para buscar el ítem
+        const [rows] = await pool.query(
+            `
         SELECT * FROM item
         WHERE CODIGO_PATRIMONIAL = ? AND TRABAJADOR = ?
         LIMIT 1;
         `,
-        [code, worker]
-      );
-  
-      // Verificar si se encontró un resultado
-      if (rows.length === 0) {
-        return res.status(404).json({ message: 'No se encontró ningún ítem para el código y trabajador especificados.' });
-      }
-  
-      // Devolver el resultado
-      res.json(rows[0]);
+            [code, worker]
+        );
+
+        // Verificar si se encontró un resultado
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No se encontró ningún ítem para el código y trabajador especificados.' });
+        }
+
+        // Devolver el resultado
+        res.json(rows[0]);
     } catch (error) {
-      console.error('Error en la búsqueda:', error);
-      res.status(500).json({ message: 'Error interno del servidor.' });
+        console.error('Error en la búsqueda:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
     }
-  };
+};

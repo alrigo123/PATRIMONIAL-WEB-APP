@@ -36,7 +36,7 @@ export const searchItemByPartialWorker = async (req, res, next) => {
 
         // Realizamos la búsqueda con el término de búsqueda en los campos deseados
         const [rows] = await pool.query(`
-            SELECT DISTINCT DEPENDENCIA, TRABAJADOR 
+            SELECT DISTINCT TRABAJADOR 
             FROM item
             WHERE TRABAJADOR LIKE ?
             LIMIT 10;`, [`%${searchTerm}%`]);

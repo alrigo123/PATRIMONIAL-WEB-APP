@@ -11,8 +11,8 @@ const HomePageComp = () => {
                     Aquí podra visualizar los bienes registrados, patrimonizar nuevos bienes, gestionar el control de bienes y recursos de la institución.
                 </p>
                 <div className="cta-container">
-                    <a className="btn btn-success fw-bold" href="/items">Ver Bienes Registrados</a>
-                    <a className="btn btn-success m-2 fw-bold" href="/codigo-patrimonial">Patrimonizar Nuevo Bienes</a>
+                    <a className="btn btn-success fw-bold" href="/inventory/items">Ver Bienes Registrados</a>
+                    <a className="btn btn-success m-2 fw-bold" href="/inventory/codigo-patrimonial">Patrimonizar Nuevo Bienes</a>
                 </div>
             </header>
         </div>
