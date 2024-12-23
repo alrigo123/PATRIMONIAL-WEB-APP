@@ -50,8 +50,6 @@ export const getItemByCodePatAndUpdate = async (req, res, next) => {
 
         const item = rows[0];
 
-        // console.log("TRABAJADAOR", trabajador_data, "DEPEDNENICA", dependencia_data)
-
         if (trabajador_data) {
             console.log("se envio el trabajador")
             const [trabajador] = await pool.query(
@@ -196,8 +194,6 @@ export const updateItem = async (req, res) => {
         res.status(500).json({ message: 'Error updating item', error });
     }
 };
-
-// SELECT * FROM item WHERE TRABAJADOR LIKE '%ESTRADA CHILE%' AND ESTADO = 0;
 
 export const insertExcelData = async (req, res) => {
     const { data } = req.body; // Datos enviados desde el frontend

@@ -28,8 +28,6 @@ export const loginUser = async (req, res) => {
         // Buscar al usuario por DNI
         const [rows] = await pool.query("SELECT * FROM user_i WHERE dni = ?", [dni]); // Destructuring para evitar niveles anidados
 
-        // console.log("Resultado de la consulta:", rows);
-
         // Verificar si el usuario existe
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -59,7 +57,6 @@ export const loginUser = async (req, res) => {
             user: {
                 dni: user.dni,
                 name_and_last: user.name_and_last
-                // role: user.role, // Supón que hay un campo 'role'
             }
         });
     } catch (error) {
@@ -70,7 +67,6 @@ export const loginUser = async (req, res) => {
 
 export const registerUser = async (req, res) => {
     const { dni, name_and_last, password } = req.body;
-
     try {
         // Validación básica
         if (!dni || !name_and_last || !password) {
@@ -78,7 +74,7 @@ export const registerUser = async (req, res) => {
         }
 
         // Verificar si el DNI ya existe
-        const [existingDNI] = await pool.query("SELECT * FROM user_i WHERE dni = ?", [dni]);
+        const [existingDNI] = await pool.query("    ", [dni]);
         if (existingDNI.length > 0) {
             return res.status(400).json({ message: "El DNI ya está registrado" });
         }

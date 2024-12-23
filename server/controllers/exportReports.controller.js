@@ -167,7 +167,14 @@ export const getItemsSituationFalse = async (req, res) => {
 export const getAllItemsToExport = async (req, res) => {
     try {
         const [rows] = await pool.query(
-            `select * FROM item`
+            `SELECT 
+            I.N, I.CODIGO_PATRIMONIAL, I.DESCRIPCION, I.TRABAJADOR, 
+            I.DEPENDENCIA, I.UBICACION, I.FECHA_REGISTRO, 
+            I.FECHA_ALTA, I.FECHA_COMPRA, I.ESTADO, I.DISPOSICION,
+            I.SITUACION, C.CONSERV AS EST_CONSERVACION
+        FROM item AS I
+        INNER JOIN conservacion AS C
+        ON I.CONSERV = C.id`
         );
 
         res.json(rows)

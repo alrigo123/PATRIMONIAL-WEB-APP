@@ -3,13 +3,6 @@ import pool from '../db.js';
 export const searchGeneral = async (req, res, next) => {
     try {
         const searchTerm = req.query.q; // El término de búsqueda que el usuario ingresa
-        /* 
-        ##FULL TEXT PARA OPTIMIZAR LA BUSQUEDA SIN ORDEN 
-        ##CREAR UN INDEX EN LA BD Y LUEGO LA CONSULTA LO MATCHEA
-       
-       "SHOW INDEX FROM item;" ## PARA VER LOS FULLTEXT
-        "CREATE FULLTEXT INDEX idx_trabajador_desc ON item(TRABAJADOR, DESCRIPCION, DEPENDENCIA);"
-        */
         const [rows] = await pool.query(
             `SELECT * FROM item 
              WHERE MATCH(DESCRIPCION, TRABAJADOR, DEPENDENCIA) 
@@ -48,7 +41,7 @@ export const searchItemByPartialWorker = async (req, res, next) => {
 
         // Devolvemos las sugerencias encontradas
         res.json(rows);
-        // console.log(rows)
+
     } catch (error) {
         console.error('Error en la búsqueda:', error);  // Agregar un log más específico para el error
         return res.status(500).json({ message: 'Hubo un error interno en el servidor', error });
@@ -78,7 +71,7 @@ export const searchItemByPartialDependency = async (req, res, next) => {
 
         // Devolvemos las sugerencias encontradas
         res.json(rows);
-        // console.log(rows)
+
     } catch (error) {
         console.error('Error en la búsqueda:', error);  // Agregar un log más específico para el error
         return res.status(500).json({ message: 'Hubo un error interno en el servidor', error });
@@ -113,8 +106,6 @@ export const searchItemsByWorker = async (req, res, next) => {
             `,
             parametros
         );
-
-        // console.log(rows);
 
         // Verificar si hay resultados
         if (rows.length === 0) {
@@ -158,8 +149,6 @@ export const searchItemsByDependece = async (req, res, next) => {
             parametros
         );
 
-        // console.log(rows);
-
         // Verificar si hay resultados
         if (rows.length === 0) {
             return res.status(404).json({ message: 'No se encontraron ítems para el trabajador especificado' });
@@ -188,7 +177,6 @@ export const searchItemsByWorkerAndDescription = async (req, res, next) => {
         // Validamos si hay resultados
         if (!rows.length) return res.status(404).json({ message: 'No se encontraron ítems con los criterios especificados' });
         res.json(rows); // Enviamos los resultados
-
     } catch (error) {
         console.error("Error en la consulta:", error);
         return res.status(500).json({ message: "Error en el servidor" });

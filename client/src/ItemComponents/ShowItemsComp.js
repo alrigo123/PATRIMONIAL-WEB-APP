@@ -70,9 +70,9 @@ const ShowItemsComp = () => {
         <div className="container">
             <div className='mt-3'>
                 {/* Botones para exportar reportes */}
-                <ExportReportsStateMod />
+                {/* <ExportReportsStateMod />
                 <ExportReportsDispoMod />
-                <ExportReportsSituaMod />
+                <ExportReportsSituaMod /> */}
                 <ExportReportsMod />
             </div>
             <div className="row">

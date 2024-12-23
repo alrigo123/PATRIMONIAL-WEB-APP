@@ -102,7 +102,7 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
           </Button>
         </Form>
         <div className="text-center mt-3">
-          <p>¿No tienes cuenta? <a href="/user-register">Regístrate</a></p>
+          <p>¿No tienes cuenta? <a href="/inventory/user-register">Regístrate</a></p>
         </div>
       </Modal.Body>
     </Modal>

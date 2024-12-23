@@ -87,7 +87,7 @@ export const getItemByCodePatAndConservation = async (req, res, next) => {
     }
 }
 
-//FUNCTION TO GET ITEMS QUANTITY OF A "TRABAJADOR" BY THEIR NAME AND LAST NAME 
+//FUNCTION TO GET ITEMS QUANTITY FROM A "TRABAJADOR" BY THEIR NAME AND LAST NAME 
 export const getItemsQtyByWorker = async (req, res, next) => {
     try {
         const input = req.query.q;
@@ -127,6 +127,7 @@ export const getItemsQtyByWorker = async (req, res, next) => {
     }
 };
 
+//FUNCTION TO GET ITEMS QUANTITY FROM A "DEPENDENCIA" BY THEIR SEDE NAME
 export const getItemsQtyByDependece = async (req, res, next) => {
     try {
         const input = req.query.q;

@@ -172,6 +172,7 @@ const NavBarComp = () => {
                 <Link className="menu-item" to="/dependencia" onClick={closeMenu}>🏢 Búsqueda por Dependencia</Link>
                 <Link className="menu-item" to="/import-excel" onClick={closeMenu}>📚 Importar Datos</Link>
                 <Link className="menu-item" to="/user-register" onClick={closeMenu}>👨‍💻 Registro Usuario Autorizado</Link>
+                <a className="menu-item" href="/">🌾 GERAGRI Página Principal</a>
             </Menu>
             <LoginModalComp
                 show={isLoginModalOpen}
