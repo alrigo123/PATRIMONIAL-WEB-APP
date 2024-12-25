@@ -32,6 +32,7 @@ import ChatBotComp from './chat-test/ChatBotComp.js';
 
 //USER
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
+import ProtectedRouteComp from './UserComponents/ProtectedRouteComp.js';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -47,7 +48,16 @@ function App() {
             <Route path="/" element={<HomePageComp />} />
             <Route path="/search" element={<GeneralSearchComp />} />
             <Route path="/items" element={<ShowItemsComp />} />
-            <Route path="/codigo-patrimonial" element={<CodePropertyComp />} />
+
+            {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} /> */}
+
+            {/* Ruta protegida */}
+            <Route path="/codigo-patrimonial" element={
+              <ProtectedRouteComp>
+                <CodePropertyComp />
+              </ProtectedRouteComp>
+            } />
+
             <Route path="/trabajador" element={<WorkerSearchComp />} />
             <Route path="/dependencia" element={<DependencySearchComp />} />
             <Route path="/doble-busqueda" element={<DoubleSearchComp />} />

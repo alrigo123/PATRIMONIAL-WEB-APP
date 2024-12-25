@@ -1,99 +1,32 @@
 // import React, { useState } from "react";
-// import { slide as Menu } from "react-burger-menu";
-// import { useNavigate } from "react-router-dom"; // Importar useNavigate
-// import LoginModalComp from "../UserComponents/LoginModalComp";
+// import { Link, useNavigate } from "react-router-dom";
+// import LoginModalComp from "../UserComponents/LoginModalComp"; // Asegúrate de importar el modal
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "../styles/Navbar.css";
 
 // const NavBarComp = () => {
-//     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-//     const [redirectPath, setRedirectPath] = useState(""); // URL objetivo
-//     const navigate = useNavigate(); // Hook para navegar
+//     const [menuOpen, setMenuOpen] = useState(false); // Estado del menú
+//     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // Estado del modal de login
+//     const [redirectPath, setRedirectPath] = useState(""); // Ruta de redirección después del login
 
-//     const handleLoginClick = (e, path) => {
-//         e.preventDefault(); // Evita la navegación predeterminada
-//         setRedirectPath(path); // Almacena la URL objetivo
-//         setIsLoginModalOpen(true); // Muestra el modal
-//     };
-
-//     const closeLoginModal = () => {
-//         setIsLoginModalOpen(false); // Oculta el modal
-//     };
-
-//     const handleLoginSuccess = () => {
-//         closeLoginModal(); // Cierra el modal
-//         if (redirectPath) {
-//             navigate(redirectPath); // Navega a la URL objetivo
-//         }
-//     };
-
-//     return (
-//         <>
-//             <Menu>
-//                 <a className="menu-item" href="/home">
-//                     🏠 Home
-//                 </a>
-//                 <a className="menu-item" href="/items">
-//                     📊 Ver Items
-//                 </a>
-//                 <a className="menu-item" href="/search">
-//                     📂 Búsqueda General
-//                 </a>
-//                 <a
-//                     className="menu-item"
-//                     onClick={(e) => handleLoginClick(e, "/codigo-patrimonial")} // Especifica la URL objetivo
-//                     href="/codigo-patrimonial"
-//                 >
-//                     🗃️ Búsqueda por Código Patrimonial
-//                 </a>
-//                 <a className="menu-item" href="/trabajador">
-//                     👨‍🌾 Búsqueda por Trabajador
-//                 </a>
-//                 <a className="menu-item" href="/dependencia">
-//                     🏢 Búsqueda por Dependencia
-//                 </a>
-//                 {/* <a className="menu-item" href="/doble-busqueda">
-//                     🔎 Doble Busqueda (Trabajador & Item)
-//                 </a> */}
-//                 <a className="menu-item" href="/import-excel">
-//                     📚 Importar Datos
-//                 </a>
-//                 <a className="menu-item" href="/user-register">
-//                     👨‍💻 Registro Usuario Autorizado
-//                 </a>
-//             </Menu>
-//             <LoginModalComp
-//                 show={isLoginModalOpen}
-//                 handleClose={closeLoginModal}
-//                 onLoginSuccess={handleLoginSuccess} // Manejo del login exitoso
-//             />
-//         </>
-//     );
-// };
-
-// export default NavBarComp
-
-////// ----------------------------
-
-// import React, { useState } from "react";
-// import { slide as Menu } from "react-burger-menu";
-// import { Link,useNavigate } from "react-router-dom"; // Importar Link
-// import LoginModalComp from "../UserComponents/LoginModalComp";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "../styles/Navbar.css";
-
-// const NavBarComp = () => {
-//     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-//     const [redirectPath, setRedirectPath] = useState(""); // URL objetivo
 //     const navigate = useNavigate();
+
+//     const toggleMenu = () => {
+//         setMenuOpen(!menuOpen); // Alterna el estado del menú
+//     };
+
+//     const closeMenu = () => {
+//         setMenuOpen(false); // Cierra el menú al seleccionar una opción
+//     };
+
 //     const handleLoginClick = (e, path) => {
 //         e.preventDefault(); // Evita la navegación predeterminada
-//         setRedirectPath(path); // Almacena la URL objetivo
-//         setIsLoginModalOpen(true); // Muestra el modal
+//         setRedirectPath(path); // Establece la ruta de redirección
+//         setIsLoginModalOpen(true); // Muestra el modal de login
 //     };
 
 //     const closeLoginModal = () => {
-//         setIsLoginModalOpen(false); // Oculta el modal
+//         setIsLoginModalOpen(false); // Cierra el modal de login
 //     };
 
 //     const handleLoginSuccess = () => {
@@ -105,20 +38,59 @@
 
 //     return (
 //         <>
-//             <Menu>
-//                 <Link className="menu-item" to="/">🏠 Home</Link>
-//                 <Link className="menu-item" to="/items">📊 Ver Items</Link>
-//                 <Link className="menu-item" to="/search">📂 Búsqueda General</Link>
-//                 <Link className="menu-item" onClick={(e) => handleLoginClick(e, "/codigo-patrimonial")} to="/codigo-patrimonial">🗃️ Búsqueda por Código Patrimonial</Link>
-//                 <Link className="menu-item" to="/trabajador">👨‍🌾 Búsqueda por Trabajador</Link>
-//                 <Link className="menu-item" to="/dependencia">🏢 Búsqueda por Dependencia</Link>
-//                 <Link className="menu-item" to="/import-excel">📚 Importar Datos</Link>
-//                 <Link className="menu-item" to="/user-register">👨‍💻 Registro Usuario Autorizado</Link>
-//             </Menu>
+//             <nav className="navbar">
+//                 <div className="burger-menu">
+//                     {/* Icono de la hamburguesa */}
+//                     <button className="burger-icon" onClick={toggleMenu}>
+//                         <span className="bar"></span>
+//                         <span className="bar"></span>
+//                         <span className="bar"></span>
+//                     </button>
+//                     <span className="menu-text">Menu</span>
+//                 </div>
+
+//                 {/* Menú desplegable */}
+//                 <div className={`menu ${menuOpen ? "open" : ""}`}>
+//                     <Link className="menu-item" to="/" onClick={closeMenu}>
+//                         🏠 Home
+//                     </Link>
+//                     <Link className="menu-item" to="/items" onClick={closeMenu}>
+//                         📊 Ver Items
+//                     </Link>
+//                     <Link className="menu-item" to="/search" onClick={closeMenu}>
+//                         📂 Búsqueda General
+//                     </Link>
+//                     {/* Aquí se abre el modal de login antes de navegar */}
+//                     <Link
+//                         className="menu-item"
+//                         onClick={(e) => handleLoginClick(e, "/codigo-patrimonial")}
+//                         to="/codigo-patrimonial" // Esto es solo para mantener el formato de link
+//                     >
+//                         🗃️ Patrimonizar Bien
+//                     </Link>
+//                     <Link className="menu-item" to="/trabajador" onClick={closeMenu}>
+//                         👨‍🌾 Búsqueda por Trabajador
+//                     </Link>
+//                     <Link className="menu-item" to="/dependencia" onClick={closeMenu}>
+//                         🏢 Búsqueda por Dependencia
+//                     </Link>
+//                     <Link className="menu-item" to="/import-excel" onClick={closeMenu}>
+//                         📚 Importar Datos
+//                     </Link>
+//                     <Link className="menu-item" to="/user-register" onClick={closeMenu}>
+//                         👨‍💻 Registro Usuario Autorizado
+//                     </Link>
+//                     <a className="menu-item" href="/">
+//                         🌾 GERAGRI Página Principal
+//                     </a>
+//                 </div>
+//             </nav>
+
+//             {/* Modal de inicio de sesión */}
 //             <LoginModalComp
 //                 show={isLoginModalOpen}
 //                 handleClose={closeLoginModal}
-//                 onLoginSuccess={handleLoginSuccess} // Manejo del login exitoso
+//                 onLoginSuccess={handleLoginSuccess}
 //             />
 //         </>
 //     );
@@ -126,27 +98,57 @@
 
 // export default NavBarComp;
 
+
 import React, { useState } from "react";
-import { slide as Menu } from "react-burger-menu";
 import { Link, useNavigate } from "react-router-dom";
-import LoginModalComp from "../UserComponents/LoginModalComp";
+import LoginModalComp from "../UserComponents/LoginModalComp"; // Asegúrate de importar el modal
+import { jwtDecode } from "jwt-decode"; // Importa jwt-decode para verificar el token
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Navbar.css";
 
 const NavBarComp = () => {
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const [redirectPath, setRedirectPath] = useState("");
-    const [menuOpen, setMenuOpen] = useState(false); // Controla el estado del menú
+    const [menuOpen, setMenuOpen] = useState(false); // Estado del menú
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // Estado del modal de login
+    const [redirectPath, setRedirectPath] = useState(""); // Ruta de redirección después del login
+
     const navigate = useNavigate();
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen); // Alterna el estado del menú
+    };
+
+    const closeMenu = () => {
+        setMenuOpen(false); // Cierra el menú al seleccionar una opción
+    };
+
+    const checkTokenValidity = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token); // Decodifica el token
+                // Verificar si el token ha expirado
+                if (decoded.exp > Date.now() / 1000) {
+                    return true; // El token es válido
+                }
+            } catch (error) {
+                console.log('Token inválido', error);
+            }
+        }
+        return false; // No hay token o el token ha expirado
+    };
 
     const handleLoginClick = (e, path) => {
         e.preventDefault(); // Evita la navegación predeterminada
-        setRedirectPath(path);
-        setIsLoginModalOpen(true); // Muestra el modal
+        if (checkTokenValidity()) {
+            navigate(path); // Si el token es válido, redirige directamente
+        } else {
+            setRedirectPath(path); // Establece la ruta de redirección
+            setIsLoginModalOpen(true); // Muestra el modal de login
+        }
     };
 
     const closeLoginModal = () => {
-        setIsLoginModalOpen(false); // Oculta el modal
+        setIsLoginModalOpen(false); // Cierra el modal de login
     };
 
     const handleLoginSuccess = () => {
@@ -156,24 +158,57 @@ const NavBarComp = () => {
         }
     };
 
-    // Función para manejar el cierre del menú al hacer clic
-    const closeMenu = () => {
-        setMenuOpen(false); // Cambia el estado de apertura del menú
-    };
-
     return (
         <>
-            <Menu isOpen={menuOpen} onStateChange={({ isOpen }) => setMenuOpen(isOpen)}>
-                <Link className="menu-item" to="/" onClick={closeMenu}>🏠 Home</Link>
-                <Link className="menu-item" to="/items" onClick={closeMenu}>📊 Ver Items</Link>
-                <Link className="menu-item" to="/search" onClick={closeMenu}>📂 Búsqueda General</Link>
-                <Link className="menu-item" onClick={(e) => { handleLoginClick(e, "/codigo-patrimonial"); closeMenu(); }} to="/codigo-patrimonial">🗃️ Búsqueda por Código Patrimonial</Link>
-                <Link className="menu-item" to="/trabajador" onClick={closeMenu}>👨‍🌾 Búsqueda por Trabajador</Link>
-                <Link className="menu-item" to="/dependencia" onClick={closeMenu}>🏢 Búsqueda por Dependencia</Link>
-                <Link className="menu-item" to="/import-excel" onClick={closeMenu}>📚 Importar Datos</Link>
-                <Link className="menu-item" to="/user-register" onClick={closeMenu}>👨‍💻 Registro Usuario Autorizado</Link>
-                <a className="menu-item" href="/">🌾 GERAGRI Página Principal</a>
-            </Menu>
+            <nav className="navbar">
+                <div className="burger-menu">
+                    {/* Icono de la hamburguesa */}
+                    <button className="burger-icon" onClick={toggleMenu}>
+                        <span className="bar"></span>
+                        <span className="bar"></span>
+                        <span className="bar"></span>
+                    </button>
+                    <span className="fw-bold menu-text">Menu</span>
+                </div>
+
+                {/* Menú desplegable */}
+                <div className={`menu ${menuOpen ? "open" : ""}`}>
+                    <Link className="fw-bold menu-item" to="/" onClick={closeMenu}>
+                        🏠 Home
+                    </Link>
+                    <Link className="fw-bold menu-item" to="/items" onClick={closeMenu}>
+                        📊 Ver Items
+                    </Link>
+                    <Link className="fw-bold menu-item" to="/search" onClick={closeMenu}>
+                        📂 Búsqueda General
+                    </Link>
+                    {/* Aquí se abre el modal de login antes de navegar */}
+                    <Link
+                        className="fw-bold menu-item"
+                        onClick={(e) => handleLoginClick(e, "/codigo-patrimonial")}
+                        to="/codigo-patrimonial" // Esto es solo para mantener el formato de link
+                    >
+                        🗃️ Patrimonizar Bien
+                    </Link>
+                    <Link className="fw-bold menu-item" to="/trabajador" onClick={closeMenu}>
+                        👨‍🌾 Búsqueda por Trabajador
+                    </Link>
+                    <Link className="fw-bold menu-item" to="/dependencia" onClick={closeMenu}>
+                        🏢 Búsqueda por Dependencia
+                    </Link>
+                    <Link className="fw-bold menu-item" to="/import-excel" onClick={closeMenu}>
+                        📚 Importar Datos
+                    </Link>
+                    <Link className="fw-bold menu-item" to="/user-register" onClick={closeMenu}>
+                        👨‍💻 Registro Usuario Autorizado
+                    </Link>
+                    <a className="fw-bold menu-item" href="/">
+                        🌾 GERAGRI Página Principal
+                    </a>
+                </div>
+            </nav>
+
+            {/* Modal de inicio de sesión */}
             <LoginModalComp
                 show={isLoginModalOpen}
                 handleClose={closeLoginModal}

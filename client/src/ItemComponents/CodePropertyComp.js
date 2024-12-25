@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Importa SweetAlert2
 
-// import CodeSearchMod1 from '../Modules/CodeProperty/CodeSearchMod1';
-import CodeSearchMod1 from '../test/V1CodeSearchMod1.js'
+import CodeSearchMod1 from '../Modules/CodeProperty/CodeSearchMod1';
+// import CodeSearchMod1 from '../test/V1CodeSearchMod1.js'
 import CodeSearchMod2 from '../Modules/CodeProperty/CodeSearchMod2';
 
 const CodePropertyComp = () => {

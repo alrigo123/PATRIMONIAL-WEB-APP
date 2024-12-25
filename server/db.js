@@ -25,7 +25,7 @@ config(); //Cargar las variables del archivo .env
 //     queueLimit: 0
 // })
 
-// Hostgator 
+// Hostgator GERAGRI
 const pool = new createPool({
     host: process.env.DB_HOST_HGATOR,
     user: process.env.DB_USER_HGATOR,

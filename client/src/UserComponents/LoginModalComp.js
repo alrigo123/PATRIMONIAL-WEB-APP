@@ -26,6 +26,10 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
     try {
       const response = await axios.post(`${URL}/login`, { dni, password });
 
+      // Si el login es exitoso, guardar el token en el localStorage
+      const token = localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user.name_and_last));
+
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
@@ -33,6 +37,12 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
           showConfirmButton: false,
           timer: 1000
         });
+
+        if (token) {
+          console.log("SE CREO EL TOKEN PARA EL LOGIN")
+        } else {
+          console.log("EL TOKEN NO EXISTE")
+        }
         // Aquí puedes guardar datos como token o redirigir al usuario
         // localStorage.setItem('authToken', response.data.token || '');
 

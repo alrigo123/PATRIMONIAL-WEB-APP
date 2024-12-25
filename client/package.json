@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
+    "jwt-decode": "^4.0.0",
     "lodash-es": "^4.17.21",
     "lottie-react": "^2.4.0",
     "mdb-react-ui-kit": "^9.0.0",

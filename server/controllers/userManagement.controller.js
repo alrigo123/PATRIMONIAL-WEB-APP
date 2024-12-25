@@ -2,18 +2,26 @@ import pool from '../db.js'; // Asegúrate de importar tu pool de conexión a la
 import * as bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
-// export const authenticateToken = (req, res, next) => {
-//     const token = req.headers['authorization']?.split(' ')[1]; // Bearer <token>
-//     if (!token) return res.status(401).json({ message: 'Acceso no autorizado' });
+const SECRET_KEY = process.env.JWT_KEY
 
-//     try {
-//         const user = jwt.verify(token, process.env.JWT_SECRET);
-//         req.user = user; // Agregar los datos del usuario al request
-//         next();
-//     } catch (error) {
-//         return res.status(403).json({ message: 'Token inválido' });
-//     }
-// };
+// Lista negra para tokens
+let blacklist = [];
+
+const authenticateToken = (req, res, next) => {
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token provided" });
+
+    // Verifica si el token está en la lista negra
+    if (blacklist.includes(token)) {
+        return res.status(401).json({ message: "Token invalidado" });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ message: "Token no válido" });
+        req.user = user;
+        next();
+    });
+};
 
 export const loginUser = async (req, res) => {
     try {
@@ -51,13 +59,17 @@ export const loginUser = async (req, res) => {
             return res.status(401).json({ message: 'Credenciales inválidas' });
         }
 
+        // Generar un token JWT
+        const token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '20s' }); // 1h de expiración
+
         // Respuesta exitosa
         return res.status(200).json({
             message: 'Inicio de sesión exitoso',
             user: {
                 dni: user.dni,
                 name_and_last: user.name_and_last
-            }
+            },
+            token: token
         });
     } catch (error) {
         console.error("Error en loginUser:", error);
@@ -74,7 +86,7 @@ export const registerUser = async (req, res) => {
         }
 
         // Verificar si el DNI ya existe
-        const [existingDNI] = await pool.query("    ", [dni]);
+        const [existingDNI] = await pool.query("SELECT * FROM user_i WHERE dni = ?", [dni]);
         if (existingDNI.length > 0) {
             return res.status(400).json({ message: "El DNI ya está registrado" });
         }
@@ -94,3 +106,18 @@ export const registerUser = async (req, res) => {
         res.status(500).json({ message: "Error del servidor" });
     }
 };
+
+export const logoutUser = (req, res) => {
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) return res.status(400).json({ message: "No token provided" });
+
+    // Agregar el token a la lista negra
+    blacklist.push(token);
+
+    // Opcional: Limpiar tokens antiguos de la lista negra para optimizar memoria
+    setTimeout(() => {
+        blacklist = blacklist.filter((t) => t !== token);
+    }, 3600000); // 1 hora
+
+    res.status(200).json({ message: "Sesión cerrada correctamente" });
+}
