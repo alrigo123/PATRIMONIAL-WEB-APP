@@ -174,7 +174,7 @@ const CodeSearchMod1 = () => {
       <h5 className="text-lg-start fw-bold mb-3">REGISTRAR BIEN PATRIMONIAL</h5>
       <div className="row g-3">
         {/* Select para elegir entre Trabajador o Dependencia */}
-        <div className="col-3">
+        <div className="col-12 col-md-3">
           <select
             className="form-select fw-bold"
             value={searchType}
@@ -187,7 +187,7 @@ const CodeSearchMod1 = () => {
         </div>
 
         {/* Input para buscar */}
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <input
             type="text"
             placeholder={`Buscar ${searchType}`}
@@ -213,7 +213,7 @@ const CodeSearchMod1 = () => {
         </div>
 
         {/* Input de código patrimonial */}
-        <div className="col-10">
+        <div className="col-12 col-md-10">
           <input
             type="text"
             placeholder="Escanear código (barras) patrimonial"
@@ -235,11 +235,11 @@ const CodeSearchMod1 = () => {
         </div>
 
         {/* Botón de limpiar */}
-        <div className="col-2">
+        <div className="col-12 col-md-2">
           <button
             onClick={clearInput}
             className="btn btn-dark fw-bold"
-            style={{ fontSize: '1.2rem', padding: '10px' }}
+            style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
           >
             🧹 Limpiar
           </button>

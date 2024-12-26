@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { parseDate } from '../utils/datesUtils'
+import PopNotify from '../AnimationComp/PopNotify';
 import ExportReportsDispoMod from '../Modules/Export/ExportReportsDispoMod';
 import ExportReportsStateMod from '../Modules/Export/ExportReportsStateMod';
 import ExportReportsSituaMod from '../Modules/Export/ExportReportsSituaMod';
 import ExportReportsMod from '../Modules/Export/ExportReportsMod';
+import "../styles/ShowItem.css";
 
 const URI = process.env.REACT_APP_API_URL_ITEMS;
 
@@ -20,8 +22,6 @@ const ShowItemsComp = () => {
     const [filterDisposicion, setFilterDisposicion] = useState('all');
     const [filterSituacion, setFilterSituacion] = useState('all');
     const [filterConservation, setfilterConservation] = useState('all');
-
-    // throw Error                                                                                                                    
 
     // Obtener todos los items de la API con paginación
     const getItems = async () => {
@@ -75,12 +75,14 @@ const ShowItemsComp = () => {
                 <ExportReportsSituaMod /> */}
                 <ExportReportsMod />
             </div>
-            <div className="row">
+            <hr />
+            <div className="row mt-2">
                 <div className="col mt-3">
                     {/* Controles para seleccionar los filtros */}
-                    <div className="row mt-2">
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Estado</h5>
+                    <div className="row mt-1">
+                        <h5 className='fw-semibold'>FILTRADO</h5>
+                        <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2'>por Estado</h5>
                             <select
                                 id="filter1"
                                 className="form-select fw-bolder"
@@ -92,8 +94,8 @@ const ShowItemsComp = () => {
                                 <option value="not_registered">No Patrimonizado</option>
                             </select>
                         </div>
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Disposición</h5>
+                        <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2 '>por Disposición</h5>
                             <select
                                 id="filter2"
                                 className="form-select fw-bolder"
@@ -105,7 +107,7 @@ const ShowItemsComp = () => {
                                 <option value="not_available">No Funcional</option>
                             </select>
                         </div>
-                        <div className="mb-3 col-3 text-start">
+                        {/* <div className="mb-3 col-3 text-start">
                             <h5 className='fw-semibold mt-2 '>Filtrar por Situación</h5>
                             <select
                                 id="filter3"
@@ -117,9 +119,9 @@ const ShowItemsComp = () => {
                                 <option value="verified">Verificados</option>
                                 <option value="missing">Faltantes</option>
                             </select>
-                        </div>
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Estado conservacion</h5>
+                        </div> */}
+                        <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2 '>por Estado conservacion</h5>
                             <select
                                 id="filter4"
                                 className="form-select fw-bolder"
@@ -133,7 +135,7 @@ const ShowItemsComp = () => {
                             </select>
                         </div>
                     </div>
-
+                    <hr />
                     {/* Selector de límite */}
                     <div className="d-flex align-items-center mb-3 flex-wrap">
                         <label className="me-2 fw-bold">Mostrar:</label>
@@ -154,74 +156,80 @@ const ShowItemsComp = () => {
                         <span className="me-3">registros por página</span>
                     </div>
 
+                    <div className="table-responsive mt-3">
+                        {/* TABLA DE DATOS */}
+                        {/* <table className="w-auto table table-striped table-bordered align-middle mt-3"> */}
 
-                    {/* TABLA DE DATOS */}
-                    <table className="w-auto table table-striped table-bordered align-middle mt-3">
-                        <thead className="table-primary">
-                            <tr>
-                                <th>#</th>
-                                <th>Codigo Patrimonial</th>
-                                <th>Descripcion</th>
-                                <th>Dependencia</th>
-                                <th>Trabajador</th>
-                                <th>Ultima Fecha Registro</th>
-                                <th>Fecha de Alta</th>
-                                <th>Estado</th>
-                                <th>Disposición</th>
-                                <th>Conservación</th>
-                                <th>Situación</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredItems.map((item, index) => (
-                                <tr key={item.id}>
-                                    <td>{index + 1}</td> {/* Número iterativo */}
-                                    <td>{item.CODIGO_PATRIMONIAL}</td>
-                                    <td>{item.DESCRIPCION}</td>
-                                    <td>{item.DEPENDENCIA}</td>
-                                    <td>{item.TRABAJADOR}</td>
-                                    <td>{parseDate(item.FECHA_REGISTRO)}</td>
-                                    <td>{item.FECHA_ALTA}</td>
-                                    <td>
-                                        {item.ESTADO === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>No Patrimonizado</span>
-                                        ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Patrimonizado</span>
-                                        )}
-                                    </td>
-                                    <td>
-                                        {item.DISPOSICION === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>No Funcional</span>
-                                        ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Funcional</span>
-                                        )}
-                                    </td>
-                                    <td
-                                        style={{
-                                            fontWeight: 'bold',
-                                            color:
-                                                item.EST_CONSERVACION === "Bueno"
-                                                    ? "blue"
-                                                    : item.EST_CONSERVACION === "Malo"
-                                                        ? "#790303"
-                                                        : item.EST_CONSERVACION === "Regular"
-                                                            ? "purple"
-                                                            : "black", // Color por defecto
-                                        }}
-                                    >
-                                        {item.EST_CONSERVACION}
-                                    </td>
-                                    <td>
-                                        {item.SITUACION === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
-                                        ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
-                                        )}
-                                    </td>
+                        {/* Mostrar icono solo en dispositivos móviles */}
+                        <PopNotify />
+
+                        <table className="table table-striped table-bordered align-middle small">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>#</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Codigo Patrimonial</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripcion</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Dependencia</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Trabajador</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Ultima Fecha Registro</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Alta</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Conservación</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Situación</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {filteredItems.map((item, index) => (
+                                    <tr key={item.id}>
+                                        <td>{index + 1}</td> {/* Número iterativo */}
+                                        <td>{item.CODIGO_PATRIMONIAL}</td>
+                                        <td>{item.DESCRIPCION}</td>
+                                        <td>{item.DEPENDENCIA}</td>
+                                        <td>{item.TRABAJADOR}</td>
+                                        <td>{parseDate(item.FECHA_REGISTRO)}</td>
+                                        <td>{item.FECHA_ALTA}</td>
+                                        <td>
+                                            {item.ESTADO === 0 ? (
+                                                <span style={{ color: 'red', fontWeight: 'bold' }}>No Patrimonizado</span>
+                                            ) : (
+                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Patrimonizado</span>
+                                            )}
+                                        </td>
+                                        <td>
+                                            {item.DISPOSICION === 0 ? (
+                                                <span style={{ color: 'red', fontWeight: 'bold' }}>No Funcional</span>
+                                            ) : (
+                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Funcional</span>
+                                            )}
+                                        </td>
+                                        <td
+                                            style={{
+                                                fontWeight: 'bold',
+                                                color:
+                                                    item.EST_CONSERVACION === "Bueno"
+                                                        ? "blue"
+                                                        : item.EST_CONSERVACION === "Malo"
+                                                            ? "#790303"
+                                                            : item.EST_CONSERVACION === "Regular"
+                                                                ? "purple"
+                                                                : "black", // Color por defecto
+                                            }}
+                                        >
+                                            {item.EST_CONSERVACION}
+                                        </td>
+                                        <td>
+                                            {item.SITUACION === 0 ? (
+                                                <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
+                                            ) : (
+                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
                     {/* Controles de paginación */}
                     <div className="d-flex justify-content-center align-items-center my-3">

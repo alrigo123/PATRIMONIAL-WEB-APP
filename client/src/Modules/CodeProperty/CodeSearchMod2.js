@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import PopNotify from '../../AnimationComp/PopNotify';
 
 const URL = process.env.REACT_APP_API_URL_ITEMS
 
@@ -91,7 +92,7 @@ const CodeSearchMod2 = () => {
       {/* Sección de búsqueda para estados */}
       <h5 className="text-lg-start fw-bold">CONSULTAR ESTADO DEL BIEN PATRIMONIAL</h5>
       <div className="row g-3">
-        <div className="col-10">
+        <div className="col-12 col-md-10">
           <input
             type="text"
             placeholder="Escanear código (barras) patrimonial"
@@ -100,9 +101,10 @@ const CodeSearchMod2 = () => {
             ref={stateInputRef}
             className="form-control mb-3 fw-bold"
             style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
+            maxLength="12"
           />
         </div>
-        <div className="col-2">
+        <div className="col-12 col-md-2">
           <button
             onClick={clearStateInput}
             className="btn btn-dark mb-3 fw-bold"
@@ -114,9 +116,11 @@ const CodeSearchMod2 = () => {
       </div>
 
       {stateData.length > 0 ? (
-        <div className="mt-3">
-          <table className="w-auto table table-striped table-bordered align-middle mb-5" style={{ width: '100%', tableLayout: 'fixed' }}>
-            <thead className="thead-dark">
+        <div className="table-responsive mt-3">
+          {/* Mostrar icono solo en dispositivos móviles */}
+          <PopNotify />
+          <table className="table table-striped table-bordered align-middle small">
+            <thead className="table-dark">
               <tr>
                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Codigo Patrimonial</th>
                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción</th>

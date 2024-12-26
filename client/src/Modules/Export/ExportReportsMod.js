@@ -92,19 +92,20 @@ const ExportReportsMod = () => {
 
   // Renderizado de botones
   return (
-    <div className="row mt-2 mb-2 justify-content-center">
-      {queriesConfig.map((config, index) => (
-        <div className="col-4 d-flex justify-content-center" key={index}>
-          <button
-            className="btn btn-success btn-sm fw-bolder w-100 p-3"
-            onClick={() => handleExport(config)}
-          >
-            {config.name}
-          </button>
-        </div>
-      ))}
+    <div className="mt-3">
+      <div className="row mt-2 mb-2 justify-content-center">
+        {queriesConfig.map((config, index) => (
+          <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center mb-2" key={index}>
+            <button
+              className="btn btn-success btn-sm fw-bolder w-100 p-3"
+              onClick={() => handleExport(config)}
+            >
+              {config.name}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
-
   );
 };
 

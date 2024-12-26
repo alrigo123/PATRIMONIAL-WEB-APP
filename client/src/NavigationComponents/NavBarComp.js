@@ -168,7 +168,7 @@ const NavBarComp = () => {
                         <span className="bar"></span>
                         <span className="bar"></span>
                     </button>
-                    <span className="fw-bold menu-text">Menu</span>
+                    <span onClick={toggleMenu} className="fw-bold menu-text">Menu</span>
                 </div>
 
                 {/* Menú desplegable */}

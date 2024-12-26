@@ -56,11 +56,11 @@ export const loginUser = async (req, res) => {
         // Comparar contraseñas con bcrypt
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Credenciales inválidas' });
+            return res.status(401).json({ message: 'Contraseña Incorrecta' });
         }
 
         // Generar un token JWT
-        const token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '20s' }); // 1h de expiración
+        const token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '40m' }); // 1h de expiración
 
         // Respuesta exitosa
         return res.status(200).json({

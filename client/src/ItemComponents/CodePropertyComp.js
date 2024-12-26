@@ -34,8 +34,9 @@ const CodePropertyComp = () => {
 
     return (
         <div className="container my-4">
-            <h2 className="text-center mb-4 fw-bold">BUSCAR BIEN POR CÓDIGO PATRIMONIAL</h2>
-            <button onClick={handleAddItem} className="btn btn-primary p-3 fw-bolder">
+            <h2 className="text-center mb-3 fw-bold">BUSCAR BIEN POR CÓDIGO PATRIMONIAL</h2>
+            <button onClick={handleAddItem} className="btn btn-primary p-3 fw-bolder mb-4">
+            {/* <button onClick={handleAddItem} className="btn btn-primary p-3 fw-bolder col-12 col-sm-6 col-md-4 d-flex justify-content-center mb-2"> */}
                 📦 AGREGAR NUEVO BIEN
             </button>
             <CodeSearchMod1 />

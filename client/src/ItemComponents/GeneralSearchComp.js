@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import PopNotify from '../AnimationComp/PopNotify';
 
 const URI = process.env.REACT_APP_API_URL_ITEMS;
 
@@ -66,9 +67,11 @@ const GeneralSearchComp = () => {
                     </div>
                 </div>
             ) : results.length > 0 ? (
-                <div>
-                    <table className="w-auto table table-striped table-bordered" style={{ width: '100%', tableLayout: 'fixed' }}>
-                        <thead className="thead-dark">
+                <div className="table-responsive mt-3">
+                    {/* Mostrar icono solo en dispositivos móviles */}
+                    <PopNotify />
+                    <table className="table table-striped table-bordered align-middle small">
+                        <thead className="table-dark">
                             <tr class="text-center align-middle align-content-center">
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Codigo Patrimonial</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción</th>
