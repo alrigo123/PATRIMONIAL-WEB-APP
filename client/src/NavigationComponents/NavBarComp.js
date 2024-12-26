@@ -185,7 +185,10 @@ const NavBarComp = () => {
                     {/* Aquí se abre el modal de login antes de navegar */}
                     <Link
                         className="fw-bold menu-item"
-                        onClick={(e) => handleLoginClick(e, "/codigo-patrimonial")}
+                        onClick={(e) => {
+                            handleLoginClick(e, "/codigo-patrimonial")
+                            closeMenu();
+                        }}
                         to="/codigo-patrimonial" // Esto es solo para mantener el formato de link
                     >
                         🗃️ Patrimonizar Bien

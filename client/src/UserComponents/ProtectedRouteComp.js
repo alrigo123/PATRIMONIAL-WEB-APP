@@ -17,7 +17,6 @@ const ProtectedRouteComp = ({ children }) => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user')); // Convertir el string de vuelta a un objeto
 
-
     // Función de Logout
     const handleLogout = async () => {
         try {

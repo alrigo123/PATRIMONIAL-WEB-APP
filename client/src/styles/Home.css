@@ -1,57 +1,101 @@
 /* General Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  .App {
-    text-align: center;
-    background-color: #f1f1f1;
-    min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-  }
-  
+.App {
+  text-align: center;
+  background-color: #ffffff;
+}
+
+
+.App-header {
+  background: url("https://geragricusco.gob.pe/landing_page/img/carousel-2.jpg") no-repeat center center;
+  background-size: cover; /* Asegura que la imagen cubra toda el área */
+  min-height: 75vh; /* Asegura que ocupe toda la altura de la ventana */
+  width: 100%; /* Usa todo el ancho de la pantalla */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(12px + 2vmin); /* Escala la fuente con el viewport */
+  color: rgb(0, 0, 0); /* Cambia el color de texto si es necesario */
+  box-sizing: border-box; /* Asegúrate de que los paddings no rompan el diseño */
+  text-align: center; /* Centrado de texto */
+  margin: 0; /* Elimina márgenes por defecto */
+  position: relative; /* Necesario para la posición del pseudo-elemento */
+  z-index: 2; /* Asegura que el contenido esté sobre el fondo */
+}
+
+.App-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8); /* Capa blanca semitransparente */
+  z-index: -2; /* Capa blanca debajo del texto */
+}
+
+/* Si necesitas modificar algunos estilos dentro de App-header, puedes usar clases adicionales */
+.App-header--small-padding {
+  padding: 10px 10px; /* Para casos con menor padding */
+}
+
+@media (max-width: 768px) {
   .App-header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 10px;
-    text-align: center;
-    margin: 0;
+    font-size: calc(8px + 2vmin); /* Ajusta el tamaño de la fuente en móviles */
+    padding: 10px; /* Reduce padding en pantallas pequeñas */
   }
-  
-  .title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-  }
-  
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  width: 75%;
+  text-align: justify;
+  /* border:1px solid red; */
+  color: #000000 !important;
+}
+
+@media (max-width: 768px) {
   .description {
     font-size: 1.2rem;
     margin-bottom: 30px;
     line-height: 1.6;
-    color: #f1f1f1;
+    width: 100%;
+    text-align: justify;
+    /* border:1px solid red; */
+    color: #000000;
   }
-  
-  .cta-container {
-    margin-top: 30px;
-  }
-  
-  .cta-button {
-    background-color: #ffffff;
-    color: #4CAF50;
-    border: 2px solid #4CAF50;
-    padding: 10px 20px;
-    margin: 10px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .cta-button:hover {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
- 
-  
+}
+
+.cta-container {
+  margin-top: 30px;
+}
+
+.cta-button {
+  background-color: #ffffff;
+  color: #4caf50;
+  border: 2px solid #4caf50;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #4caf50;
+  color: white;
+}
