@@ -26,12 +26,12 @@ config(); //Cargar las variables del archivo .env
 // })
 
 // Hostgator GERAGRI
-const pool = new createPool({
-    host: process.env.DB_HOST_HGATOR,
-    user: process.env.DB_USER_HGATOR,
-    password: process.env.DB_PASSWORD_HGATOR,
-    database: process.env.DB_NAME_HGATOR
-})
+// const pool = new createPool({
+//     host: process.env.DB_HOST_HGATOR,
+//     user: process.env.DB_USER_HGATOR,
+//     password: process.env.DB_PASSWORD_HGATOR,
+//     database: process.env.DB_NAME_HGATOR
+// })
 
 // Docker VM server
 // const pool = new createPool({
@@ -45,15 +45,15 @@ const pool = new createPool({
 // })
 
 // Docker VM server GERAGRI
-// const pool = new createPool({
-//     host: process.env.DB_HOST_DOCKER_G,
-//     user: process.env.DB_USER_DOCKER_G,
-//     password: process.env.DB_PASSWORD_DOCKER_G,
-//     database: process.env.DB_NAME_DOCKER_G,
-//     waitForConnections: true,
-//     connectionLimit: 10,
-//     queueLimit: 0
-// })
+const pool = new createPool({
+    host: process.env.DB_HOST_DOCKER_G,
+    user: process.env.DB_USER_DOCKER_G,
+    password: process.env.DB_PASSWORD_DOCKER_G,
+    database: process.env.DB_NAME_DOCKER_G,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+})
 
 // Check database connection
 async function checkConnection() {

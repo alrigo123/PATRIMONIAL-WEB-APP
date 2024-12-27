@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
-
+import PopNotify from '../../AnimationComp/PopNotify';
 const URL = process.env.REACT_APP_API_URL_ITEMS
+
 
 const WorkerSearchMod2 = () => {
     const [searchTerm2, setSearchTerm2] = useState(''); // Valor del segundo buscador
@@ -71,7 +72,7 @@ const WorkerSearchMod2 = () => {
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Bienes');
 
         // Descargar el archivo Excel
-        XLSX.writeFile(workbook, `Bienes_Trabajador_${searchTerm2}_${fechaFormateada}.xlsx`);
+        XLSX.writeFile(workbook, `Bienes_Trabajador_${searchTerm2.toUpperCase()}_${fechaFormateada}.xlsx`);
     };
 
     return (
@@ -95,23 +96,28 @@ const WorkerSearchMod2 = () => {
                     </div>
                 </div>
             ) : results2.length > 0 ? (
-                <div>
-                    <h3 className='fw-semibold'>CANTIDAD DE BIENES EN PODER DE <strong>{searchTerm2}</strong> </h3>
+                <div className="">
+                    {/* <table className="w-auto table table-striped table-bordered align-middle mt-3"> */}
+                    <h3 className='fw-semibold'>CANTIDAD DE BIENES EN PODER DE <strong>{searchTerm2.toUpperCase()}</strong> </h3>
                     <button
-                        className="btn btn-success mb-3"
+                        className="fw-bold p-2 btn btn-success mb-3 mt-2"
                         onClick={exportToExcel}
                     >
                         Exportar a Excel
                     </button>
-                    <table className="w-auto table table-striped table-bordered align-middle" style={{ width: '100%', tableLayout: 'fixed' }}>
-                        <thead className="thead-dark">
+
+                    <div className="table-responsive mt-2">
+                    <PopNotify />
+
+                    <table className="table table-striped table-bordered align-middle small">
+                        <thead className="table-dark">
                             <tr>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD Bienes</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Patrimonizados</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Patrimonizados</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>PATRIMONIZADOS</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>NO PATRIMONIZADOS</th>
                                 {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
                             </tr>
                         </thead>
@@ -128,6 +134,7 @@ const WorkerSearchMod2 = () => {
                             ))}
                         </tbody>
                     </table>
+                    </div>
                 </div>
             ) : (
                 searchTerm2 && <p className="text-center text-danger ">No se encontraron items con los datos del trabajador.</p>

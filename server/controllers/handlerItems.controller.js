@@ -51,7 +51,7 @@ export const getItemByCodePatAndUpdate = async (req, res, next) => {
         const item = rows[0];
 
         if (trabajador_data) {
-            console.log("se envio el trabajador")
+            // console.log("se envio el trabajador")
             const [trabajador] = await pool.query(
                 "SELECT * FROM item WHERE TRABAJADOR = ? AND CODIGO_PATRIMONIAL = ?",
                 [trabajador_data, id]
@@ -80,7 +80,7 @@ export const getItemByCodePatAndUpdate = async (req, res, next) => {
                 return res.status(400).json({ message: 'El código patrimonial no pertenece a este trabajador' });
             }
         } else if (dependencia_data) {
-            console.log("se envio la dependencia")
+            // console.log("se envio la dependencia")
             const [dependencia] = await pool.query(
                 "SELECT * FROM item WHERE DEPENDENCIA = ? AND CODIGO_PATRIMONIAL = ?",
                 [dependencia_data, id]

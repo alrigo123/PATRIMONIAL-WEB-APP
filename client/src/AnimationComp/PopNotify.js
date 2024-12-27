@@ -29,7 +29,7 @@ const PopNotify = () => {
             {isMobile && showTip && (
                 <div className="scroll-tip">
                     <span className="scroll-icon">👉</span>
-                    <p>Deslizar para ver la tabla completa</p>
+                    <p>Deslizar la tabla para verla completa</p>
                 </div>
             )}
         </div>

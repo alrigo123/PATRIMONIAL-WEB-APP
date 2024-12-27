@@ -157,10 +157,7 @@ const ShowItemsComp = () => {
                     </div>
 
                     <div className="table-responsive mt-3">
-                        {/* TABLA DE DATOS */}
                         {/* <table className="w-auto table table-striped table-bordered align-middle mt-3"> */}
-
-                        {/* Mostrar icono solo en dispositivos móviles */}
                         <PopNotify />
 
                         <table className="table table-striped table-bordered align-middle small">
