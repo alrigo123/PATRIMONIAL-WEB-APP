@@ -52,6 +52,7 @@ const GeneralSearchComp = () => {
     return (
         <div className="container my-4">
             <h2 className="text-center mb-4 fw-bold">BÚSQUEDA GENERAL</h2>
+            <h5 className='text-lg-start fw-bold'>Ingrese término <strong>"bien"</strong> , <strong>"trabajador"</strong> o <strong>"dependencia"</strong></h5>
             <input
                 type="text"
                 placeholder="Ingrese término de búsqueda"

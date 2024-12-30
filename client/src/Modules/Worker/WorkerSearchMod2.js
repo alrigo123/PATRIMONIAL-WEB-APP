@@ -107,33 +107,32 @@ const WorkerSearchMod2 = () => {
                     </button>
 
                     <div className="table-responsive mt-2">
-                    <PopNotify />
-
-                    <table className="table table-striped table-bordered align-middle small">
-                        <thead className="table-dark">
-                            <tr>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>PATRIMONIZADOS</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>NO PATRIMONIZADOS</th>
-                                {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {results2.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.DESCRIPCION}</td>
-                                    <td>{item.DEPENDENCIA}</td>
-                                    <td>{item.TRABAJADOR}</td>
-                                    <td>{item.CANTIDAD_ITEMS}</td>
-                                    <td>{item.CANTIDAD_PATRIMONIZADOS}</td>
-                                    <td>{item.CANTIDAD_NO_PATRIMONIZADOS}</td>
+                        <PopNotify />
+                        <table className="table table-striped table-bordered align-middle small">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>PATRIMONIZADOS</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>NO PATRIMONIZADOS</th>
+                                    {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {results2.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.DESCRIPCION}</td>
+                                        <td>{item.DEPENDENCIA}</td>
+                                        <td>{item.TRABAJADOR}</td>
+                                        <td>{item.CANTIDAD_ITEMS}</td>
+                                        <td>{item.CANTIDAD_PATRIMONIZADOS}</td>
+                                        <td>{item.CANTIDAD_NO_PATRIMONIZADOS}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             ) : (

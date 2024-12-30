@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import PopNotify from '../../AnimationComp/PopNotify';
 import { parseDate } from '../../utils/datesUtils';
 import { exportarItems } from '../../utils/exportReportBySearch';
 import { Modal, Button } from 'react-bootstrap'; // Usamos react-bootstrap para el modal.
@@ -131,7 +132,7 @@ const DependencySearchMod1 = () => {
     return (
         <div>
             {/* Primer buscador */}
-            <h5 className='text-lg-start fw-bold'>ITEMS CON CODIGO PATRIMONIAL DE LA DEPENDENCIA</h5>
+            <h5 className='text-lg-start fw-bold'>BIENES CON CODIGO PATRIMONIAL DE LA DEPENDENCIA</h5>
             <input
                 type="text"
                 placeholder="Ingrese dependencia"
@@ -150,7 +151,7 @@ const DependencySearchMod1 = () => {
                 </div>
             ) : results1.length > 0 ? (
                 <div>
-                    <h3 className='fw-semibold'>ITEMS EN DEPENDENCIA <strong>{searchTerm1.toUpperCase()}</strong> </h3>
+                    <h3 className='fw-semibold'>BIENES EN DEPENDENCIA <strong>{searchTerm1.toUpperCase()}</strong> </h3>
                     <div>
                         {/* Botón para exportar Patrimonizado */}
                         <button className="btn btn-success mb-3 me-2" onClick={exportPatrimonizado}>Exportar Patrimonizados</button>
@@ -163,9 +164,10 @@ const DependencySearchMod1 = () => {
                     </div>
 
                     {/* Controles para seleccionar los filtros */}
-                    <div className="row mt-2">
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Estado</h5>
+                    <div className="row mt-2 mb-3">
+                        <h5 className='fw-bold mt-4'>FILTRADO</h5>
+                        <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2 '>por Estado</h5>
                             <select
                                 id="filter1"
                                 className="form-select fw-bolder"
@@ -177,8 +179,8 @@ const DependencySearchMod1 = () => {
                                 <option value="not_registered">No Patrimonizado</option>
                             </select>
                         </div>
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Disposición</h5>
+                        <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2 '>por Disposición</h5>
                             <select
                                 id="filter2"
                                 className="form-select fw-bolder"
@@ -190,8 +192,8 @@ const DependencySearchMod1 = () => {
                                 <option value="not_available">No Funcional</option>
                             </select>
                         </div>
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Situación</h5>
+                        {/* <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2 '>por Situación</h5>
                             <select
                                 id="filter3"
                                 className="form-select fw-bolder"
@@ -202,9 +204,9 @@ const DependencySearchMod1 = () => {
                                 <option value="verified">Verificado</option>
                                 <option value="missing">Extraviado</option>
                             </select>
-                        </div>
-                        <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Conservación</h5>
+                        </div> */}
+                        <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
+                            <h5 className='fw-semibold mt-2 '>por Conservación</h5>
                             <select
                                 id="filter4"
                                 className="form-select fw-bolder"
@@ -220,9 +222,11 @@ const DependencySearchMod1 = () => {
                         </div>
                     </div>
 
-                    <div className="">
-                        <table className="w-auto table table-striped table-bordered align-middle" style={{ width: '100%', tableLayout: 'fixed' }}>
-                            <thead className="thead-dark">
+                    <div className="table-responsive mt-3">
+                        {/* <table className="w-auto table table-striped table-bordered align-middle mt-3"> */}
+                        <PopNotify />
+                        <table className="table table-striped table-bordered align-middle small">
+                            <thead className="table-dark">
                                 <tr>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Código Patrimonial</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción</th>

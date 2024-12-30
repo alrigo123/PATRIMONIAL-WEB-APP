@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
+import PopNotify from '../../AnimationComp/PopNotify';
 
 const URL = process.env.REACT_APP_API_URL_ITEMS
 
@@ -76,7 +77,7 @@ const DependencySearchMod2 = () => {
 
     return (
         <div>
-            <h5 className='text-lg-start fw-bold'>CANTIDAD ITEMS DE LA DEPENDENCIA</h5>
+            <h5 className='text-lg-start fw-bold'>CANTIDAD BIENES DE LA DEPENDENCIA</h5>
             {/* Segundo buscador */}
             <input
                 type="text"
@@ -96,38 +97,42 @@ const DependencySearchMod2 = () => {
                 </div>
             ) : results2.length > 0 ? (
                 <div>
-                    <h3 className='fw-semibold'>CANTIDAD DE ITEMS EN DEPENDENCIA <strong>{searchTerm2}</strong> </h3>
+                    <h3 className='fw-semibold'>CANTIDAD DE ITEMS EN DEPENDENCIA <strong>{searchTerm2.toUpperCase()}</strong> </h3>
                     <button
-                        className="btn btn-success mb-3"
+                        className="fw-bold p-2 btn btn-success mb-3"
                         onClick={exportToExcel}
                     >
                         Exportar a Excel
                     </button>
-                    <table className="w-auto table table-striped table-bordered align-middle" style={{ width: '100%', tableLayout: 'fixed' }}>
-                        <thead className="thead-dark">
-                            <tr>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD Bienes</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Patrimonizados</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Patrimonizados</th>
-                                {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {results2.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.DESCRIPCION}</td>
-                                    <td>{item.DEPENDENCIA}</td>
-                                    <td>{item.TRABAJADOR}</td>
-                                    <td>{item.CANTIDAD_ITEMS}</td>
-                                    <td>{item.CANTIDAD_PATRIMONIZADOS}</td>
-                                    <td>{item.CANTIDAD_NO_PATRIMONIZADOS}</td>
+
+                    <div className="table-responsive mt-2">
+                        <PopNotify />
+                        <table className="table table-striped table-bordered align-middle small">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD Bienes</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Patrimonizados</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Patrimonizados</th>
+                                    {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {results2.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.DESCRIPCION}</td>
+                                        <td>{item.DEPENDENCIA}</td>
+                                        <td>{item.TRABAJADOR}</td>
+                                        <td>{item.CANTIDAD_ITEMS}</td>
+                                        <td>{item.CANTIDAD_PATRIMONIZADOS}</td>
+                                        <td>{item.CANTIDAD_NO_PATRIMONIZADOS}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             ) : (
                 searchTerm2 && <p className="text-center text-danger ">No se encontraron items con los datos de la dependencia.</p>

@@ -68,10 +68,12 @@
   width: 100%;
   text-align: center;
   transition: background-color 0.3s;
+  border-radius: 5px;
 }
 
 .menu-item:hover {
-  background-color: #00796b; /* Color al pasar el cursor */
+  background-color: #018c7c; /* Color al pasar el cursor */
+  border-radius: 5px;
 }
 
 /* Cerrar menú automáticamente en pantallas más grandes */

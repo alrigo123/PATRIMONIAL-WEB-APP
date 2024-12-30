@@ -98,9 +98,9 @@ const NavBarComp = () => {
                     <Link className="fw-bold menu-item" to="/dependencia" onClick={closeMenu}>
                         🏢 Búsqueda por Dependencia
                     </Link>
-                    <Link className="fw-bold menu-item" to="/import-excel" onClick={closeMenu}>
+                    {/* <Link className="fw-bold menu-item" to="/import-excel" onClick={closeMenu}>
                         📚 Importar Datos
-                    </Link>
+                    </Link> */}
                     <Link className="fw-bold menu-item" to="/user-register" onClick={closeMenu}>
                         👨‍💻 Registro Usuario Autorizado
                     </Link>
