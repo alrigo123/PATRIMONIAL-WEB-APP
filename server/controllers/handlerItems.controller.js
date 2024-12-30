@@ -1,4 +1,5 @@
 import pool from '../db.js';
+import { authenticateToken } from '../middleware/tokenJWT.js';
 
 export const updateDisposition = async (req, res) => {
     const { id } = req.params;
@@ -33,6 +34,115 @@ export const updateSituation = async (req, res) => {
         res.status(500).json(error);
     }
 };
+
+// export const getItemByCodePatAndUpdate = async (req, res, next) => {
+//     try {
+
+//         const { dni } = req.user;  // Obtenemos el dni del usuario autenticado
+
+//         const id = req.params.id;  // Código patrimonial del item
+//         const { trabajador_data } = req.query; // trabajador
+//         const { dependencia_data } = req.query; // trabajador
+
+//         // Verificar si el código patrimonial existe en la base de datos
+//         const [rows] = await pool.query("SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?", [id]);
+
+//         if (!rows.length) {
+//             console.log('Item no encontrado.');
+//             return res.status(404).json({ message: 'El código patrimonial no existe en la base de datos' });
+//         }
+
+//         const item = rows[0];
+
+//         if (trabajador_data) {
+//             // console.log("se envio el trabajador")
+//             const [trabajador] = await pool.query(
+//                 "SELECT * FROM item WHERE TRABAJADOR = ? AND CODIGO_PATRIMONIAL = ?",
+//                 [trabajador_data, id]
+//             );
+
+//             if (trabajador.length === 0) {
+//                 // Verificar si el código pertenece a otro trabajador
+//                 const [otroTrabajador] = await pool.query(
+//                     "SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?",
+//                     [id]
+//                 );
+
+//                 if (otroTrabajador.length > 0) {
+//                     // console.log('El código patri monial pertenece a otro trabajador:', otroTrabajador[0]);
+//                     return res.status(400).json({
+//                         message: 'El código patrimonial pertenece a otro trabajador',
+//                         otroTrabajador: {
+//                             TRABAJADOR: otroTrabajador[0].TRABAJADOR,
+//                             DEPENDENCIA: otroTrabajador[0].DEPENDENCIA,
+//                             UBICACION: otroTrabajador[0].UBICACION, // Incluye más campos si es necesario
+//                         },
+//                     });
+//                 }
+
+//                 console.log('El código patrimonial no pertenece a este trabajador');
+//                 return res.status(400).json({ message: 'El código patrimonial no pertenece a este trabajador' });
+//             }
+//         } else if (dependencia_data) {
+//             // console.log("se envio la dependencia")
+//             const [dependencia] = await pool.query(
+//                 "SELECT * FROM item WHERE DEPENDENCIA = ? AND CODIGO_PATRIMONIAL = ?",
+//                 [dependencia_data, id]
+//             );
+
+//             if (dependencia.length === 0) {
+//                 // Verificar si el código pertenece a otro trabajador
+//                 const [otraDependencia] = await pool.query(
+//                     "SELECT * FROM item WHERE CODIGO_PATRIMONIAL = ?",
+//                     [id]
+//                 );
+
+//                 if (otraDependencia.length > 0) {
+//                     // console.log('El código patri monial pertenece a otro trabajador:', otroTrabajador[0]);
+//                     return res.status(400).json({
+//                         message: 'El código patrimonial pertenece a otra dependencia',
+//                         otraDependencia: {
+//                             TRABAJADOR: otraDependencia[0].TRABAJADOR,
+//                             DEPENDENCIA: otraDependencia[0].DEPENDENCIA,
+//                             UBICACION: otraDependencia[0].UBICACION, // Incluye más campos si es necesario
+//                         },
+//                     });
+//                 }
+//                 console.log('El código patrimonial no pertenece a esta dependencia');
+//                 return res.status(400).json({ message: 'El código patrimonial no pertenece a esta dependencia' });
+//             }
+//         }
+
+//         // Si el código pertenece al trabajador o dependencia, proceder con la actualización
+//         const fechaRegistro = new Date(); // Fecha actual
+
+//         // Primero, registramos en la tabla PATRIMONIZACION
+//         await pool.query(
+//             "INSERT INTO patrimonizacion (codigo_patrimonial, dni_user, Fecha_Registro) VALUES (?, ?, ?)",
+//             [id, dni, fechaRegistro]
+//         );
+
+
+//         const [updateResult] = await pool.query(
+//             "UPDATE item SET ESTADO = 1, SITUACION = 1, FECHA_REGISTRO = ? WHERE CODIGO_PATRIMONIAL = ?",
+//             [fechaRegistro, id]
+//         );
+
+//         // Verificar si se actualizó algún registro
+//         if (updateResult.affectedRows === 0) {
+//             console.log('No se actualizó ningún registro.');
+//             return res.status(400).json({ message: 'No se pudo actualizar el registro' });
+//         }
+
+//         // Retornar el item actualizado
+//         res.json({ ...item, ESTADO: 1, SITUACION: 1, FECHA_REGISTRO: fechaRegistro });
+
+//     } catch (error) {
+//         console.error('Error en la actualización:', error.message);
+//         return res.status(500).json({ message: 'Error en el servidor', error });
+//     }
+// };
+
 
 export const getItemByCodePatAndUpdate = async (req, res, next) => {
     try {

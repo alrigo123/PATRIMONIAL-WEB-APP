@@ -60,7 +60,7 @@ export const loginUser = async (req, res) => {
         }
 
         // Generar un token JWT
-        const token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '40m' }); // 1h de expiración
+        const token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '2h' }); // 1h de expiración
 
         // Respuesta exitosa
         return res.status(200).json({

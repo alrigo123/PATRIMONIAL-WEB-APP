@@ -70,7 +70,20 @@ const CodeSearchMod1 = () => {
           ? { trabajador_data: selectedPerson.TRABAJADOR }
           : { dependencia_data: selectedPerson.DEPENDENCIA }; // Parámetros dinámicos
 
-      const response = await axios.get(`${URL}/${code}`, { params });
+      // Obtener el token del almacenamiento local (o donde lo guardes después del login)
+      const token = localStorage.getItem('token');  // O usa el método adecuado para obtener el token
+
+      if (!token) {
+        alert('No se encontró el token de autenticación');
+        return;
+      }
+
+      const response = await axios.get(`${URL}/${code}`, {
+        params,
+        headers: {
+          'Authorization': `Bearer ${token}`  // Enviar el token en el encabezado
+        }
+      });
 
       if (response.status === 200) {
         toast.success('El bien patrimonial fue registrado correctamente', {

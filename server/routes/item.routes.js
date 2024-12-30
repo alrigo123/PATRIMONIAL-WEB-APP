@@ -27,6 +27,8 @@ import {
   addObservation
 } from "../controllers/handlerItems.controller.js";
 
+import { authenticateToken } from "../middleware/tokenJWT.js";
+
 const router = Router();
 
 /* ROUTES FOR SEARCH AND GET ITEMS */
@@ -40,7 +42,8 @@ router.get("/worker", searchItemsByWorker); //GET ITEMS BY WORKER
 router.get("/dependency", searchItemsByDependece); //GET ITEMS BY DEPENDENCY
 router.get("/filter", searchItemsByWorkerAndDescription); // GET ITEMS BY WORKER AND DESCRIPTION
 router.get("/conservation", getConservationStatus); // 
-router.get("/:id", getItemByCodePatAndUpdate); // GET ITEMS BY PATRIMONIAL CODE AND UPDATE STATE
+router.get("/:id" ,getItemByCodePatAndUpdate); // GET ITEMS BY PATRIMONIAL CODE AND UPDATE STATE
+// router.get("/:id",authenticateToken ,getItemByCodePatAndUpdate); // GET ITEMS BY PATRIMONIAL CODE AND UPDATE STATE
 router.get("/status/:id", getItemByCodePat); // GET ITEMS BY PATRIMONIAL CODE
 router.get("/conservation/:id", getItemByCodePatAndConservation); // 
 
