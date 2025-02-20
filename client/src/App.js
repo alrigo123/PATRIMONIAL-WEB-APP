@@ -49,16 +49,15 @@ function App() {
             <Route path="/search" element={<GeneralSearchComp />} />
             <Route path="/items" element={<ShowItemsComp />} />
 
-            <Route path="/codigo-patrimonial" element={<CodePropertyComp />} />
+            {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} /> */}
 
-           
             {/* Ruta protegida */}
 
-            {/* <Route path="/codigo-patrimonial" element={
+            <Route path="/codigo-patrimonial" element={
               <ProtectedRouteComp>
                 <CodePropertyComp />
               </ProtectedRouteComp>
-            } /> */}
+            } />
 
             <Route path="/trabajador" element={<WorkerSearchComp />} />
             <Route path="/dependencia" element={<DependencySearchComp />} />

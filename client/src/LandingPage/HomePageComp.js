@@ -60,7 +60,7 @@ const HomePageComp = () => {
         <div className="App">
             <header className="App-header text-center p-4">
                 <h1 className="title fw-bolder fs-4 fs-md-3">
-                    Control Patrimonial - Gerencia Regional de Agricultura de Cusco
+                    Control Patrimonial - Gerencia Regional de Agricultura - Cusco
                 </h1>
                 <p className="description ">
                     Bienvenido al sistema de control patrimonial de la Gerencia Regional de Agricultura Cusco.
