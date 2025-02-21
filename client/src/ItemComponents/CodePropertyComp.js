@@ -13,10 +13,10 @@ const CodePropertyComp = () => {
     const handleAddItem = () => {
         Swal.fire({
             title: '¿Añadir Ítem?',
-            text: "Puede añadir varios items importando un archivo excel",
+            // text: "Puede añadir varios items importando un archivo excel",
             icon: 'warning',
             showCancelButton: true,
-            showDenyButton: true, // Agrega un tercer botón
+            // showDenyButton: true, // Agrega un tercer botón
             confirmButtonColor: '#3085d6',
             denyButtonColor: '#0ea14c',
             cancelButtonColor: '#d33',
@@ -27,7 +27,7 @@ const CodePropertyComp = () => {
             if (result.isConfirmed) {
                 navigate('/add');
             } else if (result.isDenied) {
-                navigate('/import-excel');
+                // navigate('/import-excel');
             }
         });
     };
