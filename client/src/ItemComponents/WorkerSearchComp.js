@@ -8,7 +8,7 @@ const WorkerSearchComp = () => {
         <div className="container my-4">
             <h2 className="text-center mb-4 fw-bold">BÚSQUEDA POR TRABAJADOR</h2>
             <WorkerSearchMod1 />
-            <hr />
+            <hr className="border border-success border-2 opacity-100 mb-4"/>
             <WorkerSearchMod2 />
         </div>
     );

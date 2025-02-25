@@ -40,7 +40,9 @@ const CodePropertyComp = () => {
                 📦 AGREGAR NUEVO BIEN
             </button>
             <CodeSearchMod1 />
-            <hr />
+
+            <hr className="border border-success border-2 opacity-100 mb-4"/>
+
             <CodeSearchMod2 />
         </div>
     );

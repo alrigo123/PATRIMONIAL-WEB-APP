@@ -280,8 +280,9 @@ const AddItemComp = () => {
                                         type="checkbox"
                                         id="situacionSwitch"
                                         name="situacion"
-                                        checked={formData.situacion}
-                                        onChange={handleChange}
+                                        // checked={formData.situacion}
+                                        checked={0}
+                                        value={0}
                                         disabled />
                                     <label
                                         className="form-check-label fw-bolder ms-2"
