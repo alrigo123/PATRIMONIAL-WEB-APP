@@ -123,7 +123,7 @@ const AddItemComp = () => {
 
     return (
         <div className="container mt-5">
-            <div className="card shadow-sm">
+            <div className="card shadow-sm"  >
                 <div className="card-header bg-primary text-white text-center">
                     <h3 className="mb-0">Agregar Bien Patrimonial</h3>
                 </div>
@@ -145,6 +145,7 @@ const AddItemComp = () => {
                                         // Evita la entrada de caracteres no numéricos
                                         e.target.value = e.target.value.replace(/[^0-9]/g, '');
                                     }}
+                                    style={{ border: "1px solid black" }}
                                     required
                                 />
                             </div>
@@ -158,6 +159,8 @@ const AddItemComp = () => {
                                     value={formData.descripcion}
                                     onChange={handleChange}
                                     required
+                                    style={{ border: "1px solid black" }}
+
                                 />
                             </div>
                         </div>
@@ -172,6 +175,8 @@ const AddItemComp = () => {
                                     value={formData.trabajador}
                                     onChange={handleChange}
                                     required
+                                    style={{ border: "1px solid black" }}
+
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -184,6 +189,8 @@ const AddItemComp = () => {
                                     value={formData.dependencia}
                                     onChange={handleChange}
                                     required
+                                    style={{ border: "1px solid black" }}
+
                                 />
                             </div>
                         </div>
@@ -195,14 +202,18 @@ const AddItemComp = () => {
                                     placeholder="Ingrese ubicación donde se encuentra el bien"
                                     value={formData.ubicacion}
                                     onChange={handleChange}
-                                    required />
+                                    required
+                                    style={{ border: "1px solid black" }}
+                                />
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Fecha Alta</label>
                                 <input type="date" className="form-control" name="fechaAlta"
                                     value={formData.fechaAlta}
                                     onChange={handleChange}
-                                    required />
+                                    required
+                                    style={{ border: "1px solid black" }}
+                                />
                             </div>
                         </div>
 
@@ -216,6 +227,8 @@ const AddItemComp = () => {
                                     value={formData.fechaCompra}
                                     onChange={handleChange}
                                     required
+                                    style={{ border: "1px solid black" }}
+
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -226,6 +239,8 @@ const AddItemComp = () => {
                                     value={formData.conservacion || ''}
                                     onChange={handleChange}
                                     required
+                                    style={{ border: "1px solid black" }}
+
                                 >
                                     <option value="" disabled>Seleccionar</option>
                                     {loadingConservacion ? (

@@ -173,6 +173,7 @@ const EditItemComp = () => {
                                     value={formData.CODIGO_PATRIMONIAL}
                                     readOnly
                                     disabled
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -184,6 +185,8 @@ const EditItemComp = () => {
                                     value={formData.DESCRIPCION}
                                     onChange={handleInputChange}
                                     required
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
@@ -198,6 +201,8 @@ const EditItemComp = () => {
                                     value={formData.TRABAJADOR}
                                     onChange={handleInputChange}
                                     required
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -209,6 +214,8 @@ const EditItemComp = () => {
                                     value={formData.DEPENDENCIA}
                                     onChange={handleInputChange}
                                     required
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
@@ -223,6 +230,8 @@ const EditItemComp = () => {
                                     value={formData.UBICACION}
                                     onChange={handleInputChange}
                                     required
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -234,6 +243,8 @@ const EditItemComp = () => {
                                     value={formData.FECHA_REGISTRO ? parseDate(formData.FECHA_REGISTRO) : 'NO REGISTRADO'}
                                     readOnly
                                     disabled
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
@@ -247,6 +258,8 @@ const EditItemComp = () => {
                                     name="FECHA_ALTA"
                                     value={formatToDateInput(formData.FECHA_ALTA) || ''}
                                     onChange={handleInputChange}
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -257,6 +270,8 @@ const EditItemComp = () => {
                                     name="FECHA_COMPRA"
                                     value={formatToDateInput(formData.FECHA_COMPRA) || ''}
                                     onChange={handleInputChange}
+
+                                    style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
@@ -271,6 +286,7 @@ const EditItemComp = () => {
                                     onChange={handleInputChange}
                                     required
                                     disabled={formData.DISPOSICION === 0} // Desactiva si DISPOSICIÓN es "No funcional"
+                                    style={{ border: "1px solid black" }}
                                 >
                                     <option value="">Seleccionar</option>
                                     {loadingConservacion ? (
@@ -368,9 +384,9 @@ const EditItemComp = () => {
                             <button type="submit" className="btn btn-success me-3 fw-bold p-2">
                                 Guardar Cambios
                             </button>
-                            <Link to="/codigo-patrimonial" className="btn btn-secondary fw-bold p-2">
+                            <button type="button" className="btn btn-secondary fw-bold p-2" onClick={() => navigate(-1)}>
                                 Regresar
-                            </Link>
+                            </button>
                         </div>
                     </form>
                 </div>

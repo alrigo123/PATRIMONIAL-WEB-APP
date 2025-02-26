@@ -59,6 +59,7 @@ const GeneralSearchComp = () => {
                 value={searchTerm}
                 onChange={handleInputChange}
                 className="form-control mb-4 fw-bold"
+                style={{ border: "1px solid black" }} // Agregando borde negro
             />
             {/* Muestra un spinner de carga cuando se está realizando la búsqueda */}
             {isLoading ? (
@@ -121,7 +122,7 @@ const GeneralSearchComp = () => {
                     </table>
                 </div>
             ) : (
-                searchTerm && <p className="text-center text-muted">No se encontraron items con el término ingresado.</p>
+                searchTerm && <p className="text-center text-danger fw-bold">No se encontraron coincidencias con el término ingresado.</p>
             )}
         </div>
     );

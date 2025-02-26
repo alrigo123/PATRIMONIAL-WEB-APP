@@ -155,7 +155,7 @@ const WorkerSearchMod1 = () => {
                 value={searchTerm1}
                 onChange={handleInputChange1}
                 className="form-control mb-3 fw-bold"
-                style={{ marginBottom: '20px', padding: '10px' }}
+                style={{ marginBottom: '20px', padding: '10px', border: "1px solid black" }}
             />
 
             {/* Muestra un spinner de carga cuando se está realizando la búsqueda */}
@@ -404,7 +404,7 @@ const WorkerSearchMod1 = () => {
                     </Modal>
                 </div>
             ) : (
-                searchTerm1 && <p className="text-center text-danger">No se encontraron bienes con los datos del trabajador.</p>
+                searchTerm1 && <p className="text-center text-danger fw-bold">No se encontraron bienes con los datos del trabajador.</p>
             )}
         </div>
     );

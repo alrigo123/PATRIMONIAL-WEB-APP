@@ -189,10 +189,10 @@ const CodeSearchMod1 = () => {
         {/* Select para elegir entre Trabajador o Dependencia */}
         <div className="col-12 col-md-3">
           <select
-            className="form-select fw-bold"
+            className="form-select fw-bold mb-2"
             value={searchType}
             onChange={handleSearchTypeChange}
-            style={{ fontSize: '1.2rem', padding: '10px' }}
+            style={{ padding: '10px', border: "1px solid black", fontSize: '1.2rem' }}
           >
             <option value="TRABAJADOR">Trabajador</option>
             <option value="DEPENDENCIA">Dependencia</option>
@@ -207,7 +207,8 @@ const CodeSearchMod1 = () => {
             value={searchInput}
             onChange={handleSearch}
             className="form-control fw-bold"
-            style={{ fontSize: '1.2rem', padding: '10px' }}
+            style={{ padding: '10px', border: "1px solid black", fontSize: '1.2rem' }}
+
           />
           {personsList.length > 0 && (
             <ul className="list-group">
@@ -227,6 +228,7 @@ const CodeSearchMod1 = () => {
 
         {/* Input de código patrimonial */}
         <div className="col-12 col-md-10">
+
           <input
             type="text"
             placeholder="Escanear código (barras) patrimonial"
@@ -240,12 +242,20 @@ const CodeSearchMod1 = () => {
             }}
             ref={inputRef}
             className="form-control mb-3 fw-bold"
-            style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
+            style={{
+              marginBottom: '20px',
+              fontSize: '1.2rem',
+              padding: '10px',
+              border: selectedPerson ? "1px solid black" : "1px solid black",
+              backgroundColor: selectedPerson ? "#ffffff" : "#9e9e9e",
+            }}
             disabled={!selectedPerson} // Deshabilitar si no se ha seleccionado una persona
             pattern="\d{12}" // Validar en el submit para asegurarse de que tiene exactamente 12 dígitos
             title="Debe contener exactamente 12 dígitos"
           />
+
         </div>
+
 
         {/* Botón de limpiar */}
         <div className="col-12 col-md-2">

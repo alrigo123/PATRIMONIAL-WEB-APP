@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PopNotify from '../../AnimationComp/PopNotify';
+import { Modal, Button } from 'react-bootstrap'; // Usamos react-bootstrap para el modal.
 
 const URL = process.env.REACT_APP_API_URL_ITEMS
 
@@ -9,6 +10,11 @@ const CodeSearchMod2 = () => {
   const [stateCode, setStateCode] = useState('');
   const [stateData, setStateData] = useState([]);
   const stateInputRef = useRef(null);
+
+  const [selectedItem, setSelectedItem] = useState(null); // Para guardar el item seleccionado
+  const [modalVisible, setModalVisible] = useState(false); // Para controlar el modal
+  const [newObservation, setNewObservation] = useState(''); // Para el contenido del textarea
+
 
   const handleStateInputChange = (e) => {
     const value = e.target.value;
@@ -87,6 +93,32 @@ const CodeSearchMod2 = () => {
     }
   };
 
+  const handleEditObservation = (item) => {
+    setSelectedItem(item);
+    setNewObservation(item.OBSERVACION || ''); // Prellenar con la observación actual
+    setModalVisible(true);
+  };
+
+  const saveObservation = async () => {
+    try {
+      // Llamada al endpoint con el código patrimonial
+      await axios.put(`${URL}/observation/${selectedItem.CODIGO_PATRIMONIAL}`, {
+        observacion: newObservation,
+      });
+      // Actualizar la tabla con la nueva observación
+      setStateData((prev) =>
+        prev.map((item) =>
+          item.CODIGO_PATRIMONIAL === selectedItem.CODIGO_PATRIMONIAL
+            ? { ...item, OBSERVACION: newObservation }
+            : item
+        )
+      );
+      setModalVisible(false); // Cerrar el modal
+    } catch (error) {
+      console.error('Error al guardar la observación:', error);
+    }
+  };
+
   return (
     <div>
       {/* Sección de búsqueda para estados */}
@@ -100,7 +132,7 @@ const CodeSearchMod2 = () => {
             onChange={handleStateInputChange}
             ref={stateInputRef}
             className="form-control mb-3 fw-bold"
-            style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px' }}
+            style={{ marginBottom: '20px', fontSize: '1.2rem', padding: '10px', border: "1px solid black" }}
             maxLength="12"
           />
         </div>
@@ -133,6 +165,7 @@ const CodeSearchMod2 = () => {
                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Conservación</th>
                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Situación</th>
                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>ACCION</th>
+                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Observacion</th>
               </tr>
             </thead>
             <tbody>
@@ -206,13 +239,55 @@ const CodeSearchMod2 = () => {
                     </div>
 
                   </td>
+                  <td>
+                    <span
+                      style={{
+                        fontWeight: item.OBSERVACION ? 'bold' : 'normal',
+                        fontStyle: item.OBSERVACION ? 'normal' : 'italic',
+                        color: item.OBSERVACION ? '#000' : '#666', // Opcional: color diferenciado
+                      }}
+                    >
+                      {item.OBSERVACION ? item.OBSERVACION : 'Sin observación'}
+                    </span>
+                    <Button
+                      variant="link"
+                      size="sm"
+                      className='fw-bold'
+                      onClick={() => handleEditObservation(item)}
+                    >
+                      📝 Añadir Observación
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Editar Observación</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <textarea
+                className="form-control"
+                rows={5}
+                value={newObservation}
+                onChange={(e) => setNewObservation(e.target.value)}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setModalVisible(false)}>
+                Cancelar
+              </Button>
+              <Button variant="primary" onClick={saveObservation}>
+                Guardar
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
+
+
       ) : (
-        stateCode && <p className="text-center text-danger">No se encontró información de estado del bien con el CODIGO PATRIMONIAL ingresado.</p>
+        stateCode && <p className="text-center text-danger fw-bold">No se encontró información del bien con el CODIGO PATRIMONIAL ingresado.</p>
       )}
     </div>
   )

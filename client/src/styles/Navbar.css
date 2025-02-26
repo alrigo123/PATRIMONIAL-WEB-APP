@@ -74,7 +74,16 @@
 .menu-item:hover {
   background-color: #018c7c; /* Color al pasar el cursor */
   border-radius: 5px;
+  padding: 5px 5px;
 }
+
+.menu-item.active {
+  background-color: #018c7c; /* Color azul */
+  color: white;
+  border-radius: 5px;
+  padding: 5px 5px;
+}
+
 
 /* Cerrar menú automáticamente en pantallas más grandes */
 @media (min-width: 768px) {
@@ -96,3 +105,6 @@
       display: none; /* Ocultar el icono de la hamburguesa */
   }
 }
+
+
+
