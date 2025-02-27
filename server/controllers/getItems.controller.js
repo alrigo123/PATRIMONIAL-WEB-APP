@@ -45,7 +45,7 @@ export const getAllItemsAndConservationLimited = async (req, res, next) => {
             FROM item AS I
             INNER JOIN conservacion AS C
             ON I.CONSERV = C.id
-            ORDER BY I.TRABAJADOR ASC
+            ORDER BY I.CODIGO_PATRIMONIAL ASC
             LIMIT ? OFFSET ?
             `,
             [limit, offset] // Query parameters

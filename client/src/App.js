@@ -29,6 +29,8 @@ import AddItemComp from './HandlerComponets/AddItemComp.js';
 
 //CHAT BOT
 import ChatBotComp from './chat-test/ChatBotComp.js';
+import LockComp from './private/LockComp.js';
+import SurfComp from './private/SurfComp.js';
 
 //USER
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
@@ -46,18 +48,24 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePageComp />} />
+
+            {/* AI INTEGRATION */}
+            <Route path="/chat" element={<ChatBotComp />} />
+            <Route path="/2804RST/login" element={<LockComp />} />
+            <Route path="/2804RST/surf" element={<SurfComp />} />
+
             <Route path="/search" element={<GeneralSearchComp />} />
             <Route path="/items" element={<ShowItemsComp />} />
 
             {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} /> */}
 
             {/* Ruta protegida */}
-
             <Route path="/codigo-patrimonial" element={
               <ProtectedRouteComp>
                 <CodePropertyComp />
               </ProtectedRouteComp>
-            } />
+            }
+            />
 
             <Route path="/trabajador" element={<WorkerSearchComp />} />
             <Route path="/dependencia" element={<DependencySearchComp />} />
@@ -70,8 +78,6 @@ function App() {
             <Route path="/add" element={<AddItemComp />} />
             {/* USER ACTIONS */}
             <Route path="/user-register" element={<RegisterWithPin />} />
-            {/* AI INTEGRATION */}
-            <Route path="/chat" element={<ChatBotComp />} />
           </Routes>
         </main>
       </BrowserRouter>

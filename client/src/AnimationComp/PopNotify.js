@@ -2,23 +2,25 @@ import { useState, useEffect } from 'react';
 import "../styles/PopNotify.css";
 
 const PopNotify = () => {
-    const [isMobile, setIsMobile] = useState(false);
-    const [showTip, setShowTip] = useState(true);  // Estado para controlar la visibilidad del mensaje
+    const [isMobile, setIsMobile] = useState(false); // State to check if the device is mobile (responsive)
+    const [showTip, setShowTip] = useState(true);  // State to control the visibility of the message
 
     useEffect(() => {
         const checkIfMobile = () => {
-            setIsMobile(window.innerWidth <= 768); // O cualquier otro ancho que consideres como móvil
+            setIsMobile(window.innerWidth <= 768); // O cualquier otro ancho que consideres como móvil (responsive)
         };
-        window.addEventListener("resize", checkIfMobile);
+
+        window.addEventListener("resize", checkIfMobile); // Añadir el listener al evento de redimensionamiento
         checkIfMobile();
-        return () => window.removeEventListener("resize", checkIfMobile);
+        return () => window.removeEventListener("resize", checkIfMobile); // Eliminar el listener al evento de redimensionamiento
     }, []);
+
     useEffect(() => {
-        // Si es móvil, mostrar el mensaje durante 10 segundos
+        // Si es móvil, mostrar el mensaje
         if (isMobile) {
             const timer = setTimeout(() => {
                 setShowTip(false);  // Ocultar el mensaje después de 10 segundos
-            }, 7000); // 10 segundos
+            }, 7000); // 7 segundos
 
             return () => clearTimeout(timer);  // Limpiar el temporizador si el componente se desmonta
         }

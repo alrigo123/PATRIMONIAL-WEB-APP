@@ -8,8 +8,8 @@ const URI_ITEMS = process.env.REACT_APP_API_URL_ITEMS
 
 const AddItemComp = () => {
 
-    const [conservacion, setConservacion] = useState([]);
-    const [loadingConservacion, setLoadingConservacion] = useState(true);
+    const [conservacion, setConservacion] = useState([]); // Estado para almacenar las conservaciones
+    const [loadingConservacion, setLoadingConservacion] = useState(true); // Estado para manejar la carga
 
     // Para navegar a otra página después del submit
     const navigate = useNavigate();
@@ -39,17 +39,8 @@ const AddItemComp = () => {
                 console.error("Error al cargar las conservaciones:", err);
             }
         };
-
         fetchConservacion();
     }, []);
-
-    // const handleChange = (e) => {
-    //     const { name, value, type, checked } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [name]: type === "checkbox" ? checked : value
-    //     });
-    // };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -59,21 +50,21 @@ const AddItemComp = () => {
         });
     };
 
-
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevenir la recarga de la página
+
         // Verifica los datos que se enviarán al backend
-        console.log("Datos enviados al backend:", {
+        /* console.log("Datos enviados al backend:", {
             ...formData,
             DISPOSICION: formData.disposicion ? 1 : 0, // Convertir booleano a 1/0
             SITUACION: formData.situacion ? 1 : 0,
             FECHA_COMPRA: formData.fechaCompra ? formatToDatabase(formData.fechaCompra).toString() : 'Sin Registro',
             FECHA_ALTA: formData.fechaAlta ? formatToDatabase(formData.fechaAlta).toString() : 'Sin Registro',
             CONSERV: formData.conservacion
-        });
-        // throw Error
+        }); */
 
         try {
+            // API consume
             const response = await axios.post(
                 `${URI_ITEMS}/add`,
                 {
@@ -85,7 +76,6 @@ const AddItemComp = () => {
                     CONSERV: formData.conservacion
                 }
             );
-            // alert(response.data.message);
 
             if (response.status === 200) {
                 Swal.fire({
@@ -117,7 +107,6 @@ const AddItemComp = () => {
                 alert('Error al enviar la solicitud');
             }
             console.error('Error:', err);
-            // alert('Error:', err);
         }
     };
 
@@ -158,9 +147,8 @@ const AddItemComp = () => {
                                     placeholder="Ingrese descripción del bien a agregar"
                                     value={formData.descripcion}
                                     onChange={handleChange}
-                                    required
                                     style={{ border: "1px solid black" }}
-
+                                    required
                                 />
                             </div>
                         </div>
@@ -174,9 +162,8 @@ const AddItemComp = () => {
                                     placeholder="Ingrese apellidos y nombres del trabajador"
                                     value={formData.trabajador}
                                     onChange={handleChange}
-                                    required
                                     style={{ border: "1px solid black" }}
-
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -188,13 +175,11 @@ const AddItemComp = () => {
                                     placeholder="Ingrese datos de la dependecia (SEDE) en la que se encuentra"
                                     value={formData.dependencia}
                                     onChange={handleChange}
-                                    required
                                     style={{ border: "1px solid black" }}
-
+                                    required
                                 />
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Ubicación</label>
@@ -211,12 +196,11 @@ const AddItemComp = () => {
                                 <input type="date" className="form-control" name="fechaAlta"
                                     value={formData.fechaAlta}
                                     onChange={handleChange}
-                                    required
                                     style={{ border: "1px solid black" }}
+                                    required
                                 />
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Fecha Compra</label>
@@ -226,9 +210,8 @@ const AddItemComp = () => {
                                     name="fechaCompra"
                                     value={formData.fechaCompra}
                                     onChange={handleChange}
-                                    required
                                     style={{ border: "1px solid black" }}
-
+                                    required
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
@@ -240,7 +223,6 @@ const AddItemComp = () => {
                                     onChange={handleChange}
                                     required
                                     style={{ border: "1px solid black" }}
-
                                 >
                                     <option value="" disabled>Seleccionar</option>
                                     {loadingConservacion ? (
@@ -255,15 +237,9 @@ const AddItemComp = () => {
                                 </select>
                             </div>
                         </div>
-
                         <div className="col-md-6 mt-3">
                             <div className="mb-3 text-center">
-                                <label
-                                    htmlFor="disposicionSwitch"
-                                    className="form-label me-2 fw-bold"
-                                >
-                                    Estado:
-                                </label>
+                                <label htmlFor="disposicionSwitch" className="form-label me-2 fw-bold" > Estado: </label>
                                 <div className="form-check form-switch d-inline-flex align-items-center">
                                     <input
                                         className="form-check-input"
@@ -283,12 +259,7 @@ const AddItemComp = () => {
                                 </div>
                             </div>
                             <div className="mb-3 text-center">
-                                <label
-                                    htmlFor="situacionSwitch"
-                                    className="form-label me-2 fw-bold"
-                                >
-                                    Situación:
-                                </label>
+                                <label htmlFor="situacionSwitch" className="form-label me-2 fw-bold"> Situación: </label>
                                 <div className="form-check form-switch d-inline-flex align-items-center">
                                     <input
                                         className="form-check-input"
@@ -298,23 +269,15 @@ const AddItemComp = () => {
                                         // checked={formData.situacion}
                                         checked={0}
                                         value={0}
-                                        disabled />
-                                    <label
-                                        className="form-check-label fw-bolder ms-2"
-                                        htmlFor="situacionSwitch"
-                                    >
+                                        disabled
+                                    />
+                                    <label className="form-check-label fw-bolder ms-2" htmlFor="situacionSwitch">
                                         {formData.situacion ? 'Verificado' : 'Faltante'}
-                                        {/* {situacion ? "Verificado" : "Faltante"} */}
                                     </label>
                                 </div>
                             </div>
                             <div className="mb-3 text-center">
-                                <label
-                                    htmlFor="disposicionSwitch"
-                                    className="form-label me-2 fw-bold"
-                                >
-                                    Disposición:
-                                </label>
+                                <label htmlFor="disposicionSwitch" className="form-label me-2 fw-bold" > Disposición: </label>
                                 <div className="form-check form-switch d-inline-flex align-items-center">
                                     <input
                                         className="form-check-input"
@@ -324,25 +287,15 @@ const AddItemComp = () => {
                                         checked={formData.disposicion}
                                         onChange={handleChange}
                                     />
-                                    <label
-                                        className="form-check-label fw-bolder ms-2"
-                                        htmlFor="disposicionSwitch"
-                                    >
-                                        {/* {disposicion ? "Funcional" : "No Funcional"} */}
+                                    <label className="form-check-label fw-bolder ms-2" htmlFor="disposicionSwitch">
                                         {formData.disposicion ? 'Funcional' : 'No Funcional'}
                                     </label>
                                 </div>
                             </div>
                         </div>
-
-
                         <div className="text-center mt-4">
-                            <button type="submit" className="btn btn-success me-3">
-                                Agregar item
-                            </button>
-                            <Link to="/codigo-patrimonial" className="btn btn-secondary">
-                                Regresar
-                            </Link>
+                            <button type="submit" className="btn btn-success me-3">Agregar item</button>
+                            <Link to="/codigo-patrimonial" className="btn btn-secondary">Regresar</Link>
                         </div>
                     </form>
                 </div>

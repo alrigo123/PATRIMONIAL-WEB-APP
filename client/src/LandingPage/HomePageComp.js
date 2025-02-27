@@ -67,7 +67,7 @@ const HomePageComp = () => {
                     Este sistema ha sido diseñado para ofrecerte una herramienta accesible para
                     la gestión integral de los bienes y recursos de nuestra institución. A través de esta
                     plataforma, tendrás la posibilidad de visualizar de manera detallada todos los bienes
-                    registrados, desde equipos hasta inmuebles, y realizar la patrimonización de nuevos
+                    registrados, desde equipos hasta inmuebles, y realizar el registro patrimonial de nuevos
                     bienes de manera sencilla y organizada. Además, podrás llevar un control
                     sobre la ubicación, estado y utilización de los activos. Este sistema
                     es clave para asegurar el cumplimiento de las normativas de control patrimonial y
@@ -84,7 +84,7 @@ const HomePageComp = () => {
                         }}
                         to="/codigo-patrimonial" // Esto es solo para mantener el formato de link
                     >
-                        Patrimonizar Nuevo Bienes                    </Link>
+                        Registrar Patrimonio de Nuevo Bienes                    </Link>
 
                     {/* Modal de inicio de sesión */}
                     <LoginModalComp

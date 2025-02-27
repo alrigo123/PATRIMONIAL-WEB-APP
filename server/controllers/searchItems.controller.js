@@ -32,7 +32,9 @@ export const searchItemByPartialWorker = async (req, res, next) => {
             SELECT DISTINCT TRABAJADOR 
             FROM item
             WHERE TRABAJADOR LIKE ?
-            LIMIT 10;`, [`%${searchTerm}%`]);
+            LIMIT 10;
+            ORDER BY CODIGO_PATRIMONIAL ASC;
+            `, [`%${searchTerm}%`]);
 
         // Si no se encuentra nada, devolver un mensaje
         if (!rows.length) {
@@ -102,7 +104,7 @@ export const searchItemsByWorker = async (req, res, next) => {
             INNER JOIN conservacion AS C
                 ON I.CONSERV = C.id
             WHERE ${condiciones}
-            ORDER BY I.DESCRIPCION ASC;
+            ORDER BY I.CODIGO_PATRIMONIAL ASC;
             `,
             parametros
         );
@@ -144,7 +146,7 @@ export const searchItemsByDependece = async (req, res, next) => {
             INNER JOIN conservacion AS C
                 ON I.CONSERV = C.id
             WHERE ${condiciones}
-            ORDER BY I.DESCRIPCION ASC;
+            ORDER BY I.CODIGO_PATRIMONIAL ASC;
             `,
             parametros
         );

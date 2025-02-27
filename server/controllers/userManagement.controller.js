@@ -42,6 +42,7 @@ export const loginUser = async (req, res) => {
         }
 
         const user = rows[0]; // Primer resultado
+        const su = user.dni;
 
         // Verificar si la contraseña existe en los datos del usuario
         if (!user.password) {
@@ -59,8 +60,13 @@ export const loginUser = async (req, res) => {
             return res.status(401).json({ message: 'Contraseña Incorrecta' });
         }
 
-        // Generar un token JWT
-        const token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '2h' }); // 1h de expiración
+        let token = ""
+        if(su === 'root'){
+            // Generar un token JWT
+            token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '30s' }); // 1h de expiración
+        }else{
+            token = jwt.sign({ dni: user.dni, name: user.name_and_last }, SECRET_KEY, { expiresIn: '2h' }); // 1h de expiración
+        }
 
         // Respuesta exitosa
         return res.status(200).json({
@@ -69,7 +75,8 @@ export const loginUser = async (req, res) => {
                 dni: user.dni,
                 name_and_last: user.name_and_last
             },
-            token: token
+            token: token,
+            su: su
         });
     } catch (error) {
         console.error("Error en loginUser:", error);

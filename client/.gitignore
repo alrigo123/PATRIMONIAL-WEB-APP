@@ -1,6 +1,7 @@
 /node_modules
 /test
 /.pnp
+/src/private
 .pnp.js
 .env
 htaccess
