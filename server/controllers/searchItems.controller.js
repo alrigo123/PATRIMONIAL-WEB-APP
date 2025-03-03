@@ -32,9 +32,7 @@ export const searchItemByPartialWorker = async (req, res, next) => {
             SELECT DISTINCT TRABAJADOR 
             FROM item
             WHERE TRABAJADOR LIKE ?
-            LIMIT 10;
-            ORDER BY CODIGO_PATRIMONIAL ASC;
-            `, [`%${searchTerm}%`]);
+            LIMIT 10; `, [`%${searchTerm}%`]);
 
         // Si no se encuentra nada, devolver un mensaje
         if (!rows.length) {
