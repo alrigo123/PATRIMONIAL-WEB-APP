@@ -3,15 +3,15 @@ import { config } from 'dotenv';
 config(); //Cargar las variables del archivo .env
 
 // Local Host
-const pool = new createPool({
-    host: 'localhost',
-    user: process.env.DB_USER_LOCAL,
-    password: '',
-    database: process.env.DB_NAME_LOCAL,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-})
+// const pool = new createPool({
+//     host: 'localhost',
+//     user: process.env.DB_USER_LOCAL,
+//     password: '',
+//     database: process.env.DB_NAME_LOCAL,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// })
 
 // Clever cloud
 // const pool = new createPool({
@@ -25,12 +25,12 @@ const pool = new createPool({
 // })
 
 // Hostgator GERAGRI
-// const pool = new createPool({
-//     host: process.env.DB_HOST_HGATOR,
-//     user: process.env.DB_USER_HGATOR,
-//     password: process.env.DB_PASSWORD_HGATOR,
-//     database: process.env.DB_NAME_HGATOR
-// })
+const pool = new createPool({
+    host: process.env.DB_HOST_HGATOR,
+    user: process.env.DB_USER_HGATOR,
+    password: process.env.DB_PASSWORD_HGATOR,
+    database: process.env.DB_NAME_HGATOR
+})
 
 // Docker VM server
 // const pool = new createPool({
