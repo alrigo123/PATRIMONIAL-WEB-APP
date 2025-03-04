@@ -21,6 +21,7 @@ const app = express();
 //Middleware
 // Configuración CORS para permitir accesos desde cualquier origen
 app.use(cors({ origin: '*' }));
+app.set('trust proxy', true);
 app.use(express.json()) //process data to send to the backend
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
