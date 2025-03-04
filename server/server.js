@@ -10,22 +10,23 @@ import rateLimit from 'express-rate-limit';
 // Cargar las variables del archivo .env
 config();
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // Límite de 100 peticiones por IP
-    message: 'Demasiadas solicitudes desde esta IP, por favor inténtalo de nuevo más tarde.'
-});
+// const limiter = rateLimit({
+//     windowMs: 15 * 60 * 1000, // 15 minutos
+//     max: 100, // Límite de 100 peticiones por IP
+//     message: 'Demasiadas solicitudes desde esta IP, por favor inténtalo de nuevo más tarde.'
+// });
+
 const app = express();
-   
+
 //Middleware
 // Configuración CORS para permitir accesos desde cualquier origen
 app.use(cors({ origin: '*' }));
 app.use(express.json()) //process data to send to the backend
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(limiter);
+// app.use(limiter);
 
-////// PRUEBA DEL OPEN AI 
+////// PRUEBA DEL OPEN AI
 // Ruta para manejar mensajes del chatbot
 app.post('/api/chat', async (req, res) => {
     const now = Date.now();
@@ -77,9 +78,8 @@ app.use('/items', item_routes)
 app.use('/user', user_routes)
 app.use('/export', export_reports)
 
-
 const PORT = process.env.PORT || process.env.SERVER_PORT;
 
 app.listen(PORT, () => {
     console.log(`server :${PORT}`);
-}); 
+});

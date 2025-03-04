@@ -5,7 +5,6 @@ config(); //Cargar las variables del archivo .env
 // Local Host
 // const pool = new createPool({
 //     host: 'localhost',
-//     // port : 3333,
 //     user: process.env.DB_USER_LOCAL,
 //     password: '',
 //     database: process.env.DB_NAME_LOCAL,
@@ -14,7 +13,7 @@ config(); //Cargar las variables del archivo .env
 //     queueLimit: 0
 // })
 
-// Clever cloud 
+// Clever cloud
 // const pool = new createPool({
 //     host: process.env.DB_HOST_CLOUD,
 //     user: process.env.DB_USER_CLOUD,
