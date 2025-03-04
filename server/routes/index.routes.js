@@ -6,7 +6,7 @@ const router = Router();
 
 // TESTING ROUTES
 router.get('/ping', async (req, res) => {
-    const [rows] = await pool.query('SELECT * FROM user_i')
+    const [rows] = await pool.query('SELECT CODIGO_PATRIMONIAL FROM item')
     console.log(rows);
     res.json(rows)
 })
