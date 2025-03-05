@@ -1,7 +1,7 @@
 import './App.css';
 import './styles/styles.css'
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 //LANDING PAGE
 import HomePageComp from './LandingPage/HomePageComp.js';

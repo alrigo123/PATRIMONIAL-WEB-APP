@@ -13,4 +13,4 @@ export const APIgetItemById = async (id) => {
         console.error('Error fetching item data:', error);
         throw error;
     }
-};   
+};

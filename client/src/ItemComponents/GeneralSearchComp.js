@@ -104,9 +104,9 @@ const GeneralSearchComp = () => {
                                     </td>
                                     <td>
                                         {item.DISPOSICION === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>No Funcional</span>
+                                            <span style={{ color: 'red', fontWeight: 'bold' }}>de Baja</span>
                                         ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Funcional</span>
+                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Activo</span>
                                         )}
                                     </td>
                                     <td>
