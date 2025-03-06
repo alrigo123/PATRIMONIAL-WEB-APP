@@ -120,7 +120,8 @@ const EditItemComp = () => {
                     confirmButtonText: 'Aceptar'
                 }).then(() => {
                     // Después de que el usuario haga clic en "Aceptar", redirigir a otra página
-                    navigate('/codigo-patrimonial');
+                    // navigate('/codigo-patrimonial');
+                    navigate(-1)
                 });
             } else {
                 // alert('Error de API');
