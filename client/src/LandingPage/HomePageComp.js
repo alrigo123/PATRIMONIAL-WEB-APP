@@ -75,6 +75,7 @@ const HomePageComp = () => {
                     eficiencia en todos los procesos.
                 </p>
                 <div className="cta-container d-flex flex-column flex-md-row justify-content-center align-items-center mt-4">
+                    <a className="btn btn-success fw-bold mb-2 mb-md-0 mx-md-2" href="/inventory/pdf">Guia del Aplicativo Web</a>
                     <a className="btn btn-success fw-bold mb-2 mb-md-0 mx-md-2" href="/inventory/items">Ver Bienes Registrados</a>
                     <Link
                         className="btn btn-success fw-bold mx-md-2"
@@ -84,7 +85,8 @@ const HomePageComp = () => {
                         }}
                         to="/codigo-patrimonial" // Esto es solo para mantener el formato de link
                     >
-                        Registrar Patrimonio de Nuevo Bienes                    </Link>
+                        Registrar Patrimonio de Nuevo Bienes
+                    </Link>
 
                     {/* Modal de inicio de sesión */}
                     <LoginModalComp

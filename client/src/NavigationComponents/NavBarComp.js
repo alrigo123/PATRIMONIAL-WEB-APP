@@ -125,15 +125,15 @@
 
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom"; // Importar useLocation
-import LoginModalComp from "../UserComponents/LoginModalComp"; 
-import { jwtDecode } from "jwt-decode"; 
+import LoginModalComp from "../UserComponents/LoginModalComp";
+import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Navbar.css";
 
 const NavBarComp = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const [redirectPath, setRedirectPath] = useState(""); 
+    const [redirectPath, setRedirectPath] = useState("");
     const navigate = useNavigate();
     const location = useLocation(); // Obtiene la ruta actual
 
@@ -190,17 +190,20 @@ const NavBarComp = () => {
                     <Link className={`fw-bold menu-item ${isActive("/")}`} to="/" onClick={closeMenu}>
                         🏠 Home
                     </Link>
+                    <Link className={`fw-bold menu-item ${isActive("/pdf")}`} to="/pdf" onClick={closeMenu}>
+                    <i class="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guia App
+                    </Link>
                     <Link className={`fw-bold menu-item ${isActive("/items")}`} to="/items" onClick={closeMenu}>
                         📊 Ver Items
                     </Link>
                     <Link className={`fw-bold menu-item ${isActive("/search")}`} to="/search" onClick={closeMenu}>
                         📂 Búsqueda General
                     </Link>
-                    <Link className={`fw-bold menu-item ${isActive("/codigo-patrimonial")}`} 
+                    <Link className={`fw-bold menu-item ${isActive("/codigo-patrimonial")}`}
                         onClick={(e) => {
                             handleLoginClick(e, "/codigo-patrimonial");
                             closeMenu();
-                        }} 
+                        }}
                         to="/codigo-patrimonial">
                         🗃️ Patrimonizar Bien
                     </Link>

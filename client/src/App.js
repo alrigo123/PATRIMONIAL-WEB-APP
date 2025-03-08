@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 //LANDING PAGE
 import HomePageComp from './LandingPage/HomePageComp.js';
 import FooterComp from './LandingPage/FooterComp.js';
+import PDFViewer from './LandingPage/PDFViewer.js';
 
 // ITEM COMPONENTS
 import GeneralSearchComp from './ItemComponents/GeneralSearchComp.js'; // Ajusta la ruta según tu estructura
@@ -48,6 +49,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePageComp />} />
+            <Route path="/pdf" element={<PDFViewer />} />
 
             {/* AI INTEGRATION */}
             <Route path="/chat" element={<ChatBotComp />} />
