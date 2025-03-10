@@ -66,7 +66,7 @@ const ExportReportsMod = () => {
   // Configuración de consultas
   const queriesConfig = [
     {
-      name: "REPORTE CONSOLIDADO GENERAL",
+      name: "REPORTE GENERAL CONSOLIDADO",
       url: `${API_export}/general`,
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,

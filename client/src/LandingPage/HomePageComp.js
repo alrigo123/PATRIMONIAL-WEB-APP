@@ -85,7 +85,7 @@ const HomePageComp = () => {
                         }}
                         to="/codigo-patrimonial" // Esto es solo para mantener el formato de link
                     >
-                        Registrar Patrimonio de Nuevo Bienes
+                        Registrar bien patrimonial
                     </Link>
 
                     {/* Modal de inicio de sesión */}

@@ -22,7 +22,6 @@ const WorkerSearchMod1 = () => {
     // States para los filtros
     const [filterEstado, setFilterEstado] = useState('all');
     const [filterDisposicion, setFilterDisposicion] = useState('all');
-    const [filterSituacion, setFilterSituacion] = useState('all');
     const [filterConservation, setfilterConservation] = useState('all');
 
     // Maneja el cambio en el primer input
@@ -61,20 +60,12 @@ const WorkerSearchMod1 = () => {
         }
     }, [searchTerm1]);
 
-    const handleEdit = (item) => {
-        if (!item.CODIGO_PATRIMONIAL) {
-            console.error('El CODIGO_PATRIMONIAL está indefinido:', item);
-            return; // Evita seguir si no hay un código válido
-        }
-        console.log("Editando CODIGO_PATRIMONIAL:", item.CODIGO_PATRIMONIAL, "CON DATOS:", item);
-    };
-
     const exportPatrimonizado = () => {
-        exportarItems(results1, 1, "Bienes Trabajador", "Bienes_Patrimonizados", searchTerm1, fechaFormateada);
+        exportarItems(results1, 1, "Bienes Trabajador", "Bienes_Registrados", searchTerm1, fechaFormateada);
     };
 
     const exportNoPatrimonizado = () => {
-        exportarItems(results1, 0, "Bienes Trabajador", "Bienes_No_Patrimonizados", searchTerm1, fechaFormateada);
+        exportarItems(results1, 0, "Bienes Trabajador", "Bienes_No_Registrados", searchTerm1, fechaFormateada);
     };
 
     const exportConsolidado = () => {
@@ -117,38 +108,19 @@ const WorkerSearchMod1 = () => {
             filterDisposicion === 'all' ||
             (filterDisposicion === 'available' && item.DISPOSICION === 1) ||
             (filterDisposicion === 'not_available' && item.DISPOSICION === 0);
-        const situacionFilter =
-            filterSituacion === 'all' ||
-            (filterSituacion === 'verified' && item.SITUACION === 1) ||
-            (filterSituacion === 'missing' && item.SITUACION === 0);
         const conservationFilter =
             filterConservation === 'all' ||
             (filterConservation === 'good' && item.CONSERV === 1) ||
             (filterConservation === 'bad' && item.CONSERV === 2) ||
             (filterConservation === 'regular' && item.CONSERV === 3) ||
             (filterConservation === 'inha' && item.CONSERV === 4);
-        return estadoFilter && disposicionFilter && situacionFilter && conservationFilter;
+        return estadoFilter && disposicionFilter && conservationFilter;
     });
-
-
-    const [exportOption, setExportOption] = useState("");
-
-    const handleExportChange = (event) => {
-        const selectedOption = event.target.value;
-        setExportOption(selectedOption);
-        if (selectedOption === "patrimonizado") {
-            exportPatrimonizado();
-        } else if (selectedOption === "no_patrimonizado") {
-            exportNoPatrimonizado();
-        } else if (selectedOption === "consolidado") {
-            exportConsolidado();
-        }
-    };
 
     return (
         <div>
             {/* Primer buscador */}
-            <h5 className='text-lg-start fw-bold'>BIENES CON CODIGO PATRIMONIAL DEL TRABAJADOR</h5>
+            <h5 className='text-lg-start fw-bold'>BIENES DEL TRABAJADOR</h5>
             <input
                 type="text"
                 placeholder="Ingrese datos de trabajador (Apellidos y/o Nombres)"
@@ -167,26 +139,7 @@ const WorkerSearchMod1 = () => {
                 </div>
             ) : results1.length > 0 ? (
                 <div>
-                    <h3 className='fw-semibold'>BIENES EN PODER DE <strong>{searchTerm1.toUpperCase()}</strong> </h3>
-
-
-                    {/* Menú desplegable para seleccionar el tipo de reporte */}
-                    {/* <div className="row">
-                        <div className="col-md-3 mb-3">
-                            <h5 className='fw-semibold'>Seleccionar reporte para exportar</h5>
-                            <select
-                                className="form-select fw-bolder"
-                                value={exportOption}
-                                onChange={handleExportChange}
-                            >
-                                <option value="">Seleccione un tipo de reporte</option>
-                                <option value="patrimonizado">Exportar Patrimonizados</option>
-                                <option value="no_patrimonizado">Exportar No Patrimonizados</option>
-                                <option value="consolidado">Exportar Consolidado</option>
-                            </select>
-                        </div>
-                    </div> */}
-
+                    <h3 className='fw-semibold'>BIENES EN PODER DE <strong>{searchTerm1.toUpperCase()}</strong></h3>
                     <div className="row mt-2 g-2">
                         {/* Botón para exportar Patrimonizado */}
                         <div className="col-12 col-md-4">
@@ -194,7 +147,7 @@ const WorkerSearchMod1 = () => {
                                 className="fw-bold p-2 btn btn-success w-100"
                                 onClick={exportPatrimonizado}
                             >
-                                Exportar Patrimonizados
+                                Exportar Bienes Registrados
                             </button>
                         </div>
 
@@ -204,7 +157,7 @@ const WorkerSearchMod1 = () => {
                                 className="fw-bold p-2 btn btn-success w-100"
                                 onClick={exportNoPatrimonizado}
                             >
-                                Exportar No Patrimonizados
+                                Exportar Bienes No Registrados
                             </button>
                         </div>
 
@@ -219,12 +172,11 @@ const WorkerSearchMod1 = () => {
                         </div>
                     </div>
 
-
                     {/* Controles para seleccionar los filtros */}
                     <div className="row mt-2">
-                        <h5 className='fw-bold mt-4'>FILTRADO</h5>
+                        <h4 className='fw-bold mt-4'>FILTRADO</h4>
                         <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
-                            <h5 className='fw-semibold mt-2'>por Estado</h5>
+                            <h6 className='fw-semibold mt-2'>por Estado</h6>
                             <select
                                 id="filter1"
                                 className="form-select fw-bolder"
@@ -232,12 +184,12 @@ const WorkerSearchMod1 = () => {
                                 onChange={(e) => setFilterEstado(e.target.value)}
                             >
                                 <option value="all">Todos</option>
-                                <option value="registered">Patrimonizado</option>
-                                <option value="not_registered">No Patrimonizado</option>
+                                <option value="registered">Registrado</option>
+                                <option value="not_registered">No Registrado</option>
                             </select>
                         </div>
                         <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
-                            <h5 className='fw-semibold mt-2 '>por Disposición</h5>
+                            <h6 className='fw-semibold mt-2 '>por Disposición</h6>
                             <select
                                 id="filter2"
                                 className="form-select fw-bolder"
@@ -245,25 +197,12 @@ const WorkerSearchMod1 = () => {
                                 onChange={(e) => setFilterDisposicion(e.target.value)}
                             >
                                 <option value="all">Todos</option>
-                                <option value="available">Funcional</option>
-                                <option value="not_available">No Funcional</option>
+                                <option value="available">Activo</option>
+                                <option value="not_available">de Baja</option>
                             </select>
                         </div>
-                        {/* <div className="mb-3 col-3 text-start">
-                            <h5 className='fw-semibold mt-2 '>Filtrar por Situación</h5>
-                            <select
-                                id="filter3"
-                                className="form-select fw-bolder"
-                                value={filterSituacion}
-                                onChange={(e) => setFilterSituacion(e.target.value)}
-                            >
-                                <option value="all">Todos</option>
-                                <option value="verified">Verificado</option>
-                                <option value="missing">Extraviado</option>
-                            </select>
-                        </div> */}
                         <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
-                            <h5 className='fw-semibold mt-2 '>por Conservación</h5>
+                            <h6 className='fw-semibold mt-2 '>por Conservación</h6>
                             <select
                                 id="filter4"
                                 className="form-select fw-bolder"
@@ -271,9 +210,9 @@ const WorkerSearchMod1 = () => {
                                 onChange={(e) => setfilterConservation(e.target.value)}
                             >
                                 <option value="all">Todos</option>
-                                <option value="good">Buena</option>
-                                <option value="bad">Mala</option>
+                                <option value="good">Bueno</option>
                                 <option value="regular">Regular</option>
+                                <option value="bad">Malo</option>
                                 <option value="inha">INHABILITADO</option>
                             </select>
                         </div>
@@ -287,7 +226,7 @@ const WorkerSearchMod1 = () => {
                             <thead className="table-dark">
                                 <tr>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Código Patrimonial</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción del bien</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Trabajador</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Dependencia</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Compra</th>
@@ -295,9 +234,8 @@ const WorkerSearchMod1 = () => {
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Ultimo Registro</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado Conservación</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Situación</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>ACCION</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Est. Conservación</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Acción</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Observación</th>
                                 </tr>
                             </thead>
@@ -310,26 +248,19 @@ const WorkerSearchMod1 = () => {
                                         <td>{item.DEPENDENCIA}</td>
                                         <td>{item.FECHA_COMPRA ? item.FECHA_COMPRA : 'No Registra'}</td>
                                         <td>{item.FECHA_ALTA ? item.FECHA_ALTA : 'No Registra'}</td>
-                                        <td>{parseDate(item.FECHA_REGISTRO)}</td>
+                                        <td className='fw-bold'>{parseDate(item.FECHA_REGISTRO) || "Sin Registro"}</td>
                                         <td>
                                             {item.ESTADO === 0 ? (
-                                                <span style={{ color: 'red', fontWeight: 'bold' }}> No Patrimonizado</span>
+                                                <span style={{ color: 'red', fontWeight: 'bold' }}> No Registrado</span>
                                             ) : (
-                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Patrimonizado</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            {item.SITUACION === 0 ? (
-                                                <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
-                                            ) : (
-                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
+                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Registrado</span>
                                             )}
                                         </td>
                                         <td>
                                             {item.DISPOSICION === 0 ? (
-                                                <span style={{ color: 'red', fontWeight: 'bold' }}>No Funcional</span>
+                                                <span style={{ color: 'red', fontWeight: 'bold' }}>de Baja</span>
                                             ) : (
-                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Funcional</span>
+                                                <span style={{ color: 'green', fontWeight: 'bold' }}>Activo</span>
                                             )}
                                         </td>
                                         <td
@@ -350,7 +281,6 @@ const WorkerSearchMod1 = () => {
                                         <td>
                                             <Link
                                                 to={`/edit/${item.CODIGO_PATRIMONIAL}`}
-                                                onClick={() => handleEdit(item)}
                                                 className="btn btn-primary bt-sm d-flex align-items-center gap-2"
                                             >
                                                 ✏️ Editar

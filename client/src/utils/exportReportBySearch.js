@@ -1,23 +1,16 @@
 import { parseDate } from "./datesUtils";
 import * as XLSX from 'xlsx';  // Importa la librería xlsx
 
+// Función para mapear estado
 const mapEstado = (estado) => {
-    if (estado === 1) return "Patrimonizado";
-    if (estado === 0) return "No Patrimonizado";
+    if (estado === 1) return "Registrado";
+    if (estado === 0) return "No Registrado";
     return "Desconocido";
 };
 
-// Función para mapear estado
-const mapSituacion = (estado) => {
-    if (estado === 1) return "Verificado";
-    if (estado === 0) return "Faltante";
-    return "Desconocido";
-};
-
-// Función para mapear estado
 const mapDisposicion = (estado) => {
-    if (estado === 1) return "Funcional";
-    if (estado === 0) return "No Funcional";
+    if (estado === 1) return "Activo";
+    if (estado === 0) return "de Baja";
     return "Desconocido";
 };
 
@@ -39,7 +32,6 @@ export const exportarItems = (results1, estado, nombreHoja, nombreArchivo, searc
         ESTADO: mapEstado(item.ESTADO),
         DISPOSICION: mapDisposicion(item.DISPOSICION),
         EST_CONSERVACION: item.EST_CONSERVACION,
-        SITUACION: mapSituacion(item.SITUACION),
         OBSERVACION: item.OBSERVACION || 'Sin observación'
     }));
 

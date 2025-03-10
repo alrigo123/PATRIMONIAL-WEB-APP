@@ -154,7 +154,7 @@ const EditItemComp = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) { return <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Cargando...</span></div> }
     if (error) return <div>{error}</div>;
 
     return (

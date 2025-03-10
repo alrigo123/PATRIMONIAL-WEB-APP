@@ -62,8 +62,8 @@ const DependencySearchMod2 = () => {
             "Dependencia": item.DEPENDENCIA,
             "Trabajador": item.TRABAJADOR,
             "Cantidad de Bienes": item.CANTIDAD_ITEMS,
-            "Bienes Patrimonizados": item.CANTIDAD_PATRIMONIZADOS,
-            "Bienes No Patrimonizados": item.CANTIDAD_NO_PATRIMONIZADOS,
+            "Bienes Registrados": item.CANTIDAD_PATRIMONIZADOS,
+            "Bienes No Registrados": item.CANTIDAD_NO_PATRIMONIZADOS,
         }));
 
         // Crear un libro de Excel
@@ -72,7 +72,7 @@ const DependencySearchMod2 = () => {
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Bienes');
 
         // Descargar el archivo Excel
-        XLSX.writeFile(workbook, `Bienes_Trabajador_${searchTerm2}_${fechaFormateada}.xlsx`);
+        XLSX.writeFile(workbook, `Bienes_Sede_${searchTerm2}_${fechaFormateada}.xlsx`);
     };
 
     return (
@@ -97,7 +97,7 @@ const DependencySearchMod2 = () => {
                 </div>
             ) : results2.length > 0 ? (
                 <div>
-                    <h3 className='fw-semibold'>CANTIDAD DE ITEMS EN DEPENDENCIA <strong>{searchTerm2.toUpperCase()}</strong> </h3>
+                    <h3 className='fw-semibold'>CANTIDAD DE BIENES EN DEPENDENCIA <strong>{searchTerm2.toUpperCase()}</strong> </h3>
                     <button
                         className="fw-bold p-2 btn btn-success mb-3"
                         onClick={exportToExcel}
@@ -113,10 +113,9 @@ const DependencySearchMod2 = () => {
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DESCRIPCION</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD Bienes</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Patrimonizados</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Patrimonizados</th>
-                                    {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Registrados</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Registrados</th>
                                 </tr>
                             </thead>
                             <tbody>

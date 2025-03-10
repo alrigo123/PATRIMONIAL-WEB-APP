@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { parseDate } from '../utils/datesUtils'
 import PopNotify from '../AnimationComp/PopNotify';
 
 const URI = process.env.REACT_APP_API_URL_ITEMS;
@@ -52,7 +53,13 @@ const GeneralSearchComp = () => {
     return (
         <div className="container my-4">
             <h2 className="text-center mb-4 fw-bold">BÚSQUEDA GENERAL</h2>
-            <h5 className='text-lg-start fw-bold'>Ingrese término <strong>"bien"</strong> , <strong>"trabajador"</strong> o <strong>"dependencia"</strong></h5>
+            <h5 className="text-lg-start fw-bold">
+                ¿Qué desea buscar?
+            </h5>
+            <h6 className="text-lg-start mb-3">
+                Por ejemplo: <strong>descripción del bien</strong>, <strong>trabajador</strong> o <strong>dependencia</strong>
+            </h6>
+
             <input
                 type="text"
                 placeholder="Ingrese término de búsqueda"
@@ -75,31 +82,30 @@ const GeneralSearchComp = () => {
                     <table className="table table-striped table-bordered align-middle small">
                         <thead className="table-dark">
                             <tr class="text-center align-middle align-content-center">
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>#</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Codigo Patrimonial</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción del bien</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Trabajador</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Dependencia</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Alta</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Compra</th>
+                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Ultimo Registro</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
                                 <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
-                                <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Situación</th>
                             </tr>
                         </thead>
                         <tbody>
                             {results.map((item, index) => (
                                 <tr class="text-center align-middle align-content-center" key={index}>
+                                    <td>{index + 1}</td>
                                     <td>{item.CODIGO_PATRIMONIAL}</td>
                                     <td>{item.DESCRIPCION}</td>
                                     <td>{item.TRABAJADOR}</td>
                                     <td>{item.DEPENDENCIA}</td>
-                                    <td>{item.FECHA_ALTA ? item.FECHA_ALTA : 'No Registra'}</td>
-                                    <td >{item.FECHA_COMPRA ? item.FECHA_COMPRA : 'No Registra'}</td>
+                                    <td className='fw-bold'>{parseDate(item.FECHA_REGISTRO) || 'Sin registro'}</td>
                                     <td>
                                         {item.ESTADO === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>No Patrimonizado</span>
+                                            <span style={{ color: 'red', fontWeight: 'bold' }}>No Registrado</span>
                                         ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Patrimonizado</span>
+                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Registrado</span>
                                         )}
                                     </td>
                                     <td>
@@ -107,13 +113,6 @@ const GeneralSearchComp = () => {
                                             <span style={{ color: 'red', fontWeight: 'bold' }}>de Baja</span>
                                         ) : (
                                             <span style={{ color: 'green', fontWeight: 'bold' }}>Activo</span>
-                                        )}
-                                    </td>
-                                    <td>
-                                        {item.SITUACION === 0 ? (
-                                            <span style={{ color: 'red', fontWeight: 'bold' }}>Faltante</span>
-                                        ) : (
-                                            <span style={{ color: 'green', fontWeight: 'bold' }}>Verificado</span>
                                         )}
                                     </td>
                                 </tr>

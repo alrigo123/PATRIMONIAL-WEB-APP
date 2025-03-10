@@ -119,7 +119,7 @@ const CodeSearchMod1 = () => {
               <div>
                 El bien patrimonial pertenece a: <strong>{TRABAJADOR}</strong>
                 <br />
-                Dependencia: <strong>{DEPENDENCIA}</strong>
+                Dependencia: <strong>{DEPENDENCIA} - *{UBICACION}</strong>
               </div>,
               {
                 position: 'top-center',
@@ -136,7 +136,7 @@ const CodeSearchMod1 = () => {
             const { TRABAJADOR, DEPENDENCIA, UBICACION } = data.otraDependencia;
             toast.warning(
               <div>
-                El bien patrimonial pertenece a dependencia: <strong>{DEPENDENCIA}</strong>
+                El bien patrimonial pertenece a dependencia: <strong>{DEPENDENCIA} - *{UBICACION}</strong>
                 <br />
                 Trabajador: <strong>{TRABAJADOR}</strong>
               </div>,
@@ -228,7 +228,6 @@ const CodeSearchMod1 = () => {
 
         {/* Input de código patrimonial */}
         <div className="col-12 col-md-10">
-
           <input
             type="text"
             placeholder="Escanear código (barras) patrimonial"
@@ -241,7 +240,7 @@ const CodeSearchMod1 = () => {
               }
             }}
             ref={inputRef}
-            className="form-control mb-3 fw-bold"
+            className="form-control mb-2 fw-bold"
             style={{
               marginBottom: '20px',
               fontSize: '1.2rem',
@@ -253,9 +252,7 @@ const CodeSearchMod1 = () => {
             pattern="\d{12}" // Validar en el submit para asegurarse de que tiene exactamente 12 dígitos
             title="Debe contener exactamente 12 dígitos"
           />
-
         </div>
-
 
         {/* Botón de limpiar */}
         <div className="col-12 col-md-2">
@@ -271,7 +268,7 @@ const CodeSearchMod1 = () => {
 
       {/* Mostrar información del item */}
       {itemData && (
-        <div className="d-flex justify-content-center mt-3">
+        <div className="d-flex justify-content-center mt-2">
           <div className="row g-5 align-items-center">
             <div className="col-auto text-start">
               <h2 className="text-uppercase fw-bold mb-3"><u>Información del Item</u></h2>
@@ -282,23 +279,16 @@ const CodeSearchMod1 = () => {
               <h4 style={{ color: 'black', marginBottom: '10px' }}>Trabajador: <strong>{itemData.TRABAJADOR}</strong></h4>
               <p>
                 {itemData.ESTADO === 0 ? (
-                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Estado: <span style={{ color: 'red', fontWeight: 'bold' }}>❌ No Patrimonizado</span></h4>
+                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Estado: <span style={{ color: 'red', fontWeight: 'bold' }}>❌ No Registrado</span></h4>
                 ) : (
-                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Estado: <span style={{ color: 'green', fontWeight: 'bold' }}>✅ Patrimonizado</span></h4>
+                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Estado: <span style={{ color: 'green', fontWeight: 'bold' }}>✅ Registrado</span></h4>
                 )}
               </p>
               <p>
                 {itemData.DISPOSICION === 0 ? (
-                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Disposición: <span style={{ color: 'red', fontWeight: 'bold' }}>❌ No Funcional</span></h4>
+                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Disposición: <span style={{ color: 'red', fontWeight: 'bold' }}>❌ de Baja</span></h4>
                 ) : (
-                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Disposición: <span style={{ color: 'green', fontWeight: 'bold' }}>✅ Funcional</span></h4>
-                )}
-              </p>
-              <p>
-                {itemData.SITUACION === 0 ? (
-                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Situación: <span style={{ color: 'red', fontWeight: 'bold' }}>❌ Faltante</span></h4>
-                ) : (
-                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Situación: <span style={{ color: 'green', fontWeight: 'bold' }}>✅ Verificado</span></h4>
+                  <h4 style={{ color: 'black', marginBottom: '10px' }}>Disposición: <span style={{ color: 'green', fontWeight: 'bold' }}>✅ Activo</span></h4>
                 )}
               </p>
               <h4 style={{ color: 'black', marginBottom: '10px' }}>Fecha de Alta: <strong>{itemData.FECHA_ALTA || 'No Registra'}</strong></h4>

@@ -59,9 +59,13 @@ function App() {
             <Route path="/search" element={<GeneralSearchComp />} />
             <Route path="/items" element={<ShowItemsComp />} />
 
-            {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} /> */}
+            {/* RUTAS NO PROTEGIDAS , X NECESARIO UN LOGIN */}
+            {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} />
+            <Route path="/trabajador" element={<WorkerSearchComp />} />
+            <Route path="/dependencia" element={<DependencySearchComp />} /> */}
 
-            {/* Ruta protegida */}
+
+            {/* Ruta(s) protegida */}
             <Route path="/codigo-patrimonial" element={
               <ProtectedRouteComp>
                 <CodePropertyComp />
@@ -69,8 +73,22 @@ function App() {
             }
             />
 
-            <Route path="/trabajador" element={<WorkerSearchComp />} />
-            <Route path="/dependencia" element={<DependencySearchComp />} />
+            <Route path="/trabajador" element={
+              <ProtectedRouteComp>
+                <WorkerSearchComp />
+              </ProtectedRouteComp>
+            }
+            />
+
+            <Route path="/dependencia" element={
+              <ProtectedRouteComp>
+                <DependencySearchComp />
+              </ProtectedRouteComp>
+            }
+            />
+
+
+
             <Route path="/doble-busqueda" element={<DoubleSearchComp />} />
             <Route path="/import-excel" element={<GridImportedComp />} />
             {/* Ruta para páginas no encontradas */}

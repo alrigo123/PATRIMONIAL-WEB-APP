@@ -4,7 +4,6 @@ import * as XLSX from 'xlsx';
 import PopNotify from '../../AnimationComp/PopNotify';
 const URL = process.env.REACT_APP_API_URL_ITEMS
 
-
 const WorkerSearchMod2 = () => {
     const [searchTerm2, setSearchTerm2] = useState(''); // Valor del segundo buscador
     const [results2, setResults2] = useState([]); // Resultados de la segunda búsqueda
@@ -62,8 +61,8 @@ const WorkerSearchMod2 = () => {
             "Dependencia": item.DEPENDENCIA,
             "Trabajador": item.TRABAJADOR,
             "Cantidad de Bienes": item.CANTIDAD_ITEMS,
-            "Bienes Patrimonizados": item.CANTIDAD_PATRIMONIZADOS,
-            "Bienes No Patrimonizados": item.CANTIDAD_NO_PATRIMONIZADOS,
+            "Bienes Registrados": item.CANTIDAD_PATRIMONIZADOS,
+            "Bienes No Registrados": item.CANTIDAD_NO_PATRIMONIZADOS,
         }));
 
         // Crear un libro de Excel
@@ -115,9 +114,8 @@ const WorkerSearchMod2 = () => {
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>DEPENDENCIA</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>TRABAJADOR</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>CANTIDAD</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>PATRIMONIZADOS</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>NO PATRIMONIZADOS</th>
-                                    {/* <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th> */}
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes Registrados</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Bienes No Registrados</th>
                                 </tr>
                             </thead>
                             <tbody>

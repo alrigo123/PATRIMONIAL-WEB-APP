@@ -15,7 +15,7 @@ const ProtectedRouteComp = ({ children }) => {
 
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user')); // Convertir el string de vuelta a un objeto
+    const user = token ? JSON.parse(localStorage.getItem('user')) : null; // Validar el token ? - Convertir el string de vuelta a un objeto 
 
     // Función de Logout
     const handleLogout = async () => {
@@ -52,7 +52,6 @@ const ProtectedRouteComp = ({ children }) => {
     };
 
     const isAuthenticated = () => {
-
         if (token && user) {
             try {
                 const decoded = jwtDecode(token); // Decodifica el token
@@ -116,6 +115,30 @@ const ProtectedRouteComp = ({ children }) => {
         return <Navigate to="/" />; // Si el token ha expirado, redirige al login
     }
 
+    // Verificación síncrona de validez del token
+    let isTokenValid = false;
+    if (token && user) {
+        try {
+            const decoded = jwtDecode(token);
+            const expirationTime = decoded.exp * 1000; // Convertir a milisegundos
+            isTokenValid = Date.now() < expirationTime;
+        } catch (error) {
+            isTokenValid = false;
+        }
+    }
+
+    // Si el token es inválido, muestra alerta (opcional) y redirige inmediatamente
+    if (!isTokenValid) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Sesión expirada',
+            text: 'Necesitas iniciar sesión para acceder a esta página.',
+            timer: 2000,
+            timerProgressBar: true,
+        });
+        return <Navigate to="/" />;
+    }
+
     return (
         <div>
             {showWarning && (
@@ -123,7 +146,7 @@ const ProtectedRouteComp = ({ children }) => {
                     <div className='row'>
                         <div className='col-md-10'>
                             <p className="fw-bold mt-2">
-                                ¡Atención! <strong>{user}</strong>, su sesión expirará en{" "}
+                                ¡Atención! <strong>{user}</strong>, su sesión expira en{" "}
                                 <strong>{timeLeft}</strong> segundos.
                             </p>
                         </div>

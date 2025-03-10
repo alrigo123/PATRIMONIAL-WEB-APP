@@ -187,18 +187,23 @@ const NavBarComp = () => {
                 </div>
 
                 <div className={`menu ${menuOpen ? "open" : ""}`}>
+
                     <Link className={`fw-bold menu-item ${isActive("/")}`} to="/" onClick={closeMenu}>
                         🏠 Home
                     </Link>
+
                     <Link className={`fw-bold menu-item ${isActive("/pdf")}`} to="/pdf" onClick={closeMenu}>
-                    <i class="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guia App
+                        <i class="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guia App
                     </Link>
+
                     <Link className={`fw-bold menu-item ${isActive("/items")}`} to="/items" onClick={closeMenu}>
                         📊 Ver Items
                     </Link>
+
                     <Link className={`fw-bold menu-item ${isActive("/search")}`} to="/search" onClick={closeMenu}>
                         📂 Búsqueda General
                     </Link>
+
                     <Link className={`fw-bold menu-item ${isActive("/codigo-patrimonial")}`}
                         onClick={(e) => {
                             handleLoginClick(e, "/codigo-patrimonial");
@@ -207,15 +212,29 @@ const NavBarComp = () => {
                         to="/codigo-patrimonial">
                         🗃️ Patrimonizar Bien
                     </Link>
-                    <Link className={`fw-bold menu-item ${isActive("/trabajador")}`} to="/trabajador" onClick={closeMenu}>
+
+                    <Link className={`fw-bold menu-item ${isActive("/trabajador")}`}
+                        onClick={(e) => {
+                            handleLoginClick(e, "/trabajador");
+                            closeMenu();
+                        }}
+                        to="/trabajador">
                         👨‍🌾 Búsqueda por Trabajador
                     </Link>
-                    <Link className={`fw-bold menu-item ${isActive("/dependencia")}`} to="/dependencia" onClick={closeMenu}>
+
+                    <Link className={`fw-bold menu-item ${isActive("/dependencia")}`}
+                        onClick={(e) => {
+                            handleLoginClick(e, "/dependencia");
+                            closeMenu();
+                        }}
+                        to="/dependencia">
                         🏢 Búsqueda por Dependencia
                     </Link>
+
                     <Link className={`fw-bold menu-item ${isActive("/user-register")}`} to="/user-register" onClick={closeMenu}>
                         👨‍💻 Registro Usuario Autorizado
                     </Link>
+
                     <a className="fw-bold menu-item" href="/">
                         🌾 GERAGRI Página Principal
                     </a>
