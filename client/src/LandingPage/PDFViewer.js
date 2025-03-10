@@ -6,8 +6,7 @@ const PDFViewer = () => {
 
     // const pdfUrl = "https://drive.google.com/uc?export=download&id=1NXxiiY7XqHLU9YjeZ0I29vsanwG6_xXq";
 
-    const pdfUrl =
-        "https://drive.google.com/file/d/1NXxiiY7XqHLU9YjeZ0I29vsanwG6_xXq/preview";
+    const pdfUrl = "https://drive.google.com/file/d/1NXxiiY7XqHLU9YjeZ0I29vsanwG6_xXq/preview";
 
     return (
         <div className="pdf-viewer-container">
