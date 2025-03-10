@@ -63,6 +63,9 @@ function App() {
             {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} />
             <Route path="/trabajador" element={<WorkerSearchComp />} />
             <Route path="/dependencia" element={<DependencySearchComp />} /> */}
+              {/* Handler Components */}
+            {/* <Route path="/edit/:id" element={<EditItemComp />} />
+            <Route path="/add" element={<AddItemComp />} /> */}
 
 
             {/* Ruta(s) protegida */}
@@ -87,15 +90,26 @@ function App() {
             }
             />
 
+            <Route path="/edit/:id" element={
+              <ProtectedRouteComp>
+                <EditItemComp />
+              </ProtectedRouteComp>
+            }
+            />
+
+            <Route path="/ADD" element={
+              <ProtectedRouteComp>
+                <AddItemComp />
+              </ProtectedRouteComp>
+            }
+            />
+
 
 
             <Route path="/doble-busqueda" element={<DoubleSearchComp />} />
             <Route path="/import-excel" element={<GridImportedComp />} />
             {/* Ruta para páginas no encontradas */}
             <Route path="*" element={<Error404Comp />} />
-            {/* Handler Components */}
-            <Route path="/edit/:id" element={<EditItemComp />} />
-            <Route path="/add" element={<AddItemComp />} />
             {/* USER ACTIONS */}
             <Route path="/user-register" element={<RegisterWithPin />} />
           </Routes>

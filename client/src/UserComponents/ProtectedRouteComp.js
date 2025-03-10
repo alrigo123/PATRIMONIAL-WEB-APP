@@ -131,7 +131,7 @@ const ProtectedRouteComp = ({ children }) => {
     if (!isTokenValid) {
         Swal.fire({
             icon: 'error',
-            title: 'Sesión expirada',
+            title: 'No existe sesion',
             text: 'Necesitas iniciar sesión para acceder a esta página.',
             timer: 2000,
             timerProgressBar: true,

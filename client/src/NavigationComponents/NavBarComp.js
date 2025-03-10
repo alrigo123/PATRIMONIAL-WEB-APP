@@ -210,7 +210,7 @@ const NavBarComp = () => {
                             closeMenu();
                         }}
                         to="/codigo-patrimonial">
-                        🗃️ Patrimonizar Bien
+                        🗃️ Registrar Bien
                     </Link>
 
                     <Link className={`fw-bold menu-item ${isActive("/trabajador")}`}
