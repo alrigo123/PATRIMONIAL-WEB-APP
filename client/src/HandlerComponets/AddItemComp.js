@@ -53,23 +53,13 @@ const AddItemComp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevenir la recarga de la página
 
-        // Verifica los datos que se enviarán al backend
-        /* console.log("Datos enviados al backend:", {
-            ...formData,
-            DISPOSICION: formData.disposicion ? 1 : 0, // Convertir booleano a 1/0
-            SITUACION: formData.situacion ? 1 : 0,
-            FECHA_COMPRA: formData.fechaCompra ? formatToDatabase(formData.fechaCompra).toString() : 'Sin Registro',
-            FECHA_ALTA: formData.fechaAlta ? formatToDatabase(formData.fechaAlta).toString() : 'Sin Registro',
-            CONSERV: formData.conservacion
-        }); */
-
         try {
             // API consume
             const response = await axios.post(
                 `${URI_ITEMS}/add`,
                 {
                     ...formData,
-                    DISPOSICION: formData.disposicion ? 1 : 0, // Convertir booleano a 1/0
+                    DISPOSICION: formData.disposicion ? 1 : 0,
                     SITUACION: formData.situacion ? 1 : 0,
                     FECHA_COMPRA: formData.fechaCompra ? formatToDatabase(formData.fechaCompra).toString() : 'Sin Registro',
                     FECHA_ALTA: formData.fechaAlta ? formatToDatabase(formData.fechaAlta).toString() : 'Sin Registro',
@@ -84,11 +74,9 @@ const AddItemComp = () => {
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                 }).then(() => {
-                    // Después de que el usuario haga clic en "Aceptar", redirigir a otra página
                     navigate('/codigo-patrimonial');
                 });
             }
-
         } catch (err) {
             Swal.fire({
                 title: 'Error al intentar actualizar los datos.',
@@ -98,7 +86,7 @@ const AddItemComp = () => {
             });
             if (err.response) {
                 // El servidor respondió con un código de error
-                // alert(err.response.data.message || 'Error al actualizar el item');
+                alert(err.response.data.message || 'Error al actualizar el item');
             } else if (err.request) {
                 // No hubo respuesta del servidor
                 alert('No se recibió respuesta del servidor');
@@ -238,47 +226,29 @@ const AddItemComp = () => {
                             </div>
                         </div>
                         <div className="col-md-6 mt-3">
-                            <div className="mb-3 text-center">
-                                <label htmlFor="disposicionSwitch" className="form-label me-2 fw-bold" > Estado: </label>
-                                <div className="form-check form-switch d-inline-flex align-items-center">
+                            {/* Estado */}
+                            <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
+                                <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Estado:</label>
+                                <div className="form-check form-switch d-flex align-items-center">
                                     <input
                                         className="form-check-input"
                                         type="checkbox"
-                                        id="disposicionSwitch"
-                                        name="DISPOSICION"
+                                        id="estadoSwitch"
+                                        name="ESTADO"
                                         value={0}
                                         checked={0}
                                         disabled
                                     />
-                                    <label
-                                        className="form-check-label fw-bolder ms-2"
-                                        htmlFor="disposicionSwitch"
-                                    >
-                                        No Patrimonizado
+                                    <label className="form-check-label fw-bolder ms-2 text-danger" htmlFor="estadoSwitch">
+                                        No Registrado
                                     </label>
                                 </div>
                             </div>
-                            <div className="mb-3 text-center">
-                                <label htmlFor="situacionSwitch" className="form-label me-2 fw-bold"> Situación: </label>
-                                <div className="form-check form-switch d-inline-flex align-items-center">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id="situacionSwitch"
-                                        name="situacion"
-                                        // checked={formData.situacion}
-                                        checked={0}
-                                        value={0}
-                                        disabled
-                                    />
-                                    <label className="form-check-label fw-bolder ms-2" htmlFor="situacionSwitch">
-                                        {formData.situacion ? 'Verificado' : 'Faltante'}
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="mb-3 text-center">
-                                <label htmlFor="disposicionSwitch" className="form-label me-2 fw-bold" > Disposición: </label>
-                                <div className="form-check form-switch d-inline-flex align-items-center">
+
+                            {/* Disposición */}
+                            <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
+                                <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Disposición:</label>
+                                <div className="form-check form-switch d-flex align-items-center">
                                     <input
                                         className="form-check-input"
                                         type="checkbox"
@@ -287,12 +257,13 @@ const AddItemComp = () => {
                                         checked={formData.disposicion}
                                         onChange={handleChange}
                                     />
-                                    <label className="form-check-label fw-bolder ms-2" htmlFor="disposicionSwitch">
-                                        {formData.disposicion ? 'Funcional' : 'No Funcional'}
+                                    <label className="form-check-label fw-bolder ms-2 text-primary" htmlFor="disposicionSwitch">
+                                        {formData.disposicion ? 'Activo' : 'De Baja'}
                                     </label>
                                 </div>
                             </div>
                         </div>
+
                         <div className="text-center mt-4">
                             <button type="submit" className="btn btn-success me-3">Agregar item</button>
                             <Link to="/codigo-patrimonial" className="btn btn-secondary">Regresar</Link>
