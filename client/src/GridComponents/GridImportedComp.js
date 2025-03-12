@@ -45,7 +45,7 @@ const GridImportedComp = () => {
 
       console.log("Datos enviados al backend:", formattedData);
 
-      await fetch(`${URI_ITEMS}/imported`, {
+      await fetch(`api`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
