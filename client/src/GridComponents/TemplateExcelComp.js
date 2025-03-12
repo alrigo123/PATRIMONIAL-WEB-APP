@@ -7,13 +7,13 @@ function downloadTemplate() {
         ['CODIGO_PATRIMONIAL', 'DESCRIPCION', 'TRABAJADOR',
             'DEPENDENCIA', 'UBICACION', 'FECHA_COMPRA', 'FECHA_ALTA'],
         ['011110101012', 'ARADOS EN GENERAL', 'ROBERTO QUIROGA MUÑOZ',
-            'SEDE ACOMAYO', 'OFICINA DE ALMACEN', '11/03/2011 00:00:00', 
+            'SEDE ACOMAYO', 'OFICINA DE ALMACEN', '11/03/2011 00:00:00',
             '11/03/2011 00:00:00'],
         ['023342023430', 'SILLA GIRATORIA', 'ROBERTO QUIROGA MUÑOZ',
-            'SEDE ACOMAYO', 'OFICINA ADMINISTRACION', '11/03/2011 00:00:00', 
+            'SEDE ACOMAYO', 'OFICINA ADMINISTRACION', '11/03/2011 00:00:00',
             '11/03/2011 00:00:00'],
     ];
-    
+
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData); // Crear hoja a partir del array
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Plantilla'); // Nombre que se le dará a la hoja dentro del libro.
     XLSX.writeFile(workbook, 'Plantilla_Ejemplo.xlsx'); // Guardar como archivo

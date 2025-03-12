@@ -48,27 +48,31 @@ function App() {
         <NavBarComp pageWrapID={"page-wrap"} outerContainerId={"outer-container"} />
         <main>
           <Routes>
+            {/* Basic Routes */}
             <Route path="/" element={<HomePageComp />} />
             <Route path="/pdf" element={<PDFViewer />} />
+            <Route path="/search" element={<GeneralSearchComp />} />
+            <Route path="/items" element={<ShowItemsComp />} />
+            <Route path="/doble-busqueda" element={<DoubleSearchComp />} />
+
+            {/* Route for 404 pages not found */}
+            <Route path="*" element={<Error404Comp />} />
 
             {/* AI INTEGRATION */}
             <Route path="/chat" element={<ChatBotComp />} />
             <Route path="/2804RST/login" element={<LockComp />} />
             <Route path="/2804RST/surf" element={<SurfComp />} />
 
-            <Route path="/search" element={<GeneralSearchComp />} />
-            <Route path="/items" element={<ShowItemsComp />} />
-
-            {/* RUTAS NO PROTEGIDAS , X NECESARIO UN LOGIN */}
-            {/* <Route path="/codigo-patrimonial" element={<CodePropertyComp />} />
+            {/* ---- RUTAS NO PROTEGIDAS , X NECESARIO UN LOGIN ----- */}
+            {/*
+            <Route path="/codigo-patrimonial" element={<CodePropertyComp />} />
+            <Route path="/edit/:id" element={<EditItemComp />} />
+            <Route path="/add" element={<AddItemComp />} />
+            <Route path="/dependencia" element={<DependencySearchComp />} />
+            */}
             <Route path="/trabajador" element={<WorkerSearchComp />} />
-            <Route path="/dependencia" element={<DependencySearchComp />} /> */}
-              {/* Handler Components */}
-            {/* <Route path="/edit/:id" element={<EditItemComp />} />
-            <Route path="/add" element={<AddItemComp />} /> */}
 
-
-            {/* Ruta(s) protegida */}
+            {/* ----- Routes and navigation protected ---- */}
             <Route path="/codigo-patrimonial" element={
               <ProtectedRouteComp>
                 <CodePropertyComp />
@@ -76,12 +80,12 @@ function App() {
             }
             />
 
-            <Route path="/trabajador" element={
+            {/* <Route path="/trabajador" element={
               <ProtectedRouteComp>
                 <WorkerSearchComp />
               </ProtectedRouteComp>
             }
-            />
+            /> */}
 
             <Route path="/dependencia" element={
               <ProtectedRouteComp>
@@ -90,6 +94,7 @@ function App() {
             }
             />
 
+            {/* ------ Handler Components Protected as well ----- */}
             <Route path="/edit/:id" element={
               <ProtectedRouteComp>
                 <EditItemComp />
@@ -97,20 +102,17 @@ function App() {
             }
             />
 
-            <Route path="/ADD" element={
+            <Route path="/add" element={
               <ProtectedRouteComp>
                 <AddItemComp />
               </ProtectedRouteComp>
             }
             />
 
-
-
-            <Route path="/doble-busqueda" element={<DoubleSearchComp />} />
+            {/* IMPORT DATA ROUTE */}
             <Route path="/import-excel" element={<GridImportedComp />} />
-            {/* Ruta para páginas no encontradas */}
-            <Route path="*" element={<Error404Comp />} />
-            {/* USER ACTIONS */}
+
+            {/* USER PIN ACTIONS */}
             <Route path="/user-register" element={<RegisterWithPin />} />
           </Routes>
         </main>

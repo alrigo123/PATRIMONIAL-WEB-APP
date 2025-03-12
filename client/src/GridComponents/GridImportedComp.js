@@ -1,3 +1,100 @@
+
+
+import React, { useState } from "react";
+import * as XLSX from "xlsx";
+import Spreadsheet from "react-spreadsheet";
+import axios from "axios";
+const URI_ITEMS = process.env.REACT_APP_API_URL_ITEMS
+
+const GridImportedComp = () => {
+  const [sheets, setSheets] = useState([]);
+  const [activeSheet, setActiveSheet] = useState(null);
+  const [data, setData] = useState({});
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const workbook = XLSX.read(e.target.result, { type: "binary" });
+      const sheetNames = workbook.SheetNames;
+      const parsedData = {};
+
+      sheetNames.forEach((sheet) => {
+        const worksheet = workbook.Sheets[sheet];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        parsedData[sheet] = jsonData.map((row) => row.map((cell) => ({ value: cell })));
+      });
+
+      setSheets(sheetNames);
+      setActiveSheet(sheetNames[0]);
+      setData(parsedData);
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const sendToDatabase = async () => {
+    try {
+      if (!activeSheet || !data[activeSheet]) {
+        alert("No hay datos para enviar");
+        return;
+      }
+
+      const formattedData = data[activeSheet].map((row) => row.map((cell) => cell.value));
+
+      console.log("Datos enviados al backend:", formattedData);
+
+      await fetch(`${URI_ITEMS}/imported`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formattedData),
+      });
+
+      alert("Data successfully sent to database");
+    } catch (error) {
+      console.error("Error uploading data", error);
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
+      <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
+      {sheets.length > 0 && (
+        <>
+          <div style={{ marginTop: "10px" }}>
+            {sheets.map((sheet) => (
+              <button
+                key={sheet}
+                onClick={() => setActiveSheet(sheet)}
+                style={{ marginRight: "10px", padding: "5px 10px", cursor: "pointer" }}
+              >
+                {sheet}
+              </button>
+            ))}
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            {activeSheet && data[activeSheet] && (
+              <Spreadsheet data={data[activeSheet]} onChange={(newData) => {
+                setData((prevData) => ({ ...prevData, [activeSheet]: newData }));
+              }} />
+            )}
+          </div>
+          <button
+            onClick={sendToDatabase}
+            style={{ marginTop: "10px", padding: "8px 15px", cursor: "pointer" }}
+          >
+            Send to Database
+          </button>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default GridImportedComp
+
+// --------
 // import React, { useState } from 'react';
 // import * as XLSX from 'xlsx';
 // import Spreadsheet from 'react-spreadsheet';
@@ -112,6 +209,8 @@
 //     });
 //   };
 
+
+
 //   // Validar durante edición directa en la grilla
 //   const updateCellValue = (sheetName, rowIndex, colIndex, newValue) => {
 //     setSheetsData((prevData) => {
@@ -202,7 +301,7 @@
 //     } catch (error) {
 //       Swal.fire({
 //         title: 'Error al enviar los datos.',
-//         text: 'Uno o más CODIGOS_PATRIMONIALES YA EXISTE en la base de datos',
+//         text: 'Uno o más CODIGOS_PATRIMONIALES ya existe en la base de datos',
 //         icon: 'error',
 //         confirmButtonText: 'Aceptar'
 //       });
@@ -308,174 +407,3 @@
 // };
 
 // export default GridImportedComp;
-/// --
-
-import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
-import Spreadsheet from 'react-spreadsheet';
-import ModalComp from './ModalComp';
-import ErrorModalComp from './ErrorModalComp';
-import TemplateExcelComp from './TemplateExcelComp';
-
-const GridImportedComp = () => {
-  const [data, setData] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const [showModalButton, setShowModalButton] = useState(false);
-
-  // Definimos las columnas esperadas
-  const expectedColumns = ['CODIGO_PATRIMONIAL', 'DESCRIPCION', 'TRABAJADOR', 'DEPENDENCIA', 'UBICACION', 'FECHA_COMPRA', 'FECHA_ALTA'];
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) { alert("Por favor seleccionar un archivo."); return; }
-
-    if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
-      alert("Por favor, carga un archivo de formato Excel.");
-      return;
-    } else {
-      // alert("Se cargó archivo Excel. FAVOR DE COINCIDIR CAMPOS CORRECTOS DE LOS DATOS");
-      console.log("SE CARGO EL ARCHIVO")
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const workbook = XLSX.read(event.target.result, { type: 'binary' });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // Leer en formato matriz
-
-      // Validar las columnas
-      const uploadedColumns = sheetData[0]; // Primera fila = cabeceras
-      const missingColumns = expectedColumns.filter((col) => !uploadedColumns.includes(col));
-      const extraColumns = uploadedColumns.filter((col) => !expectedColumns.includes(col));
-
-      if (missingColumns.length > 0 || extraColumns.length > 0) {
-        let error = 'El archivo no sigue el formato de campos requerido.<br>';
-        if (missingColumns.length > 0) {
-          error += `En su archivo faltan las columnas: <b>${missingColumns.join(', ')}</b>.<br>`;
-        }
-
-        if (extraColumns.length > 0) {
-          error += `Su archivo contiene las columnas: <b>${extraColumns.join(', ')}</b>.`;
-        }
-        setErrorMessage(error); // Se almacena el mensaje con formato HTML
-        setShowModalButton(true);  // Mostrar el botón
-        return;
-      }
-
-      // Si pasa la validación, mostramos los datos en la grilla
-      const formattedData = sheetData.map((row) => row.map((cell) => ({ value: cell || '' })));
-      setData(formattedData);
-      setErrorMessage('');
-      setShowModalButton(false);  // Ocultar el botón si las columnas son correctas
-
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
-
-  const sendDataToDatabase = async () => {
-    try {
-      const jsonData = data.map((row) => row.map((cell) => cell.value)); // Convertir a JSON
-      console.log("Datos enviados:", JSON.stringify(jsonData));
-      // Código para enviar a la base de datos (simulación)
-      // const response = await fetch('https://tuservidorapi.com/api/guardar-datos', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(jsonData),
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error('Error al enviar los datos');
-      // }
-      alert('Datos enviados correctamente');
-
-      // Limpiar la grilla y el input
-      setData([]); // Vaciar la grilla
-      document.querySelector('input[type="file"]').value = ''; // Limpiar el input de archivo
-    } catch (error) {
-      alert('Hubo un problema al enviar los datos');
-      console.error(error);
-    }
-  };
-
-  return (
-    <div className='container mt-4'>
-
-      {/* Llamar componente Modal */}
-      <ModalComp />
-
-
-
-      {/* Contenido principal */}
-      <div className="mb-4">
-        <h3 className="text-primary fw-bold">Cargar Archivo Excel</h3>
-        <div className="text-secondary fw-bold">
-          Asegúrese de que el archivo coincida con el formato requerido.
-          {/* Llamar componente para descargar plantilla excel */}
-          <TemplateExcelComp />
-        </div>
-      </div>
-
-      <div className="d-flex justify-content-center mb-3">
-        <input
-          type="file"
-          onChange={handleFileUpload}
-          className="form-control"
-          style={{ maxWidth: '300px', border: '1px solid #ccc', borderRadius: '5px', padding: '10px' }}
-        />
-      </div>
-
-      {/* Alerta de errores si no coincide el las columnas */}
-      {errorMessage && (
-        <div
-          className="alert alert-danger text-center"
-          dangerouslySetInnerHTML={{ __html: errorMessage }}
-        >
-        </div>
-      )}
-
-      {showModalButton && (
-        <div className="text-center mt-2">
-          <ErrorModalComp />
-        </div>
-      )}
-
-
-
-      {/* Pintar datos de excel en grilla */}
-      {data.length > 0 && (
-        <div>
-          <div className="mt-4">
-            <Spreadsheet
-              data={data}
-              onChange={setData}
-              style={{
-                fontFamily: 'Arial, sans-serif',
-                fontSize: '14px',
-                border: '1px solid #ddd',
-              }}
-            />
-          </div>
-
-          <div className="text-center mt-1 mb-3">
-            <button
-              onClick={sendDataToDatabase}
-              className="btn btn-primary fw-bold"
-              style={{ fontSize: '16px', padding: '10px 20px', borderRadius: '5px' }}
-            >
-              Enviar archivo
-            </button>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-}
-
-export default GridImportedComp;

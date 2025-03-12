@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
+import "handsontable/dist/handsontable.full.min.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

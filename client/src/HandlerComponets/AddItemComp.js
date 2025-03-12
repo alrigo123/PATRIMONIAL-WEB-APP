@@ -225,45 +225,47 @@ const AddItemComp = () => {
                                 </select>
                             </div>
                         </div>
-                        <div className="col-md-6 mt-3">
-                            {/* Estado */}
-                            <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
-                                <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Estado:</label>
-                                <div className="form-check form-switch d-flex align-items-center">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id="estadoSwitch"
-                                        name="ESTADO"
-                                        value={0}
-                                        checked={0}
-                                        disabled
-                                    />
-                                    <label className="form-check-label fw-bolder ms-2 text-danger" htmlFor="estadoSwitch">
-                                        No Registrado
-                                    </label>
+                        <div className="row">
+                            <div className="col-md-6 mt-3">
+                                {/* Estado */}
+                                <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
+                                    <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Estado:</label>
+                                    <div className="form-check form-switch d-flex align-items-center">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id="estadoSwitch"
+                                            name="ESTADO"
+                                            value={0}
+                                            checked={0}
+                                            disabled
+                                        />
+                                        <label className="form-check-label fw-bolder ms-2 text-danger" htmlFor="estadoSwitch">
+                                            No Registrado
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-
-                            {/* Disposición */}
-                            <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
-                                <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Disposición:</label>
-                                <div className="form-check form-switch d-flex align-items-center">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id="disposicionSwitch"
-                                        name="disposicion"
-                                        checked={formData.disposicion}
-                                        onChange={handleChange}
-                                    />
-                                    <label className="form-check-label fw-bolder ms-2 text-primary" htmlFor="disposicionSwitch">
-                                        {formData.disposicion ? 'Activo' : 'De Baja'}
-                                    </label>
+                            <div className="col-md-6 mt-3">
+                                {/* Disposición */}
+                                <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
+                                    <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Disposición:</label>
+                                    <div className="form-check form-switch d-flex align-items-center">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id="disposicionSwitch"
+                                            name="disposicion"
+                                            checked={formData.disposicion}
+                                            onChange={handleChange}
+                                        />
+                                        <label className="form-check-label fw-bolder ms-2 text-primary" htmlFor="disposicionSwitch">
+                                            {formData.disposicion ? 'Activo' : 'De Baja'}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                         <div className="text-center mt-4">
                             <button type="submit" className="btn btn-success me-3">Agregar item</button>
                             <Link to="/codigo-patrimonial" className="btn btn-secondary">Regresar</Link>

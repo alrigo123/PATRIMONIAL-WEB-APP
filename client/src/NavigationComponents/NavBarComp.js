@@ -213,12 +213,15 @@ const NavBarComp = () => {
                         🗃️ Registrar Bien
                     </Link>
 
-                    <Link className={`fw-bold menu-item ${isActive("/trabajador")}`}
+                    {/* <Link className={`fw-bold menu-item ${isActive("/trabajador")}`}
                         onClick={(e) => {
                             handleLoginClick(e, "/trabajador");
                             closeMenu();
                         }}
                         to="/trabajador">
+                        👨‍🌾 Búsqueda por Trabajador
+                    </Link> */}
+                    <Link className={`fw-bold menu-item ${isActive("/trabajador")}`} to="/trabajador" onClick={closeMenu}>
                         👨‍🌾 Búsqueda por Trabajador
                     </Link>
 
@@ -230,6 +233,7 @@ const NavBarComp = () => {
                         to="/dependencia">
                         🏢 Búsqueda por Dependencia
                     </Link>
+
 
                     <Link className={`fw-bold menu-item ${isActive("/user-register")}`} to="/user-register" onClick={closeMenu}>
                         👨‍💻 Registro Usuario Autorizado

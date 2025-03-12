@@ -142,8 +142,8 @@ export const validateFile = (file, setProgress) => {
 export const readWorkbook = (file, XLSX, onLoadCallback) => {
     const reader = new FileReader();
     reader.onload = (event) => {
-      const workbook = XLSX.read(event.target.result, { type: 'binary' });
-      onLoadCallback(workbook);
+        const workbook = XLSX.read(event.target.result, { type: 'binary' });
+        onLoadCallback(workbook);
     };
     reader.readAsArrayBuffer(file);
-  };
+};
