@@ -193,7 +193,7 @@ const NavBarComp = () => {
                     </Link>
 
                     <Link className={`fw-bold menu-item ${isActive("/pdf")}`} to="/pdf" onClick={closeMenu}>
-                        <i class="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guia App
+                        <i class="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guía Aplicativo
                     </Link>
 
                     <Link className={`fw-bold menu-item ${isActive("/items")}`} to="/items" onClick={closeMenu}>

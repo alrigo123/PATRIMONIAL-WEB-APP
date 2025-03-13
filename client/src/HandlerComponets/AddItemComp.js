@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { formatToDatabase } from "../utils/datesUtils";
 import Swal from "sweetalert2"; // Importa SweetAlert2
+// import '../styles/Forms.css'
 
 const URI_ITEMS = process.env.REACT_APP_API_URL_ITEMS
 
@@ -22,8 +23,8 @@ const AddItemComp = () => {
         ubicacion: "",
         fechaAlta: "",
         fechaCompra: "",
-        conservacion: "",
-        disposicion: false,
+        conservacion: 1,
+        disposicion: true,
         situacion: false,
     });
 
@@ -202,14 +203,17 @@ const AddItemComp = () => {
                                     required
                                 />
                             </div>
+
+                            {/* Estado de Conservación */}
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Estado de Conservación</label>
                                 <select
                                     className="form-select"
                                     name="conservacion"
-                                    value={formData.conservacion || ''}
+                                    value={formData.disposicion ? formData.conservacion : 4} // If "De Baja", set to 4 (INHABILITADO)
                                     onChange={handleChange}
                                     required
+                                    disabled={!formData.disposicion} // Disable if "De Baja"
                                     style={{ border: "1px solid black" }}
                                 >
                                     <option value="" disabled>Seleccionar</option>
@@ -224,48 +228,60 @@ const AddItemComp = () => {
                                     )}
                                 </select>
                             </div>
+
                         </div>
-                        <div className="row">
-                            <div className="col-md-6 mt-3">
-                                {/* Estado */}
-                                <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
-                                    <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Estado:</label>
-                                    <div className="form-check form-switch d-flex align-items-center">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="estadoSwitch"
-                                            name="ESTADO"
-                                            value={0}
-                                            checked={0}
-                                            disabled
-                                        />
-                                        <label className="form-check-label fw-bolder ms-2 text-danger" htmlFor="estadoSwitch">
-                                            No Registrado
-                                        </label>
+
+                        <div className="container mt-3">
+                            <div className="row justify-content-center">
+                                <div className="col-md-3">
+                                    {/* Disposición */}
+                                    <div className="d-flex align-items-center p-2 border rounded bg-light mb-3 gap-3">
+                                        <label className="fw-bold m-0">Disposición:</label>
+                                        <div className="form-check form-switch">
+                                            <input
+                                                className={`form-check-input custom-switch ${formData.disposicion ? "bg-success" : "bg-danger"}`}
+                                                type="checkbox"
+                                                id="disposicionSwitch"
+                                                name="disposicion"
+                                                checked={formData.disposicion}
+                                                onChange={(e) => {
+                                                    const isActive = e.target.checked ? 1 : 0;
+                                                    setFormData({
+                                                        ...formData,
+                                                        disposicion: isActive,
+                                                        conservacion: isActive ? 1 : 4, // Set "Bueno" (1) if active, "Inhabilitado" (4) if de baja
+                                                    });
+                                                }}
+                                            />
+                                            <label
+                                                className={`form-check-label fw-bold ms-1 ${formData.disposicion ? "text-success" : "text-danger"}`}
+                                                htmlFor="disposicionSwitch"
+                                            >
+                                                {formData.disposicion ? "Activo" : "De Baja"}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Estado */}
+                                    <div className="d-flex align-items-center p-2 border rounded bg-light gap-3">
+                                        <label className="fw-bold m-0">Estado:</label>
+                                        <div className="form-check form-switch">
+                                            <input
+                                                className="form-check-input custom-switch disabled bg-danger"
+                                                type="checkbox"
+                                                id="estadoSwitch"
+                                                name="ESTADO"
+                                                disabled
+                                            />
+                                            <label className="form-check-label fw-bold ms-1 text-danger" htmlFor="estadoSwitch">
+                                                No Registrado
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-6 mt-3">
-                                {/* Disposición */}
-                                <div className="mb-3 d-flex justify-content-between align-items-center p-2 border rounded bg-light">
-                                    <label htmlFor="disposicionSwitch" className="form-label fw-bold m-0 w-50 text-end">Disposición:</label>
-                                    <div className="form-check form-switch d-flex align-items-center">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="disposicionSwitch"
-                                            name="disposicion"
-                                            checked={formData.disposicion}
-                                            onChange={handleChange}
-                                        />
-                                        <label className="form-check-label fw-bolder ms-2 text-primary" htmlFor="disposicionSwitch">
-                                            {formData.disposicion ? 'Activo' : 'De Baja'}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+
                         <div className="text-center mt-4">
                             <button type="submit" className="btn btn-success me-3">Agregar item</button>
                             <Link to="/codigo-patrimonial" className="btn btn-secondary">Regresar</Link>

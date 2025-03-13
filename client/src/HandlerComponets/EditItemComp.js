@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'; // Importa SweetAlert2
 import axios from 'axios';
 import { APIgetItemById } from "../services/item.service";
@@ -311,7 +311,7 @@ const EditItemComp = () => {
                                     <label htmlFor="estadoSwitch" className="form-label me-2 fw-bold">Estado:</label>
                                     <div className="form-check form-switch d-inline-flex align-items-center">
                                         <input
-                                            className={`form-check-input ${formData.ESTADO === 1 ? 'bg-success' : 'bg-light'}`}
+                                            className={`form-check-input ${formData.ESTADO === 1 ? 'bg-success' : 'bg-danger'}`}
                                             type="checkbox"
                                             id="estadoSwitch"
                                             name="ESTADO"
@@ -324,8 +324,9 @@ const EditItemComp = () => {
                                             }
                                             disabled
                                         />
-                                        <label className="form-check-label fw-bolder ms-2" htmlFor="estadoSwitch">
-                                            {formData.ESTADO === 1 ? 'Patrimonizado' : 'No Patrimonizado'}
+                                        <label className={`form-check-label fw-bolder ms-2 ${formData.ESTADO ? "text-success" : "text-danger"}`}
+                                            htmlFor="estadoSwitch">
+                                            {formData.ESTADO === 1 ? 'Registrado' : 'No Registrado'}
                                         </label>
                                     </div>
                                 </div>
@@ -334,7 +335,7 @@ const EditItemComp = () => {
                                     <label htmlFor="disposicionSwitch" className="form-label me-2 fw-bold">Disposición:</label>
                                     <div className="form-check form-switch d-inline-flex align-items-center">
                                         <input
-                                            className={`form-check-input ${formData.DISPOSICION === 1 ? 'bg-success' : 'bg-light'}`}
+                                            className={`form-check-input ${formData.DISPOSICION === 1 ? 'bg-success' : 'bg-danger'}`}
                                             type="checkbox"
                                             id="disposicionSwitch"
                                             name="DISPOSICION"
@@ -344,38 +345,17 @@ const EditItemComp = () => {
                                                 setFormData({
                                                     ...formData,
                                                     DISPOSICION: isFunctional,
-                                                    CONSERV: isFunctional === 1 ? formData.CONSERV : 4, // Ajusta CONSERV si es No funcional
+                                                    CONSERV: isFunctional === 1 ? 1 : 4, // Ajusta CONSERV si es No funcional
                                                 });
                                             }}
                                         />
-                                        <label className="form-check-label fw-bolder ms-2" htmlFor="disposicionSwitch">
-                                            {formData.DISPOSICION === 1 ? 'Funcional' : 'No Funcional'}
+                                        <label className={`form-check-label fw-bolder ms-2 ${formData.DISPOSICION ? "text-success" : "text-danger"}`}
+                                            htmlFor="disposicionSwitch">
+                                            {formData.DISPOSICION === 1 ? 'Activo' : 'de Baja'}
                                         </label>
                                     </div>
                                 </div>
 
-                                <div className="text-center">
-                                    <label htmlFor="situacionSwitch" className="form-label me-2 fw-bold">Situación:</label>
-                                    <div className="form-check form-switch d-inline-flex align-items-center">
-                                        <input
-                                            className={`form-check-input ${formData.SITUACION === 1 ? 'bg-success' : 'bg-light'}`}
-                                            type="checkbox"
-                                            id="situacionSwitch"
-                                            name="SITUACION"
-                                            checked={formData.SITUACION === 1}
-                                            onChange={(e) =>
-                                                setFormData({
-                                                    ...formData,
-                                                    SITUACION: e.target.checked ? 1 : 0,
-                                                })
-                                            }
-                                            disabled
-                                        />
-                                        <label className="form-check-label fw-bolder ms-2" htmlFor="situacionSwitch">
-                                            {formData.SITUACION === 1 ? 'Verificado' : 'Faltante'}
-                                        </label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div className="row mt-3">

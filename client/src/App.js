@@ -38,6 +38,7 @@ import RegisterWithPin from './UserComponents/RegisterWithPin.js';
 import ProtectedRouteComp from './UserComponents/ProtectedRouteComp.js';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DashboardAdmin from './UserComponents/DashboardAdmin.js';
 
 function App() {
   return (
@@ -114,6 +115,8 @@ function App() {
 
             {/* USER PIN ACTIONS */}
             <Route path="/user-register" element={<RegisterWithPin />} />
+            <Route path="/dashboard-managment" element={<DashboardAdmin />} />
+
           </Routes>
         </main>
       </BrowserRouter>

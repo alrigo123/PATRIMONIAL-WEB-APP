@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 // import { Modal, Button, Form, FormControl, Alert } from "react-bootstrap";
 import * as Rb from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -207,11 +207,18 @@ const RegisterWithPin = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="form-group text-center">
-                                                <button type="submit" className="btn btn-primary w-100">
-                                                    Registrar
+                                            <div className="text-center mt-4">
+                                                <button type="submit" className="btn btn-primary w-100 shadow-sm fw-bold">
+                                                    <i className="fas fa-save me-2"></i> Registrar
                                                 </button>
+
+                                                <div className="mt-3">
+                                                    <Link to="/dashboard-managment" className="btn btn-outline-secondary w-100 shadow-sm">
+                                                        <i className="fas fa-chart-line me-2"></i> Gestión de Usuarios
+                                                    </Link>
+                                                </div>
                                             </div>
+
                                         </Form>
                                     )}
                                 </Formik>
