@@ -1,85 +1,63 @@
-export const validatePatrimonialCodes = (sheetData, setErrorMessage, setShowModalButton) => {
-    const headers = sheetData[0]; // Primera fila como encabezados
-    const patrimonialIndex = headers.indexOf('CODIGO_PATRIMONIAL');
+/* FUNCTION to validate file format (xlsx) */
+export const validateFile = (file, setProgress) => {
+    if (!file) {
+        alert('Por favor seleccionar un archivo.');
+        document.querySelector('input[type="file"]').value = '';
+        setProgress(0);
+        return false;
+    }
 
-    if (patrimonialIndex === -1) return true; // No hay columna, pasa la validación.
+    // Validación por extensión y tipo MIME
+    const validExtensions = ['.xlsx', '.xls'];
+    // MIME Types oficiales de archivos Excel
+    const validMimeTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
 
-    const invalidRows = sheetData.slice(1).filter((row) => {
-        const value = row[patrimonialIndex];
-        return (
-            !/^\d{1,12}$/.test(value) // Solo números y máximo 12 dígitos
+    // Si la extensión y el MIME no coinciden, se rechaza el archivo
+    if (
+        !validExtensions.some(ext => file.name.endsWith(ext)) ||  // Verifica la extensión
+        !validMimeTypes.includes(file.type)                       // Verifica el MIME
+    ) {
+        alert('Por favor, carga un archivo de formato Excel válido.');
+        document.querySelector('input[type="file"]').value = '';
+        setProgress(0);
+        return false;
+    }
+
+    return true;
+};
+
+/* FUNCTION to read an excel file, converting data to binary and accepting dates in cell */
+export const readWorkbook = (file, XLSX, onLoadCallback) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const workbook = XLSX.read(event.target.result, { type: 'binary', cellDates: true });
+        onLoadCallback(workbook);
+    };
+    reader.readAsArrayBuffer(file);
+};
+
+/* FUNCTION to validate if the file contains empty cells */
+export const validateEmptyCells = (sheetData, expectedColumns, setErrorMessage, setShowModalButton) => {
+    const invalidRows = sheetData.filter((row) =>
+        expectedColumns.some((header) => !row[header] || row[header].toString().trim() === '')
+    );
+
+    if (invalidRows.length > 0) {
+        setErrorMessage(`
+            <strong>Existen celdas vacías en el archivo.</strong>
+            <br>
+            Por favor, completa todos los campos antes de enviarlo.`
         );
-    });
-
-    if (invalidRows.length > 0) {
-        setErrorMessage(`
-        La columna <strong>CODIGO_PATRIMONIAL</strong> contiene errores:
-        <ul>
-          ${invalidRows
-                .map(
-                    (row, idx) =>
-                        `<li>Fila ${idx + 2}: Código inválido (<strong>${row[patrimonialIndex] || 'vacío'
-                        }</strong>)</li>`
-                )
-                .join('')}
-        </ul>
-        Asegúrate de que los códigos sean numéricos y tengan máximo 12 dígitos.
-      `);
         setShowModalButton(true);
         return false;
     }
 
+    setErrorMessage('');
+    setShowModalButton(false);
     return true;
 }
 
-//function to get an user by user 
-export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
-    const headers = sheetData[0]; // Primera fila como encabezados
-    const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columnas a validar
-
-    const invalidRows = [];
-
-    dateColumns.forEach((col) => {
-        const dateIndex = headers.indexOf(col);
-
-        if (dateIndex === -1) return; // Si no existe la columna, continuar con la siguiente.
-
-        // Validar las filas
-        sheetData.slice(1).forEach((row, rowIndex) => {
-            const value = row[dateIndex];
-            if (
-                value && // Verificar que no esté vacío
-                !/^(?:\d{4}[-/]\d{2}[-/]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[-/]\d{2}[-/]\d{4}(?: \d{2}:\d{2}:\d{2})?)$/.test(value) // Formatos permitidos
-            ) {
-                invalidRows.push({
-                    rowNumber: rowIndex + 2, // Ajuste para contar desde 2 por los encabezados
-                    column: col,
-                    value: value || 'vacío',
-                });
-            }
-        });
-    });
-
-    if (invalidRows.length > 0) {
-        setErrorMessage(`
-        <strong>Errores encontrados en las columnas de fechas:</strong>
-        <ul>
-          ${invalidRows
-                .map(
-                    ({ rowNumber, column, value }) =>
-                        `<li>Fila ${rowNumber}, Columna <strong>${column}</strong>: Valor inválido (<strong>${value}</strong>)</li>`
-                )
-                .join('')}
-        </ul>
-        Asegúrate de usar formatos válidos como <strong>dd/mm/aaaa</strong>, <strong>yyyy-mm-dd</strong> o <strong>dd/mm/aaaa hh:mm:ss</strong>.
-      `);
-        setShowModalButton(true);
-        return false;
-    }
-
-    return true;
-}
-
+/* FUNCTION to validate headers according to the template */
 export const validateHeaderColumns = (sheetData, expectedColumns, setErrorMessage, setShowModalButton) => {
     const uploadedColumns = sheetData[0]; // Headers
     const missingColumns = expectedColumns.filter((col) => !uploadedColumns.includes(col));
@@ -93,6 +71,7 @@ export const validateHeaderColumns = (sheetData, expectedColumns, setErrorMessag
         if (extraColumns.length > 0) {
             error += `Su archivo contiene las columnas: <b>${extraColumns.join(', ')}</b>.`;
         }
+
         setErrorMessage(error);
         setShowModalButton(true);
         return false;
@@ -103,47 +82,197 @@ export const validateHeaderColumns = (sheetData, expectedColumns, setErrorMessag
     return true;
 }
 
-export const validateEmptyCells = (data, expectedColumns, setErrorMessage, setShowModalButton) => {
-    const invalidRows = data.filter((row) =>
-        expectedColumns.some((header) => !row[header] || row[header].toString().trim() === '')
-    );
+/* FUNCTION to validate PATRIMONIAL_CODES (numeric and only 12 characters) */
+export const validatePatrimonialCodes = (sheetData, setErrorMessage, setShowModalButton) => {
+    const headers = sheetData[0]; // Primera fila como encabezados
+    const patrimonialIndex = headers.indexOf('CODIGO_PATRIMONIAL'); // Index - "CODIGO_PATRIMONIAL"
+
+    if (patrimonialIndex === -1) return true; // No hay columna, pasa la validación.
+
+    const invalidRows = sheetData.slice(1).filter((row) => {
+        const value = row[patrimonialIndex];
+        return (!/^\d{12}$/.test(value)); // Solo números y solo de 12 dígitos
+    });
 
     if (invalidRows.length > 0) {
-        setErrorMessage(`<strong>Existen celdas vacías en el archivo.</strong> <br>
-          Por favor, completa todos los campos antes de enviarlo.`);
+        setErrorMessage(`
+        La columna <strong>CODIGO_PATRIMONIAL</strong> contiene errores:
+        <ul>
+        ${invalidRows
+                .map(
+                    (row, idx) =>
+                        `<li>Fila ${idx + 2}: Código inválido (<strong>${row[patrimonialIndex] || 'vacío'
+                        }</strong>)</li>`
+                )
+                .join('')}
+        </ul>
+        Asegúrate de que los códigos sean numéricos y sean de 12 dígitos.
+        `);
+        setShowModalButton(true);
+        return false;
+    }
+    return true;
+}
+
+/* FUNCTION to validate the date values and typo */
+// export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
+//     const headers = sheetData[0]; // Primera fila como encabezados
+//     const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columnas a validar
+
+//     const invalidRows = [];
+
+//     dateColumns.forEach((col) => {
+//         const dateIndex = headers.indexOf(col);
+
+//         if (dateIndex === -1) return; // Si no existe la columna, continuar con la siguiente.
+
+//         // Validar las filas
+//         sheetData.slice(1).forEach((row, rowIndex) => {
+//             const value = row[dateIndex];
+//             if (
+//                 value && // Verificar que no esté vacío
+//                 !/^(?:\d{4}[-/]\d{2}[-/]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[-/]\d{2}[-/]\d{4}(?: \d{2}:\d{2}:\d{2})?)$/.test(value) // Formatos permitidos
+//             ) {
+//                 invalidRows.push({
+//                     rowNumber: rowIndex + 2, // Ajuste para contar desde 2 por los encabezados
+//                     column: col,
+//                     value: value || 'vacío',
+//                 });
+//             }
+//         });
+//     });
+
+//     if (invalidRows.length > 0) {
+//         setErrorMessage(`
+//         <strong>Errores encontrados en las columnas de fechas:</strong>
+//         <ul>
+//           ${invalidRows
+//                 .map(
+//                     ({ rowNumber, column, value }) =>
+//                         `<li>Fila ${rowNumber}, Columna <strong>${column}</strong>: Valor inválido (<strong>${value}</strong>)</li>`
+//                 )
+//                 .join('')}
+//         </ul>
+//         Asegúrate de usar formatos válidos como <strong>dd/mm/aaaa</strong>, <strong>yyyy-mm-dd</strong> o <strong>dd/mm/aaaa hh:mm:ss</strong>.
+//       `);
+//         setShowModalButton(true);
+//         return false;
+//     }
+
+//     return true;
+// }
+
+
+export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
+    const headers = sheetData[0]; // Get headers
+    const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columns to check
+
+    const invalidRows = [];
+
+    // Define regex patterns
+    const datePattern1 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/; // dd/mm/yyyy
+    const datePattern2 = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/; // yyyy-mm-dd
+    const dateTimePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} \d{2}:\d{2}:\d{2}$/; // dd/mm/yyyy hh:mm:ss
+
+    dateColumns.forEach((col) => {
+        const dateIndex = headers.indexOf(col);
+        if (dateIndex === -1) return; // If column doesn't exist, skip
+
+        sheetData.slice(1).forEach((row, rowIndex) => {
+            const value = String(row[dateIndex] || '').trim(); // FIXED HERE
+
+            if (
+                value && // Not empty
+                !datePattern1.test(value) && 
+                !datePattern2.test(value) && 
+                !dateTimePattern.test(value)
+            ) {
+                invalidRows.push({
+                    rowNumber: rowIndex + 2, // Adjust for header row
+                    column: col,
+                    value: value || 'empty',
+                });
+            }
+        });
+    });
+
+    if (invalidRows.length > 0) {
+        setErrorMessage(`
+        <strong>Invalid dates found:</strong>
+        <ul>
+          ${invalidRows
+                .map(
+                    ({ rowNumber, column, value }) =>
+                        `<li>Row ${rowNumber}, Column <strong>${column}</strong>: Invalid value (<strong>${value}</strong>)</li>`
+                )
+                .join('')}
+        </ul>
+        Please use valid formats: <strong>dd/mm/yyyy</strong>, <strong>yyyy-mm-dd</strong> or <strong>dd/mm/yyyy hh:mm:ss</strong>.
+      `);
         setShowModalButton(true);
         return false;
     }
 
-    setErrorMessage('');
-    setShowModalButton(false);
-    return true;
-}
-
-/// HANDLER FILE VALIDATIONS
-
-export const validateFile = (file, setProgress) => {
-    if (!file) {
-        alert('Por favor seleccionar un archivo.');
-        document.querySelector('input[type="file"]').value = '';
-        setProgress(0);
-        return false;
-    }
-
-    if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
-        alert('Por favor, carga un archivo de formato Excel.');
-        document.querySelector('input[type="file"]').value = '';
-        setProgress(0);
-        return false;
-    }
     return true;
 };
 
-export const readWorkbook = (file, XLSX, onLoadCallback) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        const workbook = XLSX.read(event.target.result, { type: 'binary' });
-        onLoadCallback(workbook);
-    };
-    reader.readAsArrayBuffer(file);
+
+export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
+    const headers = sheetData[0]; // Get headers
+    const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columns to check
+
+    const invalidRows = [];
+
+    // Define regex patterns
+    const datePattern1 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/; // dd/mm/yyyy
+    const datePattern2 = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/; // yyyy-mm-dd
+    const dateTimePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} \d{2}:\d{2}:\d{2}$/; // dd/mm/yyyy hh:mm:ss
+
+    dateColumns.forEach((col) => {
+        const dateIndex = headers.indexOf(col);
+        if (dateIndex === -1) return; // If column doesn't exist, skip
+
+        sheetData.slice(1).forEach((row, rowIndex) => {
+            let value = row[dateIndex];
+
+            // Fix for Excel date formats
+            if (value instanceof Date) {
+                value = value.toLocaleDateString('es-PE'); // Convert to dd/mm/yyyy
+            } else {
+                value = String(value || '').trim();
+            }
+
+            if (
+                value && // Not empty
+                !datePattern1.test(value) && 
+                !datePattern2.test(value) && 
+                !dateTimePattern.test(value)
+            ) {
+                invalidRows.push({
+                    rowNumber: rowIndex + 2, // Adjust for header row
+                    column: col,
+                    value: value || 'empty',
+                });
+            }
+        });
+    });
+
+    if (invalidRows.length > 0) {
+        setErrorMessage(`
+        <strong>Invalid dates found:</strong>
+        <ul>
+          ${invalidRows
+                .map(
+                    ({ rowNumber, column, value }) =>
+                        `<li>Row ${rowNumber}, Column <strong>${column}</strong>: Invalid value (<strong>${value}</strong>)</li>`
+                )
+                .join('')}
+        </ul>
+        Please use valid formats: <strong>dd/mm/yyyy</strong>, <strong>yyyy-mm-dd</strong> or <strong>dd/mm/yyyy hh:mm:ss</strong>.
+      `);
+        setShowModalButton(true);
+        return false;
+    }
+
+    return true;
 };

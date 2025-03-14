@@ -2,6 +2,7 @@ import './App.css';
 import './styles/styles.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 //LANDING PAGE
 import HomePageComp from './LandingPage/HomePageComp.js';
@@ -37,7 +38,6 @@ import SurfComp from './private/SurfComp.js';
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
 import ProtectedRouteComp from './UserComponents/ProtectedRouteComp.js';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DashboardAdmin from './UserComponents/DashboardAdmin.js';
 
 function App() {
