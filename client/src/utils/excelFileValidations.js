@@ -217,7 +217,7 @@ export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButt
 };
 
 
-export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
+export const validateDateColumns1 = (sheetData, setErrorMessage, setShowModalButton) => {
     const headers = sheetData[0]; // Get headers
     const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columns to check
 
