@@ -151,7 +151,6 @@ const ProtectedRouteComp = ({ children }) => {
                             </p>
                         </div>
                         <div className='col-md-2'>
-
                             <button
                                 onClick={handleLogout}
                                 style={{

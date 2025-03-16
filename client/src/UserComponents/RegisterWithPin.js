@@ -155,7 +155,6 @@ const RegisterWithPin = () => {
                                                     />
                                                     <ErrorMessage name="dni" component="div" className="text-danger" />
                                                 </div>
-
                                                 <div className="col-md-6 form-group">
                                                     <label htmlFor="name_and_last" className="fw-bold mb-1">Nombre(s) y Apellidos</label>
                                                     <Field
@@ -168,7 +167,6 @@ const RegisterWithPin = () => {
                                                     <ErrorMessage name="name_and_last" component="div" className="text-danger" />
                                                 </div>
                                             </div>
-
                                             <div className="row mb-3">
                                                 <div className="col-md-6 form-group position-relative">
                                                     <label htmlFor="password" className="fw-bold mb-1">Contraseña</label>
@@ -190,10 +188,8 @@ const RegisterWithPin = () => {
                                                             </span>
                                                         </div>
                                                     </div>
-
                                                     <ErrorMessage name="password" component="div" className="text-danger" />
                                                 </div>
-
                                                 <div className="col-md-6 form-group">
                                                     <label htmlFor="confirmPassword" className="fw-bold mb-1">Confirmar Contraseña</label>
                                                     <Field
@@ -206,19 +202,16 @@ const RegisterWithPin = () => {
                                                     <ErrorMessage name="confirmPassword" component="div" className="text-danger" />
                                                 </div>
                                             </div>
-
                                             <div className="text-center mt-4">
                                                 <button type="submit" className="btn btn-primary w-100 shadow-sm fw-bold">
                                                     <i className="fas fa-save me-2"></i> Registrar
                                                 </button>
-
                                                 <div className="mt-3">
                                                     <Link to="/dashboard-managment" className="btn btn-outline-secondary w-100 shadow-sm">
                                                         <i className="fas fa-chart-line me-2"></i> Gestión de Usuarios
                                                     </Link>
                                                 </div>
                                             </div>
-
                                         </Form>
                                     )}
                                 </Formik>

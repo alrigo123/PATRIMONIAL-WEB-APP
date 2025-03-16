@@ -37,7 +37,6 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
           showConfirmButton: false,
           timer: 1000
         });
-
         if (token) {
           console.log("SE CREO EL TOKEN PARA EL LOGIN")
         } else {
