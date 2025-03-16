@@ -86,7 +86,6 @@ const WorkerSearchMod2 = () => {
                 className="form-control mb-4 fw-bold"
                 style={{ marginBottom: '20px', padding: '10px', border: "1px solid black" }}
             />
-
             {/* Muestra un spinner de carga cuando se está realizando la búsqueda */}
             {isLoading ? (
                 <div className="text-center">

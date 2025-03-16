@@ -36,13 +36,11 @@ const CodePropertyComp = () => {
         <div className="container my-4">
             <h2 className="text-center mb-3 fw-bold">BUSCAR BIEN POR CÓDIGO PATRIMONIAL</h2>
             <button onClick={handleAddItem} className="btn btn-primary p-3 fw-bolder mb-4">
-            {/* <button onClick={handleAddItem} className="btn btn-primary p-3 fw-bolder col-12 col-sm-6 col-md-4 d-flex justify-content-center mb-2"> */}
+                {/* <button onClick={handleAddItem} className="btn btn-primary p-3 fw-bolder col-12 col-sm-6 col-md-4 d-flex justify-content-center mb-2"> */}
                 📦 AGREGAR NUEVO BIEN
             </button>
             <CodeSearchMod1 />
-
-            <hr className="border border-success border-2 opacity-100 mb-4"/>
-
+            <hr className="border border-success border-2 opacity-100 mb-4" />
             <CodeSearchMod2 />
         </div>
     );

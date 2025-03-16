@@ -15,19 +15,20 @@ const CodeSearchMod2 = () => {
   const [modalVisible, setModalVisible] = useState(false); // Para controlar el modal
   const [newObservation, setNewObservation] = useState(''); // Para el contenido del textarea
 
-
+  // Función que maneja los cambios en el input del código patrimonial
   const handleStateInputChange = (e) => {
     const value = e.target.value;
 
+    // Validar que solo se ingresen números
     if (/^\d*$/.test(value)) {
       setStateCode(value);
-
       if (value.length === 12) {
         fetchState(value);
       }
     }
   };
 
+  // Función para obtener el item de busqueda con la conservacion (endpoint /conservation)
   const fetchState = async (code) => {
     try {
       const response = await axios.get(`${URL}/conservation/${code}`);
@@ -38,27 +39,30 @@ const CodeSearchMod2 = () => {
     }
   };
 
+  // Función para limpiar el input de código y restablecer el estado
   const clearStateInput = () => {
     setStateCode('');
     setStateData([]);
     stateInputRef.current.focus();
   };
 
+  // Función para manejar la edición de un código patrimonial
   const handleEdit = (item) => {
     if (!item.CODIGO_PATRIMONIAL) {
-      console.error('El CODIGO_PATRIMONIAL está indefinido:', item);
+      // console.error('El CODIGO_PATRIMONIAL está indefinido:', item);
       return; // Evita seguir si no hay un código válido
     }
-    console.log("Editando CODIGO_PATRIMONIAL:", item.CODIGO_PATRIMONIAL, "CON DATOS:", item);
     // Lógica de edición
   };
 
+  // Función para manejar la edición de la observación de un ítem
   const handleEditObservation = (item) => {
     setSelectedItem(item);
     setNewObservation(item.OBSERVACION || ''); // Prellenar con la observación actual
     setModalVisible(true);
   };
 
+  // Función para guardar la nueva observación en la API y actualizar el estado
   const saveObservation = async () => {
     try {
       // Llamada al endpoint con el código patrimonial
@@ -106,7 +110,7 @@ const CodeSearchMod2 = () => {
           </button>
         </div>
       </div>
-
+      {/* Muestra los datos en bucle de la consulta por id */}
       {stateData.length > 0 ? (
         <div className="table-responsive mt-3">
           {/* Mostrar icono solo en dispositivos móviles */}
@@ -168,7 +172,6 @@ const CodeSearchMod2 = () => {
                     {item.EST_CONSERVACION}
                   </td>
                   <td>
-
                     <div className="btn-group d-flex flex-column gap-2" role="group">
                       <Link
                         to={`/edit/${item.CODIGO_PATRIMONIAL}`}
@@ -178,7 +181,6 @@ const CodeSearchMod2 = () => {
                         ✏️ Editar
                       </Link>
                     </div>
-
                   </td>
                   <td>
                     <span

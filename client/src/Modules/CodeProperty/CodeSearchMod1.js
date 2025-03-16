@@ -16,7 +16,7 @@ const CodeSearchMod1 = () => {
 
   const inputRef = useRef(null);
 
-  // Manejo de cambio en el select
+  // Maneja el cambio en el select, actualiza el tipo de búsqueda y limpia los estados relacionados.
   const handleSearchTypeChange = (e) => {
     setSearchType(e.target.value);
     setSelectedPerson(null); // Limpiar selección
@@ -24,6 +24,32 @@ const CodeSearchMod1 = () => {
     setPersonsList([]);
   };
 
+  // Realiza una búsqueda de Trabajador o Dependencia según el tipo de búsqueda seleccionado.
+  const handleSearch = async (e) => {
+    const query = e.target.value;
+    setSearchInput(query);
+    if (query.length > 2) {
+      try {
+        const endpoint =
+          searchType === 'TRABAJADOR'
+            ? `${URL}/partial/worker?search=${query}`
+            : `${URL}/partial/dependency?search=${query}`;
+        const response = await axios.get(endpoint);
+        setPersonsList(response.data);
+      } catch (error) {
+        console.log('Error en la búsqueda:', error);
+      }
+    }
+  };
+
+  // Asigna la persona seleccionada y actualiza el campo de búsqueda con su nombre o dependencia.
+  const handleSelect = (person) => {
+    setSelectedPerson(person);
+    setPersonsList([]);
+    setSearchInput(searchType === 'TRABAJADOR' ? person.TRABAJADOR : person.DEPENDENCIA);
+  };
+
+  // Permite solo números en el input y activa la búsqueda si se ingresan 12 dígitos.
   const handleInputChange = (e) => {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
@@ -34,50 +60,28 @@ const CodeSearchMod1 = () => {
     }
   };
 
-  // Buscar Trabajador o Dependencia según el select
-  const handleSearch = async (e) => {
-    const query = e.target.value;
-    setSearchInput(query);
-
-    if (query.length > 2) {
-      try {
-        const endpoint =
-          searchType === 'TRABAJADOR'
-            ? `${URL}/partial/worker?search=${query}`
-            : `${URL}/partial/dependency?search=${query}`; // Ruta específica
-        const response = await axios.get(endpoint);
-        setPersonsList(response.data);
-      } catch (error) {
-        console.log('Error en la búsqueda:', error);
-      }
-    }
-  };
-
-  const handleSelect = (person) => {
-    setSelectedPerson(person);
-    setPersonsList([]);
-    setSearchInput(searchType === 'TRABAJADOR' ? person.TRABAJADOR : person.DEPENDENCIA);
-  };
-
+  // Realiza la búsqueda de un bien patrimonial según el código ingresado y la ENTITY seleccionada.
   const fetchItem = async (code) => {
     if (!selectedPerson) {
       alert('Primero debe seleccionar una persona o dependencia');
       return;
     }
     try {
+      // Define los parámetros según el tipo de búsqueda seleccionado (trabajador o dependencia)
       const params =
         searchType === 'TRABAJADOR'
           ? { trabajador_data: selectedPerson.TRABAJADOR }
           : { dependencia_data: selectedPerson.DEPENDENCIA }; // Parámetros dinámicos
 
-      // Obtener el token del almacenamiento local (o donde lo guardes después del login)
-      const token = localStorage.getItem('token');  // O usa el método adecuado para obtener el token
+      // Obtener el token del almacenamiento local
+      const token = localStorage.getItem('token');
 
       if (!token) {
         alert('No se encontró el token de autenticación');
         return;
       }
 
+      // Realiza la petición GET con los parámetros y el token de autorización
       const response = await axios.get(`${URL}/${code}`, {
         params,
         headers: {
@@ -85,6 +89,7 @@ const CodeSearchMod1 = () => {
         }
       });
 
+      // Si la respuesta es exitosa, muestra un mensaje de confirmación y almacena los datos
       if (response.status === 200) {
         toast.success('El bien patrimonial fue registrado correctamente', {
           position: 'top-center',
@@ -102,6 +107,7 @@ const CodeSearchMod1 = () => {
       if (error.response) {
         const { status, data } = error.response;
         if (status === 404) {
+          // Si el bien no existe, muestra un mensaje de error
           toast.error(`${data.message || 'El bien patrimonial no existe en la base de datos'}`, {
             position: 'top-center',
             autoClose: 3000,
@@ -113,6 +119,7 @@ const CodeSearchMod1 = () => {
             progress: undefined,
           });
         } else if (status === 400) {
+          // Si el bien pertenece a otro trabajador o dependencia, muestra una advertencia
           if (data.otroTrabajador) {
             const { TRABAJADOR, DEPENDENCIA, UBICACION } = data.otroTrabajador;
             toast.warning(
@@ -174,6 +181,7 @@ const CodeSearchMod1 = () => {
     }
   };
 
+  // Limpia el input del código de barras y los datos del bien patrimonial.
   const clearInput = () => {
     setBarcode('');
     setItemData(null);
@@ -198,8 +206,7 @@ const CodeSearchMod1 = () => {
             <option value="DEPENDENCIA">Dependencia</option>
           </select>
         </div>
-
-        {/* Input para buscar */}
+        {/* Input para buscar trabajador o dependencia */}
         <div className="col-12 col-md-6">
           <input
             type="text"
@@ -208,7 +215,6 @@ const CodeSearchMod1 = () => {
             onChange={handleSearch}
             className="form-control fw-bold"
             style={{ padding: '10px', border: "1px solid black", fontSize: '1.2rem' }}
-
           />
           {personsList.length > 0 && (
             <ul className="list-group">
@@ -225,7 +231,6 @@ const CodeSearchMod1 = () => {
             </ul>
           )}
         </div>
-
         {/* Input de código patrimonial */}
         <div className="col-12 col-md-10">
           <input

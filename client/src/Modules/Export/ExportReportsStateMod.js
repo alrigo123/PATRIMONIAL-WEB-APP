@@ -36,8 +36,8 @@ const ExportReportsStateMod = () => {
 
   // Función para mapear estado
   const mapEstado = (estado) => {
-    if (estado === 1) return "Patrimonizado";
-    if (estado === 0) return "No Patrimonizado";
+    if (estado === 1) return "Registrado";
+    if (estado === 0) return "No Registrado";
     return "Desconocido";
   };
 
@@ -52,22 +52,22 @@ const ExportReportsStateMod = () => {
   // Configuración de consultas
   const queriesConfig = [
     {
-      name: "REPORTE PATRIMONIZADO",
+      name: "REPORTE REGISTRADOS",
       url: `${API_export}/state/true`,
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,
         ESTADO: mapEstado,
       },
-      fileName: "reporte-patrimonizado",
+      fileName: "reporte-REGISTRADOS",
     },
     {
-      name: "REPORTE NO PATRIMONIZADO",
+      name: "REPORTE NO REGISTRADOS",
       url: `${API_export}/state/false`,
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,
         ESTADO: mapEstado,
       },
-      fileName: "reporte-no-patrimonizado",
+      fileName: "reporte-no-REGISTRADOS",
     },
     {
       name: "REPORTE CONSOLIDADO ESTADO",
@@ -76,7 +76,7 @@ const ExportReportsStateMod = () => {
         FECHA_REGISTRO: formatDate,
         ESTADO: mapEstado,
       },
-      fileName: "reporte-patrimonizado-consolidado",
+      fileName: "reporte-REGISTRADOS-consolidado",
     },
   ];
 

@@ -6,7 +6,7 @@ export const APIgetItemById = async (id) => {
     try {
         const response = await axios.get(`${API_URL}/status/${id}`);
 
-        console.log("ITEM DEL FRONT :", response.data)
+        // console.log("ITEM DEL FRONT :", response.data)
         return response.data;
 
     } catch (error) {

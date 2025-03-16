@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'; // Importa SweetAlert2
 import axios from 'axios';
 import { APIgetItemById } from "../services/item.service";
 import { formatToDateInput, formatToDatabase, parseDate } from "../utils/datesUtils";
+
 const API_URL = process.env.REACT_APP_API_URL_ITEMS;
 
 const EditItemComp = () => {
@@ -42,10 +43,9 @@ const EditItemComp = () => {
                 setLoadingConservacion(false);
             } catch (err) {
                 setLoadingConservacion(false);
-                console.error("Error al cargar las calificaciones:", err);
+                console.error("Error al cargar conservaciones:", err);
             }
         };
-
         fetchConservacion();
     }, []);
 
@@ -74,31 +74,28 @@ const EditItemComp = () => {
                 setLoading(false);
             }
         };
-
         fetchData();
     }, [id]);
 
     // Manejar cambios en los inputs
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
         if (name === 'FECHA_COMPRA' || name === 'FECHA_ALTA') {
             // Convertir el valor a formato de base de datos antes de guardar
             const formattedValue = formatToDatabase(value);
             setFormData({ ...formData, [name]: formattedValue });
         } else if (name === 'DISPOSICION') {
-            // Si el switch es "No Funcional" (valor 0), actualizar el estado y deshabilitar el select
+            // Si el switch es "de baja" (valor 0), actualizar el estado y deshabilitar el select
             setFormData({ ...formData, [name]: parseInt(value) });
-            // Si es no funcional, asignamos "Mala" como valor por defecto en la conservación
             if (parseInt(value) === 0) {
                 setFormData({ ...formData, CONSERV: 4 });  // 2 representa "INHABILITADO"
             }
         } else {
             setFormData({ ...formData, [name]: value });
         }
-
     };
 
+    /* FUNCTION to submit (Update DB) data */
     const handleSubmit = async (e) => {
         e.preventDefault(); // Evita que la página se recargue -- Prevenir el comportamiento por defecto del formulario
         try {
@@ -124,7 +121,6 @@ const EditItemComp = () => {
                     navigate(-1)
                 });
             } else {
-                // alert('Error de API');
                 Swal.fire({
                     title: 'Error',
                     text: 'Hubo un error al actualizar los datos.',
@@ -186,7 +182,6 @@ const EditItemComp = () => {
                                     value={formData.DESCRIPCION}
                                     onChange={handleInputChange}
                                     required
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
@@ -202,7 +197,6 @@ const EditItemComp = () => {
                                     value={formData.TRABAJADOR}
                                     onChange={handleInputChange}
                                     required
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
@@ -215,12 +209,10 @@ const EditItemComp = () => {
                                     value={formData.DEPENDENCIA}
                                     onChange={handleInputChange}
                                     required
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Ubicación</label>
@@ -231,7 +223,6 @@ const EditItemComp = () => {
                                     value={formData.UBICACION}
                                     onChange={handleInputChange}
                                     required
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
@@ -244,12 +235,10 @@ const EditItemComp = () => {
                                     value={formData.FECHA_REGISTRO ? parseDate(formData.FECHA_REGISTRO) : 'NO REGISTRADO'}
                                     readOnly
                                     disabled
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Fecha Alta</label>
@@ -259,7 +248,6 @@ const EditItemComp = () => {
                                     name="FECHA_ALTA"
                                     value={formatToDateInput(formData.FECHA_ALTA) || ''}
                                     onChange={handleInputChange}
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
@@ -271,12 +259,10 @@ const EditItemComp = () => {
                                     name="FECHA_COMPRA"
                                     value={formatToDateInput(formData.FECHA_COMPRA) || ''}
                                     onChange={handleInputChange}
-
                                     style={{ border: "1px solid black" }}
                                 />
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Estado de Conservación</label>
@@ -305,33 +291,10 @@ const EditItemComp = () => {
                                     )}
                                 </select>
                             </div>
-
-                            <div className="col-md-6 mt-3 text-center">
-                                <div className="mb-3 text-center">
-                                    <label htmlFor="estadoSwitch" className="form-label me-2 fw-bold">Estado:</label>
-                                    <div className="form-check form-switch d-inline-flex align-items-center">
-                                        <input
-                                            className={`form-check-input ${formData.ESTADO === 1 ? 'bg-success' : 'bg-danger'}`}
-                                            type="checkbox"
-                                            id="estadoSwitch"
-                                            name="ESTADO"
-                                            checked={formData.ESTADO === 1}
-                                            onChange={(e) =>
-                                                setFormData({
-                                                    ...formData,
-                                                    ESTADO: e.target.checked ? 1 : 0,
-                                                })
-                                            }
-                                            disabled
-                                        />
-                                        <label className={`form-check-label fw-bolder ms-2 ${formData.ESTADO ? "text-success" : "text-danger"}`}
-                                            htmlFor="estadoSwitch">
-                                            {formData.ESTADO === 1 ? 'Registrado' : 'No Registrado'}
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div className="mb-3 text-center">
+                            {/* INPUT SWITCHES */}
+                            {/* Disposicion */}
+                            <div className="col-md-3 mt-4 text-center align-items-center justify-content-center">
+                                <div className="d-flex align-items-center p-2 border rounded bg-light mb-3 gap-3">
                                     <label htmlFor="disposicionSwitch" className="form-label me-2 fw-bold">Disposición:</label>
                                     <div className="form-check form-switch d-inline-flex align-items-center">
                                         <input
@@ -355,11 +318,33 @@ const EditItemComp = () => {
                                         </label>
                                     </div>
                                 </div>
-
                             </div>
-                        </div>
-                        <div className="row mt-3">
-
+                            {/* Estado */}
+                            <div className="col-md-3 mt-4 text-center align-items-center justify-content-center">
+                                <div className="d-flex align-items-center p-2 border rounded bg-light mb-3 gap-3">
+                                    <label htmlFor="estadoSwitch" className="form-label me-2 fw-bold">Estado:</label>
+                                    <div className="form-check form-switch d-inline-flex align-items-center">
+                                        <input
+                                            className={`form-check-input ${formData.ESTADO === 1 ? 'bg-success' : 'bg-danger'}`}
+                                            type="checkbox"
+                                            id="estadoSwitch"
+                                            name="ESTADO"
+                                            checked={formData.ESTADO === 1}
+                                            onChange={(e) =>
+                                                setFormData({
+                                                    ...formData,
+                                                    ESTADO: e.target.checked ? 1 : 0,
+                                                })
+                                            }
+                                            disabled
+                                        />
+                                        <label className={`form-check-label fw-bolder ms-2 ${formData.ESTADO ? "text-success" : "text-danger"}`}
+                                            htmlFor="estadoSwitch">
+                                            {formData.ESTADO === 1 ? 'Registrado' : 'No Registrado'}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="text-center mt-4">
                             <button type="submit" className="btn btn-success me-3 fw-bold p-2">

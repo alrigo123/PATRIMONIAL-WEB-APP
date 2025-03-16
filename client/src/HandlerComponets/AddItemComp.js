@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { formatToDatabase } from "../utils/datesUtils";
 import Swal from "sweetalert2"; // Importa SweetAlert2
-// import '../styles/Forms.css'
+import { formatToDatabase } from "../utils/datesUtils";
 
 const URI_ITEMS = process.env.REACT_APP_API_URL_ITEMS
 
@@ -43,6 +42,7 @@ const AddItemComp = () => {
         fetchConservacion();
     }, []);
 
+    // Maneja el cambio del input swithc
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -51,13 +51,12 @@ const AddItemComp = () => {
         });
     };
 
+    /* FUNCTION TO SUBMIT (to DB) NEW ITEM */
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevenir la recarga de la página
-
         try {
             // API consume
-            const response = await axios.post(
-                `${URI_ITEMS}/add`,
+            const response = await axios.post(`${URI_ITEMS}/add`,
                 {
                     ...formData,
                     DISPOSICION: formData.disposicion ? 1 : 0,
@@ -87,7 +86,7 @@ const AddItemComp = () => {
             });
             if (err.response) {
                 // El servidor respondió con un código de error
-                alert(err.response.data.message || 'Error al actualizar el item');
+                // alert(err.response.data.message || 'Error al agregar el item');
             } else if (err.request) {
                 // No hubo respuesta del servidor
                 alert('No se recibió respuesta del servidor');
@@ -203,7 +202,6 @@ const AddItemComp = () => {
                                     required
                                 />
                             </div>
-
                             {/* Estado de Conservación */}
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Estado de Conservación</label>
@@ -228,9 +226,7 @@ const AddItemComp = () => {
                                     )}
                                 </select>
                             </div>
-
                         </div>
-
                         <div className="container mt-3">
                             <div className="row justify-content-center">
                                 <div className="col-md-3">
@@ -261,7 +257,6 @@ const AddItemComp = () => {
                                             </label>
                                         </div>
                                     </div>
-
                                     {/* Estado */}
                                     <div className="d-flex align-items-center p-2 border rounded bg-light gap-3">
                                         <label className="fw-bold m-0">Estado:</label>
@@ -281,7 +276,6 @@ const AddItemComp = () => {
                                 </div>
                             </div>
                         </div>
-
                         <div className="text-center mt-4">
                             <button type="submit" className="btn btn-success me-3">Agregar item</button>
                             <Link to="/codigo-patrimonial" className="btn btn-secondary">Regresar</Link>

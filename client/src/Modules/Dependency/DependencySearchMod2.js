@@ -18,7 +18,7 @@ const DependencySearchMod2 = () => {
         setSearchTerm2(e.target.value);
     };
 
-    // useEffect para la segunda búsqueda
+    // useEffect tiemout search trigger
     useEffect(() => {
         if (debounceTimeout.current) {
             clearTimeout(debounceTimeout.current);

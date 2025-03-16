@@ -4,7 +4,6 @@ import "../styles/PDFViewer.css"; // Asegúrate de agregar estilos
 
 const PDFViewer = () => {
     const pdfUrl = "https://drive.google.com/file/d/1NXxiiY7XqHLU9YjeZ0I29vsanwG6_xXq/preview";
-
     return (
         <div className="pdf-viewer-container">
             <iframe

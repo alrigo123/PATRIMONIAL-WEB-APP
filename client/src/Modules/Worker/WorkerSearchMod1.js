@@ -150,7 +150,6 @@ const WorkerSearchMod1 = () => {
                                 Exportar Bienes Registrados
                             </button>
                         </div>
-
                         {/* Botón para exportar No Patrimonizado */}
                         <div className="col-12 col-md-4">
                             <button
@@ -160,7 +159,6 @@ const WorkerSearchMod1 = () => {
                                 Exportar Bienes No Registrados
                             </button>
                         </div>
-
                         {/* Botón para exportar todos los items (Consolidado) */}
                         <div className="col-12 col-md-4">
                             <button
@@ -171,7 +169,6 @@ const WorkerSearchMod1 = () => {
                             </button>
                         </div>
                     </div>
-
                     {/* Controles para seleccionar los filtros */}
                     <div className="row mt-2">
                         <h4 className='fw-bold mt-4'>FILTRADO</h4>
@@ -217,7 +214,6 @@ const WorkerSearchMod1 = () => {
                             </select>
                         </div>
                     </div>
-
                     {/* Renderiza la tabla de resultados filtrados */}
                     <div className="table-responsive mt-3">
                         {/* <table className="w-auto table table-striped table-bordered align-middle mt-3"> */}

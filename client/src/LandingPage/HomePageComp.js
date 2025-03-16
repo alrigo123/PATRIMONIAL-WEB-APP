@@ -12,6 +12,7 @@ const HomePageComp = () => {
     const navigate = useNavigate();
 
     const closeMenu = () => {
+        console.log(menuOpen)
         setMenuOpen(false); // Cierra el menú al seleccionar una opción
     };
 

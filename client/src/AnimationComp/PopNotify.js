@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import "../styles/PopNotify.css";
-
 const PopNotify = () => {
     const [isMobile, setIsMobile] = useState(false); // State to check if the device is mobile (responsive)
     const [showTip, setShowTip] = useState(true);  // State to control the visibility of the message

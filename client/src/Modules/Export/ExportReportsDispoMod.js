@@ -36,8 +36,8 @@ const ExportReportsDispoMod = () => {
 
   // Función para mapear estado
   const mapEstado = (estado) => {
-    if (estado === 1) return "Funcional";
-    if (estado === 0) return "No Funcional";
+    if (estado === 1) return "Activo";
+    if (estado === 0) return "de Baja";
     return "Desconocido";
   };
 
@@ -52,22 +52,22 @@ const ExportReportsDispoMod = () => {
   // Configuración de consultas
   const queriesConfig = [
     {
-      name: "REPORTE FUNCIONALES",
+      name: "REPORTE ACTIVOS",
       url: `${API_export}/disposition/true`,
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,
         DISPOSICION: mapEstado,
       },
-      fileName: "reporte-funcionales",
+      fileName: "reporte-ACTIVOS",
     },
     {
-      name: "REPORTE NO FUNCIONALES",
+      name: "REPORTE DE BAJA",
       url: `${API_export}/disposition/false`,
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,
         DISPOSICION: mapEstado,
       },
-      fileName: "reporte-no-funcionales",
+      fileName: "reporte-DE_BAJA",
     },
     {
       name: "REPORTE CONSOLIDADO POR DISPOSICIÓN",

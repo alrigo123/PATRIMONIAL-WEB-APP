@@ -36,24 +36,24 @@ const ExportReportsMod = () => {
 
   // Función para mapear estado
   const mapEstado = (estado) => {
-    if (estado === 1) return "Patrimonizado";
-    if (estado === 0) return "No Patrimonizado";
+    if (estado === 1) return "Registrado";
+    if (estado === 0) return "No Registrado";
     return "Desconocido";
   };
 
   // Función para mapear estado
   const mapSituacion = (estado) => {
-    if (estado === 1) return "Funcional";
-    if (estado === 0) return "No Funcional";
+    if (estado === 1) return "Activo";
+    if (estado === 0) return "de Baja";
     return "Desconocido";
   };
 
   // Función para mapear estado
-  const mapDisposicion = (estado) => {
-    if (estado === 1) return "Verificado";
-    if (estado === 0) return "Faltante";
-    return "Desconocido";
-  };
+  // const mapDisposicion = (estado) => {
+  //   if (estado === 1) return "Verificado";
+  //   if (estado === 0) return "Faltante";
+  //   return "Desconocido";
+  // };
 
   // Función genérica para exportar datos a Excel
   const exportToExcel = (dataToExport, fileName) => {
@@ -71,7 +71,7 @@ const ExportReportsMod = () => {
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,
         ESTADO: mapEstado,
-        DISPOSICION: mapDisposicion,
+        // DISPOSICION: mapDisposicion,
         SITUACION: mapSituacion
       },
       fileName: "reporte-consolidado-general",
