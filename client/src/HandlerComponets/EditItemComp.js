@@ -97,7 +97,7 @@ const EditItemComp = () => {
 
     /* FUNCTION to submit (Update DB) data */
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Evita que la página se recargue -- Prevenir el comportamiento por defecto del formulario
+        e.preventDefault(); // Evita que la página se recargue / previene el comportamiento por defecto del formulario
         try {
             // Convertir fechas al formato STRING antes de enviar (simulación de envío)
             const payload = {
@@ -105,9 +105,14 @@ const EditItemComp = () => {
                 FECHA_COMPRA: formData.FECHA_COMPRA ? formData.FECHA_COMPRA.toString() : 'Sin Registro',
                 FECHA_ALTA: formData.FECHA_ALTA ? formData.FECHA_ALTA.toString() : 'Sin Registro',
             };
-            console.log("Datos enviados a la base de datos:", payload);
+            // console.log("Datos enviados a la base de datos:", payload);
             // throw Error
-            const response = await axios.put(`${API_URL}/edit/${payload.CODIGO_PATRIMONIAL}`, payload);
+            const token = localStorage.getItem('token'); // Get token from storage
+            const response = await axios.put(`${API_URL}/edit/${payload.CODIGO_PATRIMONIAL}`, payload, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include token in headers
+                }
+            });
 
             if (response.status === 200) {
                 Swal.fire({
@@ -137,7 +142,7 @@ const EditItemComp = () => {
             });
             if (err.response) {
                 // El servidor respondió con un código de error
-                alert(err.response.data.message || 'Error al actualizar el item');
+                // alert(err.response.data.message || 'Error al actualizar el item');
             } else if (err.request) {
                 // No hubo respuesta del servidor
                 alert('No se recibió respuesta del servidor');
@@ -186,7 +191,6 @@ const EditItemComp = () => {
                                 />
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label className="form-label fw-bold">Trabajador</label>

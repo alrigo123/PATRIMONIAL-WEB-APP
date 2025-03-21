@@ -77,7 +77,7 @@ const DependencySearchMod2 = () => {
 
     return (
         <div>
-            <h5 className='text-lg-start fw-bold'>CANTIDAD BIENES DE LA DEPENDENCIA</h5>
+            <h5 className='text-lg-start fw-bold'>CANTIDAD DE BIENES DE LA DEPENDENCIA</h5>
             {/* Segundo buscador */}
             <input
                 type="text"
@@ -87,7 +87,6 @@ const DependencySearchMod2 = () => {
                 className="form-control mb-4 fw-bold"
                 style={{ marginBottom: '20px', padding: '10px', border: "1px solid black" }}
             />
-
             {/* Muestra un spinner de carga cuando se está realizando la búsqueda */}
             {isLoading ? (
                 <div className="text-center">
@@ -104,7 +103,6 @@ const DependencySearchMod2 = () => {
                     >
                         Exportar a Excel
                     </button>
-
                     <div className="table-responsive mt-2">
                         <PopNotify />
                         <table className="table table-striped table-bordered align-middle small">

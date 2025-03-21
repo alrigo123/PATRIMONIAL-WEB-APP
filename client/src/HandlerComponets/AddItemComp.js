@@ -55,6 +55,7 @@ const AddItemComp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevenir la recarga de la página
         try {
+            const token = localStorage.getItem('token'); // Get token from localStorage (or sessionStorage)
             // API consume
             const response = await axios.post(`${URI_ITEMS}/add`,
                 {
@@ -64,6 +65,11 @@ const AddItemComp = () => {
                     FECHA_COMPRA: formData.fechaCompra ? formatToDatabase(formData.fechaCompra).toString() : 'Sin Registro',
                     FECHA_ALTA: formData.fechaAlta ? formatToDatabase(formData.fechaAlta).toString() : 'Sin Registro',
                     CONSERV: formData.conservacion
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Ensure token is included
+                    }
                 }
             );
 

@@ -41,6 +41,7 @@ const NavBarComp = () => {
     };
 
     const closeLoginModal = () => setIsLoginModalOpen(false);
+
     const handleLoginSuccess = () => {
         closeLoginModal();
         if (redirectPath) navigate(redirectPath);
@@ -60,14 +61,12 @@ const NavBarComp = () => {
                     </button>
                     <span onClick={toggleMenu} className="fw-bold menu-text">Menu</span>
                 </div>
-
                 <div className={`menu ${menuOpen ? "open" : ""}`}>
-
                     <Link className={`fw-bold menu-item ${isActive("/")}`} to="/" onClick={closeMenu}>
                         🏠 Home
                     </Link>
                     <Link className={`fw-bold menu-item ${isActive("/pdf")}`} to="/pdf" onClick={closeMenu}>
-                        <i class="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guía Aplicativo
+                        <i className="bi bi-file-earmark-pdf-fill" style={{ color: '#c70606', backgroundColor: 'transparent' }}></i> Guía Aplicativo
                     </Link>
                     <Link className={`fw-bold menu-item ${isActive("/items")}`} to="/items" onClick={closeMenu}>
                         📊 Ver Items
@@ -83,17 +82,17 @@ const NavBarComp = () => {
                         to="/codigo-patrimonial">
                         🗃️ Registrar Bien
                     </Link>
-                    {/* <Link className={`fw-bold menu-item ${isActive("/trabajador")}`}
+                    <Link className={`fw-bold menu-item ${isActive("/trabajador")}`}
                         onClick={(e) => {
                             handleLoginClick(e, "/trabajador");
                             closeMenu();
                         }}
                         to="/trabajador">
                         👨‍🌾 Búsqueda por Trabajador
-                    </Link> */}
-                    <Link className={`fw-bold menu-item ${isActive("/trabajador")}`} to="/trabajador" onClick={closeMenu}>
-                        👨‍🌾 Búsqueda por Trabajador
                     </Link>
+                    {/* <Link className={`fw-bold menu-item ${isActive("/trabajador")}`} to="/trabajador" onClick={closeMenu}>
+                        👨‍🌾 Búsqueda por Trabajador
+                    </Link> */}
                     <Link className={`fw-bold menu-item ${isActive("/dependencia")}`}
                         onClick={(e) => {
                             handleLoginClick(e, "/dependencia");

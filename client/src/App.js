@@ -18,6 +18,7 @@ import DependencySearchComp from './ItemComponents/DependencySearchComp.js';
 import DoubleSearchComp from './ItemComponents/DoubleSearchComp.js';
 
 // GRID DATA COMPONENTS
+// import GridImportedComp from './test/V1GridImportedComp.js';
 import GridImportedComp from './GridComponents/GridImportedComp.js';
 
 //NAVIGATION COMPONENTS
@@ -36,8 +37,8 @@ import SurfComp from './private/SurfComp.js';
 
 //USER
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
-import ProtectedRouteComp from './UserComponents/ProtectedRouteComp.js';
-
+import ProtectedRouteComp from './UserComponents/V1ProtectedRouteComp.js';
+// import ProtectedRouteComp from './UserComponents/ProtectedRouteComp.js';
 import DashboardAdmin from './UserComponents/DashboardAdmin.js';
 
 function App() {
@@ -70,8 +71,8 @@ function App() {
             <Route path="/edit/:id" element={<EditItemComp />} />
             <Route path="/add" element={<AddItemComp />} />
             <Route path="/dependencia" element={<DependencySearchComp />} />
-            */}
             <Route path="/trabajador" element={<WorkerSearchComp />} />
+            */}
 
             {/* ----- Routes and navigation protected ---- */}
             <Route path="/codigo-patrimonial" element={
@@ -81,12 +82,12 @@ function App() {
             }
             />
 
-            {/* <Route path="/trabajador" element={
+            <Route path="/trabajador" element={
               <ProtectedRouteComp>
                 <WorkerSearchComp />
               </ProtectedRouteComp>
             }
-            /> */}
+            />
 
             <Route path="/dependencia" element={
               <ProtectedRouteComp>

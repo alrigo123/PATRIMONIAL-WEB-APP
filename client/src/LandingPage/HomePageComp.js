@@ -84,7 +84,6 @@ const HomePageComp = () => {
                     >
                         Registrar bien patrimonial
                     </Link>
-
                     {/* Modal de inicio de sesión */}
                     <LoginModalComp
                         show={isLoginModalOpen}

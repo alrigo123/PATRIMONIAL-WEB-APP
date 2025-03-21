@@ -8,7 +8,6 @@ const URL = process.env.REACT_APP_API_URL_ITEMS;
 const CodeSearchMod1 = () => {
   const [barcode, setBarcode] = useState('');
   const [itemData, setItemData] = useState(null);
-
   const [searchType, setSearchType] = useState('TRABAJADOR'); // Select: TRABAJADOR o DEPENDENCIA
   const [selectedPerson, setSelectedPerson] = useState(null); // Estado para la selección
   const [personsList, setPersonsList] = useState([]); // Lista de sugerencias
@@ -81,7 +80,7 @@ const CodeSearchMod1 = () => {
         return;
       }
 
-      // Realiza la petición GET con los parámetros y el token de autorización
+      // Realiza la petición GET (which update item state) con los parámetros y el token de autorización
       const response = await axios.get(`${URL}/${code}`, {
         params,
         headers: {
@@ -124,7 +123,7 @@ const CodeSearchMod1 = () => {
             const { TRABAJADOR, DEPENDENCIA, UBICACION } = data.otroTrabajador;
             toast.warning(
               <div>
-                El bien patrimonial pertenece a: <strong>{TRABAJADOR}</strong>
+                El bien patrimonial pertenece al trabajador: <strong>{TRABAJADOR}</strong>
                 <br />
                 Dependencia: <strong>{DEPENDENCIA} - *{UBICACION}</strong>
               </div>,
@@ -143,7 +142,7 @@ const CodeSearchMod1 = () => {
             const { TRABAJADOR, DEPENDENCIA, UBICACION } = data.otraDependencia;
             toast.warning(
               <div>
-                El bien patrimonial pertenece a dependencia: <strong>{DEPENDENCIA} - *{UBICACION}</strong>
+                El bien patrimonial pertenece a la dependencia: <strong>{DEPENDENCIA} - *{UBICACION}</strong>
                 <br />
                 Trabajador: <strong>{TRABAJADOR}</strong>
               </div>,
@@ -258,7 +257,6 @@ const CodeSearchMod1 = () => {
             title="Debe contener exactamente 12 dígitos"
           />
         </div>
-
         {/* Botón de limpiar */}
         <div className="col-12 col-md-2">
           <button
@@ -270,7 +268,6 @@ const CodeSearchMod1 = () => {
           </button>
         </div>
       </div>
-
       {/* Mostrar información del item */}
       {itemData && (
         <div className="d-flex justify-content-center mt-2">

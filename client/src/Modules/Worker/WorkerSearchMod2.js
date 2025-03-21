@@ -103,7 +103,6 @@ const WorkerSearchMod2 = () => {
                     >
                         Exportar a Excel
                     </button>
-
                     <div className="table-responsive mt-2">
                         <PopNotify />
                         <table className="table table-striped table-bordered align-middle small">

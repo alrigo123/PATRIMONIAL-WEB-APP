@@ -35,6 +35,7 @@ const ShowItemsComp = () => {
         }
     };
 
+    /* Executes getItems() whenever page or limit changes */
     useEffect(() => {
         getItems();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,7 +104,7 @@ const ShowItemsComp = () => {
                             </select>
                         </div>
                         <div className="mb-3 col-12 col-sm-6 col-md-4 text-start">
-                            <h6 className='fw-semibold mt-2'>por Estado conservacion</h6>
+                            <h6 className='fw-semibold mt-2'>por Estado de conservación</h6>
                             <select
                                 id="filter3"
                                 className="form-select fw-bolder"
@@ -137,11 +138,8 @@ const ShowItemsComp = () => {
                         </select>
                         <span className="me-3">registros por página</span>
                     </div>
-
                     <div className="table-responsive mt-3">
-                        {/* <table className="w-auto table table-striped table-bordered align-middle mt-3"> */}
                         <PopNotify />
-
                         <table className="table table-striped table-bordered align-middle small">
                             <thead className="table-dark">
                                 <tr>
@@ -199,7 +197,6 @@ const ShowItemsComp = () => {
                             </tbody>
                         </table>
                     </div>
-
                     {/* Controles de paginación */}
                     <div className="d-flex justify-content-center align-items-center my-3">
                         <button

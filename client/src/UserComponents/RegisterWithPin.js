@@ -32,23 +32,41 @@ const RegisterWithPin = () => {
     // Para navegar a otra página después del submit
     const navigate = useNavigate();
 
-    // Función para manejar la validación del PIN
-    const validatePin = () => {
+    // Función para manejar la validación del PIN a través de la API
+    const validatePin = async () => {
         if (!pin.trim()) { // Verificar si el campo del PIN está vacío
             setErrorMessage("El PIN es obligatorio.");
             return;
         }
-        if (pin === process.env.REACT_APP_SECURITY_PIN) {
-            setIsPinValid(true);
-            setIsFormVisible(true); // Mostrar el formulario de registro si el PIN es correcto
-        } else {
-            setPinAttempts(pinAttempts + 1);
+
+        try {
+            const response = await fetch(`${API_URL}/verify-pin`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pin }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.valid) {
+                    setIsPinValid(true);
+                    setIsFormVisible(true); // Mostrar el formulario de registro si el PIN es correcto
+                    return;
+                }
+            }
+
+            // Si el PIN es incorrecto
+            setPinAttempts(prevAttempts => prevAttempts + 1);
             if (pinAttempts >= 2) {
                 navigate("/"); // Si se fallaron 3 veces, redirigir al menú principal
             } else {
-                setErrorMessage("PIN incorrecto. Intentos restantes: " + (3 - pinAttempts - 1));
-                setPin('');
+                setErrorMessage(`PIN incorrecto. Intentos restantes: ${3 - pinAttempts - 1}`);
+                setPin("");
             }
+
+        } catch (error) {
+            console.error("Error en la validación del PIN:", error);
+            setErrorMessage("Error al validar el PIN. Inténtalo de nuevo.");
         }
     };
 
@@ -61,10 +79,10 @@ const RegisterWithPin = () => {
     // Función que maneja el envío de los datos
     const handleSubmit = async (values) => {
         try {
-            console.log("USUAARIO: ", {
-                ...values,
-                name_and_last: values.name_and_last.toUpperCase()
-            })
+            // console.log("USUAARIO: ", {
+            //     ...values,
+            //     name_and_last: values.name_and_last.toUpperCase()
+            // })
             // throw Error
             const response = await axios.post(`${API_URL}/register`, {
                 ...values,
@@ -84,7 +102,7 @@ const RegisterWithPin = () => {
                 throw new Error("Ocurrio un error inesperado: " + response.status)
             }
 
-            console.log('User registered successfully:', response.data);
+            // console.log('User registered successfully:', response.data);
             // Aquí puedes hacer algo con la respuesta (como redirigir al usuario a login, etc.)
         } catch (error) {
             Swal.fire({
@@ -118,6 +136,7 @@ const RegisterWithPin = () => {
                         </Rb.Form.Group>
 
                         {errorMessage && <Rb.Alert className="fw-bold" variant="danger">{errorMessage}</Rb.Alert>}
+
                         <Rb.Button variant="primary" type="submit">
                             Validar PIN
                         </Rb.Button>

@@ -41,15 +41,15 @@ const ExportReportsMod = () => {
     return "Desconocido";
   };
 
-  // Función para mapear estado
-  const mapSituacion = (estado) => {
+  // Función para mapear dipso
+  const mapDisposicion = (estado) => {
     if (estado === 1) return "Activo";
     if (estado === 0) return "de Baja";
     return "Desconocido";
   };
 
   // Función para mapear estado
-  // const mapDisposicion = (estado) => {
+  // const mapSituacion = (estado) => {
   //   if (estado === 1) return "Verificado";
   //   if (estado === 0) return "Faltante";
   //   return "Desconocido";
@@ -71,8 +71,8 @@ const ExportReportsMod = () => {
       formatCallbacks: {
         FECHA_REGISTRO: formatDate,
         ESTADO: mapEstado,
-        // DISPOSICION: mapDisposicion,
-        SITUACION: mapSituacion
+        DISPOSICION: mapDisposicion
+        // SITUACION: mapSituacion
       },
       fileName: "reporte-consolidado-general",
     },

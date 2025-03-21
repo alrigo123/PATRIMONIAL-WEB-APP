@@ -16,15 +16,13 @@ const ErrorModalComp = () => {
         [{ value: 'CODIGO_PATRIMONIAL' }, { value: 'DESCRIPCION' },
         { value: 'TRABAJADOR' }, { value: 'DEPENDENCIA' },
         { value: 'UBICACION' }, { value: 'FECHA_COMPRA' }, { value: 'FECHA_ALTA' }],
-
         [{ value: '011110101012' }, { value: 'ARADOS EN GENERAL' },
         { value: 'ROBERTO QUIROGA MUÑOZ' }, { value: 'SEDE ACOMAYO' },
         { value: 'OFICINA DE ALMACEN' }, { value: '11/03/2011 00:00:00' },
-        { value: '11/03/2011 00:00:00' }],
-
+        { value: '14/03/2012' }],
         [{ value: '023342023430' }, { value: 'SILLA GIRATORIA' },
         { value: 'ROBERTO QUIROGA MUÑOZ' }, { value: 'SEDE ACOMAYO' },
-        { value: 'OFICINA ADMINISTRACION' }, { value: '11/03/2011 00:00:00' },
+        { value: 'OFICINA ADMINISTRACION' }, { value: '14/03/2012' },
         { value: '11/03/2011 00:00:00' }],
     ];
 
@@ -34,7 +32,6 @@ const ErrorModalComp = () => {
             <button className='btn btn-warning fw-bold' onClick={toggleModal} style={{ fontSize: '16px', padding: '10px 20px', borderRadius: '5px' }} >
                 <span style={{ fontWeight: 'bold', fontSize: '18px' }}>Ver Formato Requerido</span>
             </button>
-
             {/* Modal TO SHOW EXAMPLE GRID*/}
             <Modal
                 isOpen={isModalOpen}
@@ -52,7 +49,6 @@ const ErrorModalComp = () => {
                     overlay: { backgroundColor: 'rgba(0, 0, 0, 0.5)' }
                 }}
             >
-
                 {/* CONTENT OF THE EXAMPLE */}
                 <h2 className='fw-bold' style={{ marginBottom: '20px', color: '#333' }}>Formato Requerido</h2>
                 <p className='fw-bold'><u><em>Asegurese de que el archivo a subir tenga el siguiente formato</em></u></p>
@@ -61,7 +57,6 @@ const ErrorModalComp = () => {
                         data={exampleData}
                     />
                 </div>
-
                 {/* BUTTON TO CLOSE MODAL */}
                 <button
                     onClick={() => setIsModalOpen(false)}

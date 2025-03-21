@@ -17,12 +17,16 @@ const WorkerSearchMod1 = () => {
     const [newObservation, setNewObservation] = useState(''); // Para el contenido del textarea
     const debounceTimeout = useRef(null); // Referencia para el setTimeout
 
-    const fechaFormateada = new Date().toISOString().split("T")[0];
+    // Estado para el ordenamiento
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortOrder, setSortOrder] = useState('asc'); // 'asc' o 'desc'
 
     // States para los filtros
     const [filterEstado, setFilterEstado] = useState('all');
     const [filterDisposicion, setFilterDisposicion] = useState('all');
     const [filterConservation, setfilterConservation] = useState('all');
+
+    const fechaFormateada = new Date().toISOString().split("T")[0];
 
     // Maneja el cambio en el primer input
     const handleInputChange1 = (e) => {
@@ -39,7 +43,12 @@ const WorkerSearchMod1 = () => {
                 const fetchItems1 = async () => {
                     setIsLoading(true);
                     try {
-                        const response = await axios.get(`${URL}/worker?q=${searchTerm1}`);
+                        const token = localStorage.getItem('token'); // Get token from localStorage (or sessionStorage)
+                        const response = await axios.get(`${URL}/worker?q=${searchTerm1}`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}` // Ensure token is included
+                            }
+                        });
                         setResults1(response.data);
                     } catch (error) {
                         console.log('Error al obtener los items:', error);
@@ -72,12 +81,14 @@ const WorkerSearchMod1 = () => {
         exportarItems(results1, undefined, "Bienes Trabajador", "Bienes_Consolidado", searchTerm1, fechaFormateada);
     };
 
+    /* Function to Edit Observation state */
     const handleEditObservation = (item) => {
         setSelectedItem(item);
         setNewObservation(item.OBSERVACION || ''); // Prellenar con la observación actual
         setModalVisible(true);
     };
 
+    // Función para guardar la nueva observación en la API y actualizar el  estado
     const saveObservation = async () => {
         try {
             // Llamada al endpoint con el código patrimonial
@@ -116,6 +127,37 @@ const WorkerSearchMod1 = () => {
             (filterConservation === 'inha' && item.CONSERV === 4);
         return estadoFilter && disposicionFilter && conservationFilter;
     });
+
+    // Función para ordenar la tabla al hacer clic en un encabezado
+    const handleSort = (column) => {
+        let newOrder = 'asc';
+        if (sortColumn === column && sortOrder === 'asc') {
+            newOrder = 'desc';
+        }
+        setSortColumn(column);
+        setSortOrder(newOrder);
+
+        const sortedData = [...results1].sort((a, b) => {
+            let valA = a[column];
+            let valB = b[column];
+
+            // Ensure valA and valB are not null or undefined
+            if (valA == null) valA = '';
+            if (valB == null) valB = '';
+
+            // Handle numeric values
+            if (!isNaN(valA) && !isNaN(valB)) {
+                return newOrder === 'asc' ? valA - valB : valB - valA;
+            }
+
+            // Convert non-string values to strings before using localeCompare
+            return newOrder === 'asc'
+                ? String(valA).localeCompare(String(valB))
+                : String(valB).localeCompare(String(valA));
+        });
+
+        setResults1(sortedData);
+    };
 
     return (
         <div>
@@ -221,16 +263,36 @@ const WorkerSearchMod1 = () => {
                         <table className="table table-striped table-bordered align-middle small">
                             <thead className="table-dark">
                                 <tr>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Código Patrimonial</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción del bien</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Trabajador</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Dependencia</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Compra</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Fecha de Alta</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Ultimo Registro</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Est. Conservación</th>
+                                    <th onClick={() => handleSort('CODIGO_PATRIMONIAL')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Código Patrimonial {sortColumn === 'CODIGO_PATRIMONIAL' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('DESCRIPCION')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Descripción del bien {sortColumn === 'DESCRIPCION' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('TRABAJADOR')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Trabajador {sortColumn === 'TRABAJADOR' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('DEPENDENCIA')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Dependencia {sortColumn === 'DEPENDENCIA' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('FECHA_COMPRA')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Fecha de Compra {sortColumn === 'FECHA_COMPRA' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('FECHA_ALTA')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Fecha de Alta {sortColumn === 'FECHA_ALTA' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('FECHA_REGISTRO')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Fecha Último Registro {sortColumn === 'FECHA_REGISTRO' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('ESTADO')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Estado {sortColumn === 'ESTADO' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('DISPOSICION')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Disposición {sortColumn === 'DISPOSICION' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('EST_CONSERVACION')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Est. Conservación {sortColumn === 'EST_CONSERVACION' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Acción</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Observación</th>
                                 </tr>

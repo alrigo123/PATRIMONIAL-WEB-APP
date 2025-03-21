@@ -84,7 +84,6 @@
   padding: 5px 5px;
 }
 
-
 /* Cerrar menú automáticamente en pantallas más grandes */
 @media (min-width: 768px) {
   .menu {

@@ -37,13 +37,12 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
           showConfirmButton: false,
           timer: 1000
         });
+
         if (token) {
           console.log("SE CREO EL TOKEN PARA EL LOGIN")
         } else {
           console.log("EL TOKEN NO EXISTE")
         }
-        // Aquí puedes guardar datos como token o redirigir al usuario
-        // localStorage.setItem('authToken', response.data.token || '');
 
         // Llama a la función para notificar éxito y cerrar el modal
         if (onLoginSuccess) {
@@ -69,7 +68,6 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
       </Modal.Header>
       <Modal.Body>
         {errorMessage && <Alert variant="danger" aria-live="assertive">{errorMessage}</Alert>}
-
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formDni">
             <Form.Label>👤 DNI</Form.Label>
@@ -83,7 +81,6 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
             />
             <Form.Control.Feedback type="invalid">Por favor ingresa tu DNI.</Form.Control.Feedback>
           </Form.Group>
-
           <Form.Group controlId="formPassword" >
             <Form.Label className='mt-2'>🔑 Contraseña</Form.Label>
             <div className="d-flex mb-4">
@@ -105,7 +102,6 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
             </div>
             <Form.Control.Feedback type="invalid">Por favor ingresa tu contraseña.</Form.Control.Feedback>
           </Form.Group>
-
           <Button variant="primary" type="submit" block disabled={loading}>
             {loading ? <Spinner animation="border" size="sm" aria-label="Cargando..." /> : '🚀 Iniciar sesión'}
           </Button>

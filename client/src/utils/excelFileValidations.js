@@ -115,115 +115,12 @@ export const validatePatrimonialCodes = (sheetData, setErrorMessage, setShowModa
 }
 
 /* FUNCTION to validate the date values and typo */
-// export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
-//     const headers = sheetData[0]; // Primera fila como encabezados
-//     const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columnas a validar
-
-//     const invalidRows = [];
-
-//     dateColumns.forEach((col) => {
-//         const dateIndex = headers.indexOf(col);
-
-//         if (dateIndex === -1) return; // Si no existe la columna, continuar con la siguiente.
-
-//         // Validar las filas
-//         sheetData.slice(1).forEach((row, rowIndex) => {
-//             const value = row[dateIndex];
-//             if (
-//                 value && // Verificar que no esté vacío
-//                 !/^(?:\d{4}[-/]\d{2}[-/]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[-/]\d{2}[-/]\d{4}(?: \d{2}:\d{2}:\d{2})?)$/.test(value) // Formatos permitidos
-//             ) {
-//                 invalidRows.push({
-//                     rowNumber: rowIndex + 2, // Ajuste para contar desde 2 por los encabezados
-//                     column: col,
-//                     value: value || 'vacío',
-//                 });
-//             }
-//         });
-//     });
-
-//     if (invalidRows.length > 0) {
-//         setErrorMessage(`
-//         <strong>Errores encontrados en las columnas de fechas:</strong>
-//         <ul>
-//           ${invalidRows
-//                 .map(
-//                     ({ rowNumber, column, value }) =>
-//                         `<li>Fila ${rowNumber}, Columna <strong>${column}</strong>: Valor inválido (<strong>${value}</strong>)</li>`
-//                 )
-//                 .join('')}
-//         </ul>
-//         Asegúrate de usar formatos válidos como <strong>dd/mm/aaaa</strong>, <strong>yyyy-mm-dd</strong> o <strong>dd/mm/aaaa hh:mm:ss</strong>.
-//       `);
-//         setShowModalButton(true);
-//         return false;
-//     }
-
-//     return true;
-// }
-
-
 export const validateDateColumns = (sheetData, setErrorMessage, setShowModalButton) => {
     const headers = sheetData[0]; // Get headers
     const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columns to check
-
     const invalidRows = [];
 
-    // Define regex patterns
-    const datePattern1 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/; // dd/mm/yyyy
-    const datePattern2 = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/; // yyyy-mm-dd
-    const dateTimePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} \d{2}:\d{2}:\d{2}$/; // dd/mm/yyyy hh:mm:ss
-
-    dateColumns.forEach((col) => {
-        const dateIndex = headers.indexOf(col);
-        if (dateIndex === -1) return; // If column doesn't exist, skip
-
-        sheetData.slice(1).forEach((row, rowIndex) => {
-            const value = String(row[dateIndex] || '').trim(); // FIXED HERE
-
-            if (
-                value && // Not empty
-                !datePattern1.test(value) && 
-                !datePattern2.test(value) && 
-                !dateTimePattern.test(value)
-            ) {
-                invalidRows.push({
-                    rowNumber: rowIndex + 2, // Adjust for header row
-                    column: col,
-                    value: value || 'empty',
-                });
-            }
-        });
-    });
-
-    if (invalidRows.length > 0) {
-        setErrorMessage(`
-        <strong>Invalid dates found:</strong>
-        <ul>
-          ${invalidRows
-                .map(
-                    ({ rowNumber, column, value }) =>
-                        `<li>Row ${rowNumber}, Column <strong>${column}</strong>: Invalid value (<strong>${value}</strong>)</li>`
-                )
-                .join('')}
-        </ul>
-        Please use valid formats: <strong>dd/mm/yyyy</strong>, <strong>yyyy-mm-dd</strong> or <strong>dd/mm/yyyy hh:mm:ss</strong>.
-      `);
-        setShowModalButton(true);
-        return false;
-    }
-
-    return true;
-};
-
-
-export const validateDateColumns1 = (sheetData, setErrorMessage, setShowModalButton) => {
-    const headers = sheetData[0]; // Get headers
-    const dateColumns = ['FECHA_COMPRA', 'FECHA_ALTA']; // Columns to check
-
-    const invalidRows = [];
-
-    // Define regex patterns
+    // Define regex patterns (expresiones regulares)
     const datePattern1 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/; // dd/mm/yyyy
     const datePattern2 = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/; // yyyy-mm-dd
     const dateTimePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} \d{2}:\d{2}:\d{2}$/; // dd/mm/yyyy hh:mm:ss
@@ -235,17 +132,20 @@ export const validateDateColumns1 = (sheetData, setErrorMessage, setShowModalBut
         sheetData.slice(1).forEach((row, rowIndex) => {
             let value = row[dateIndex];
 
-            // Fix for Excel date formats
+            // 🛠 Convert Excel date objects to dd/mm/yyyy format
             if (value instanceof Date) {
-                value = value.toLocaleDateString('es-PE'); // Convert to dd/mm/yyyy
+                const day = String(value.getDate()).padStart(2, '0');
+                const month = String(value.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-based
+                const year = value.getFullYear();
+                value = `${day}/${month}/${year}`;
             } else {
                 value = String(value || '').trim();
             }
 
             if (
                 value && // Not empty
-                !datePattern1.test(value) && 
-                !datePattern2.test(value) && 
+                !datePattern1.test(value) &&
+                !datePattern2.test(value) &&
                 !dateTimePattern.test(value)
             ) {
                 invalidRows.push({
@@ -261,7 +161,7 @@ export const validateDateColumns1 = (sheetData, setErrorMessage, setShowModalBut
         setErrorMessage(`
         <strong>Invalid dates found:</strong>
         <ul>
-          ${invalidRows
+            ${invalidRows
                 .map(
                     ({ rowNumber, column, value }) =>
                         `<li>Row ${rowNumber}, Column <strong>${column}</strong>: Invalid value (<strong>${value}</strong>)</li>`
@@ -269,10 +169,9 @@ export const validateDateColumns1 = (sheetData, setErrorMessage, setShowModalBut
                 .join('')}
         </ul>
         Please use valid formats: <strong>dd/mm/yyyy</strong>, <strong>yyyy-mm-dd</strong> or <strong>dd/mm/yyyy hh:mm:ss</strong>.
-      `);
+        `);
         setShowModalButton(true);
         return false;
     }
-
     return true;
 };
