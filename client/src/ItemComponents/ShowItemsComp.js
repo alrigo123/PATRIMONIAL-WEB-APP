@@ -19,6 +19,10 @@ const ShowItemsComp = () => {
     const [page, setPage] = useState(1); // Página actual
     const [limit, setLimit] = useState(50); // Límite de registros por página
 
+    // Estado para el ordenamiento
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortOrder, setSortOrder] = useState('asc'); // 'asc' o 'desc'
+
     // States para los filtros
     const [filterEstado, setFilterEstado] = useState('all');
     const [filterDisposicion, setFilterDisposicion] = useState('all');
@@ -61,6 +65,37 @@ const ShowItemsComp = () => {
             (filterConservation === 'regular' && item.CONSERV === 3);
         return estadoFilter && disposicionFilter && conservationFilter;
     });
+
+    // Función para ordenar la tabla al hacer clic en un encabezado
+    const handleSort = (column) => {
+        let newOrder = 'asc';
+        if (sortColumn === column && sortOrder === 'asc') {
+            newOrder = 'desc';
+        }
+        setSortColumn(column);
+        setSortOrder(newOrder);
+
+        const sortedData = [...items].sort((a, b) => {
+            let valA = a[column];
+            let valB = b[column];
+
+            // Ensure valA and valB are not null or undefined
+            if (valA == null) valA = '';
+            if (valB == null) valB = '';
+
+            // Handle numeric values
+            if (!isNaN(valA) && !isNaN(valB)) {
+                return newOrder === 'asc' ? valA - valB : valB - valA;
+            }
+
+            // Convert non-string values to strings before using localeCompare
+            return newOrder === 'asc'
+                ? String(valA).localeCompare(String(valB))
+                : String(valB).localeCompare(String(valA));
+        });
+
+        setItems(sortedData);
+    };
 
     return (
         <div className="container">
@@ -144,14 +179,29 @@ const ShowItemsComp = () => {
                             <thead className="table-dark">
                                 <tr>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>#</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Codigo Patrimonial</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Descripción del bien</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Dependencia</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Trabajador</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Ultima Fecha Registro</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Estado</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Disposición</th>
-                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Est. Conservación</th>
+                                    <th onClick={() => handleSort('CODIGO_PATRIMONIAL')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Código Patrimonial {sortColumn === 'CODIGO_PATRIMONIAL' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('DESCRIPCION')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Descripción del bien {sortColumn === 'DESCRIPCION' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('DEPENDENCIA')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Dependencia {sortColumn === 'DEPENDENCIA' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('TRABAJADOR')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Trabajador {sortColumn === 'TRABAJADOR' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('FECHA_REGISTRO')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Fecha Último Registro {sortColumn === 'FECHA_REGISTRO' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>                                    <th onClick={() => handleSort('ESTADO')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Estado {sortColumn === 'ESTADO' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('DISPOSICION')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Disposición {sortColumn === 'DISPOSICION' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
+                                    <th onClick={() => handleSort('EST_CONSERVACION')} style={{ cursor: 'pointer', verticalAlign: 'middle' }}>
+                                        Est. Conservación {sortColumn === 'EST_CONSERVACION' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

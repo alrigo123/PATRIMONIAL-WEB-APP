@@ -59,6 +59,7 @@ export const validateEmptyCells = (sheetData, expectedColumns, setErrorMessage, 
 
 /* FUNCTION to validate headers according to the template */
 export const validateHeaderColumns = (sheetData, expectedColumns, setErrorMessage, setShowModalButton) => {
+    // const uploadedColumns = sheetData; // Headers
     const uploadedColumns = sheetData[0]; // Headers
     const missingColumns = expectedColumns.filter((col) => !uploadedColumns.includes(col));
     const extraColumns = uploadedColumns.filter((col) => !expectedColumns.includes(col));
@@ -81,6 +82,7 @@ export const validateHeaderColumns = (sheetData, expectedColumns, setErrorMessag
     setShowModalButton(false);
     return true;
 }
+
 
 /* FUNCTION to validate PATRIMONIAL_CODES (numeric and only 12 characters) */
 export const validatePatrimonialCodes = (sheetData, setErrorMessage, setShowModalButton) => {

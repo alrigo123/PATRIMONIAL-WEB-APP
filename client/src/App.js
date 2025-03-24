@@ -18,8 +18,9 @@ import DependencySearchComp from './ItemComponents/DependencySearchComp.js';
 import DoubleSearchComp from './ItemComponents/DoubleSearchComp.js';
 
 // GRID DATA COMPONENTS
-// import GridImportedComp from './test/V1GridImportedComp.js';
-import GridImportedComp from './GridComponents/GridImportedComp.js';
+// import GridImportedComp from './GridComponents/Grid Test.js';
+import UploadExcel from './GridComponents/GridImportedComp.js';
+// import GridImportedComp from './GridComponents/GridImportedComp.js';
 
 //NAVIGATION COMPONENTS
 import Header from './NavigationComponents/Header.js';
@@ -112,8 +113,9 @@ function App() {
             />
 
             {/* IMPORT DATA ROUTE */}
-            <Route path="/import-excel" element={<GridImportedComp />} />
-
+            <Route path="/import-excel" element={<UploadExcel />} />
+            {/* <Route path="/import-excel" element={<GridImportedComp />} /> */}
+            
             {/* USER PIN ACTIONS */}
             <Route path="/user-register" element={<RegisterWithPin />} />
             <Route path="/dashboard-managment" element={<DashboardAdmin />} />

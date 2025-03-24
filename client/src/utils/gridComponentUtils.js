@@ -42,6 +42,8 @@ export const updateStateAndProgress = (sheets, workbook, setSheetsData, setCurre
   setProgress(100);
   setFileLoaded(true);
 
+  console.log("UPDATE AND PROGRESS: ",sheets)
+
   setTimeout(() => {
     setFileLoaded(false);
     setLoading(false);
