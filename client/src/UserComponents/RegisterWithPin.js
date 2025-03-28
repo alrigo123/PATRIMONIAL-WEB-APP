@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 // import { Modal, Button, Form, FormControl, Alert } from "react-bootstrap";
 import * as Rb from "react-bootstrap";
@@ -32,41 +32,38 @@ const RegisterWithPin = () => {
     // Para navegar a otra página después del submit
     const navigate = useNavigate();
 
-    // Función para manejar la validación del PIN a través de la API
+    useEffect(() => {
+        const tokenExist = localStorage.getItem('adminToken');
+        if (tokenExist) {
+            setIsPinValid(true);
+            setIsFormVisible(true); // Ensure form appears if the user already validated PIN
+        }
+    }, []);
+
     const validatePin = async () => {
-        if (!pin.trim()) { // Verificar si el campo del PIN está vacío
+        if (!pin.trim()) {
             setErrorMessage("El PIN es obligatorio.");
             return;
         }
 
         try {
-            const response = await fetch(`${API_URL}/verify-pin`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ pin }),
-            });
+            const response = await axios.post(`${API_URL}/verify-pin`, { pin });
 
-            if (response.ok) {
-                const data = await response.json();
-                if (data.valid) {
-                    setIsPinValid(true);
-                    setIsFormVisible(true); // Mostrar el formulario de registro si el PIN es correcto
-                    return;
-                }
+            if (response.data.valid) {
+                localStorage.setItem('adminToken', response.data.adminToken);
+                setIsPinValid(true);
+                setIsFormVisible(true); // Make sure the registration form appears
             }
-
-            // Si el PIN es incorrecto
+        } catch (error) {
+            console.error("Error validating PIN:", error);
             setPinAttempts(prevAttempts => prevAttempts + 1);
+
             if (pinAttempts >= 2) {
-                navigate("/"); // Si se fallaron 3 veces, redirigir al menú principal
+                navigate("/"); // Redirect to the main menu after 3 failed attempts
             } else {
                 setErrorMessage(`PIN incorrecto. Intentos restantes: ${3 - pinAttempts - 1}`);
                 setPin("");
             }
-
-        } catch (error) {
-            console.error("Error en la validación del PIN:", error);
-            setErrorMessage("Error al validar el PIN. Inténtalo de nuevo.");
         }
     };
 
@@ -79,11 +76,6 @@ const RegisterWithPin = () => {
     // Función que maneja el envío de los datos
     const handleSubmit = async (values) => {
         try {
-            // console.log("USUAARIO: ", {
-            //     ...values,
-            //     name_and_last: values.name_and_last.toUpperCase()
-            // })
-            // throw Error
             const response = await axios.post(`${API_URL}/register`, {
                 ...values,
                 name_and_last: values.name_and_last.toUpperCase()
@@ -102,8 +94,6 @@ const RegisterWithPin = () => {
                 throw new Error("Ocurrio un error inesperado: " + response.status)
             }
 
-            // console.log('User registered successfully:', response.data);
-            // Aquí puedes hacer algo con la respuesta (como redirigir al usuario a login, etc.)
         } catch (error) {
             Swal.fire({
                 title: 'El usuario y/o email ya existe!',
@@ -222,12 +212,12 @@ const RegisterWithPin = () => {
                                                 </div>
                                             </div>
                                             <div className="text-center mt-4">
-                                                <button type="submit" className="btn btn-primary w-100 shadow-sm fw-bold">
-                                                    <i className="fas fa-save me-2"></i> Registrar
+                                                <button type="submit" className="btn btn-primary w-50 shadow-sm fw-bold">
+                                                    Registrar Usuario
                                                 </button>
                                                 <div className="mt-3">
-                                                    <Link to="/dashboard-managment" className="btn btn-outline-secondary w-100 shadow-sm">
-                                                        <i className="fas fa-chart-line me-2"></i> Gestión de Usuarios
+                                                    <Link to="/dashboard-managment" className="btn btn-success w-50 shadow-sm fw-bold">
+                                                        Gestión de Usuarios
                                                     </Link>
                                                 </div>
                                             </div>

@@ -27,8 +27,8 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
       const response = await axios.post(`${URL}/login`, { dni, password });
 
       // Si el login es exitoso, guardar el token en el localStorage
-      const token = localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user.name_and_last));
+      localStorage.setItem('token', response.data.token); // Store token of login
+      localStorage.setItem('user', JSON.stringify(response.data.user.name_and_last)); // Store the NAME AND LAST NAME of the USER linked to the token
 
       if (response.status === 200) {
         Swal.fire({
@@ -37,12 +37,6 @@ const LoginModalComp = ({ show, handleClose, onLoginSuccess }) => {
           showConfirmButton: false,
           timer: 1000
         });
-
-        if (token) {
-          console.log("SE CREO EL TOKEN PARA EL LOGIN")
-        } else {
-          console.log("EL TOKEN NO EXISTE")
-        }
 
         // Llama a la función para notificar éxito y cerrar el modal
         if (onLoginSuccess) {

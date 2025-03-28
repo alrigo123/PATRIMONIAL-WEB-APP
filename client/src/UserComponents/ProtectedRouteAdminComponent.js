@@ -6,35 +6,27 @@ import axios from 'axios';
 
 const URL = process.env.REACT_APP_API_URL_USER;
 
-const ProtectedRouteComp = ({ children }) => {
+const ProtectedRouteAdminComponent = ({ children }) => {
     const [timeLeft, setTimeLeft] = useState(null);
     const [showWarning, setShowWarning] = useState(false);
     const [expired, setExpired] = useState(false);
     const [isLoggedOut, setIsLoggedOut] = useState(false);
 
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-
-    let user;
-    try {
-        user = token ? JSON.parse(localStorage.getItem('user')) : null; // Validar el token ? - Convertir el string de vuelta a un objeto 
-    }
-    catch {
-        user = null;
-    }
+    const adminToken = localStorage.getItem('adminToken');
 
     // Función de Logout
     const handleLogout = async () => {
         try {
-            if (token) {
+            if (adminToken) {
                 await axios.post(`${URL}/logout`, {}, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { "Admin-Authorization": `Bearer ${adminToken}` }
                 });
-            }
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
 
-            console.log("STATE: ", isLoggedOut)
+            }
+
+            localStorage.removeItem("adminToken");
+
             setIsLoggedOut(true) // Establecer el estado como logout manual
 
             Swal.fire({
@@ -53,13 +45,13 @@ const ProtectedRouteComp = ({ children }) => {
 
     // Decodificar token de forma segura
     const decodedToken = useMemo(() => {
-        if (!token) return null;
+        if (!adminToken) return null;
         try {
-            return jwtDecode(token);
+            return jwtDecode(adminToken);
         } catch {
             return null;
         }
-    }, [token]);
+    }, [adminToken]);
 
     useEffect(() => {
         if (!decodedToken) {
@@ -107,17 +99,14 @@ const ProtectedRouteComp = ({ children }) => {
         return <Navigate to="/" />;
     }
 
-
-
-
     return (
         <div>
             {showWarning && (
-                <div style={{ backgroundColor: "yellow", padding: "10px", marginBottom: "20px" }}>
+                <div style={{ backgroundColor: "skyblue", padding: "10px", marginBottom: "20px" }}>
                     <div className='row'>
                         <div className='col-md-10'>
                             <p className="fw-bold mt-2">
-                                ¡Atención! <strong>{user || "Usuario"}</strong>, su sesión expira en{" "}
+                                ¡Atención! <strong>{'ADMINISTRADOR'}</strong>, su sesión expira en{" "}
                                 <strong>{timeLeft}</strong>
                             </p>
                         </div>
@@ -144,4 +133,4 @@ const ProtectedRouteComp = ({ children }) => {
     );
 };
 
-export default ProtectedRouteComp;
+export default ProtectedRouteAdminComponent

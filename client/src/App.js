@@ -10,7 +10,7 @@ import FooterComp from './LandingPage/FooterComp.js';
 import PDFViewer from './LandingPage/PDFViewer.js';
 
 // ITEM COMPONENTS
-import GeneralSearchComp from './ItemComponents/GeneralSearchComp.js'; // Ajusta la ruta según tu estructura
+import GeneralSearchComp from './ItemComponents/GeneralSearchComp.js';
 import ShowItemsComp from './ItemComponents/ShowItemsComp.js';
 import CodePropertyComp from './ItemComponents/CodePropertyComp.js';
 import WorkerSearchComp from './ItemComponents/WorkerSearchComp.js';
@@ -18,8 +18,8 @@ import DependencySearchComp from './ItemComponents/DependencySearchComp.js';
 import DoubleSearchComp from './ItemComponents/DoubleSearchComp.js';
 
 // GRID DATA COMPONENTS
-// import GridImportedComp from './GridComponents/Grid Test.js';
-import UploadExcel from './GridComponents/GridImportedComp.js';
+import GridImportedComp from './GridComponents/Grid Test.js';
+// import UploadExcel from './GridComponents/GridImportedComp.js';
 // import GridImportedComp from './GridComponents/GridImportedComp.js';
 
 //NAVIGATION COMPONENTS
@@ -38,8 +38,9 @@ import SurfComp from './private/SurfComp.js';
 
 //USER
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
-import ProtectedRouteComp from './UserComponents/V1ProtectedRouteComp.js';
-// import ProtectedRouteComp from './UserComponents/ProtectedRouteComp.js';
+import ProtectedRouteUsersComp from './UserComponents/V1ProtectedRouteUsersComp.js';
+// import ProtectedRouteUsersComp from './UserComponents/ProtectedRouteUsersComp.js';
+import ProtectedRouteAdminComponent from './UserComponents/ProtectedRouteAdminComponent.js';
 import DashboardAdmin from './UserComponents/DashboardAdmin.js';
 
 function App() {
@@ -77,48 +78,56 @@ function App() {
 
             {/* ----- Routes and navigation protected ---- */}
             <Route path="/codigo-patrimonial" element={
-              <ProtectedRouteComp>
+              <ProtectedRouteUsersComp>
                 <CodePropertyComp />
-              </ProtectedRouteComp>
+              </ProtectedRouteUsersComp>
             }
             />
 
             <Route path="/trabajador" element={
-              <ProtectedRouteComp>
+              <ProtectedRouteUsersComp>
                 <WorkerSearchComp />
-              </ProtectedRouteComp>
+              </ProtectedRouteUsersComp>
             }
             />
 
             <Route path="/dependencia" element={
-              <ProtectedRouteComp>
+              <ProtectedRouteUsersComp>
                 <DependencySearchComp />
-              </ProtectedRouteComp>
+              </ProtectedRouteUsersComp>
             }
             />
 
             {/* ------ Handler Components Protected as well ----- */}
             <Route path="/edit/:id" element={
-              <ProtectedRouteComp>
+              <ProtectedRouteUsersComp>
                 <EditItemComp />
-              </ProtectedRouteComp>
+              </ProtectedRouteUsersComp>
             }
             />
 
             <Route path="/add" element={
-              <ProtectedRouteComp>
+              <ProtectedRouteUsersComp>
                 <AddItemComp />
-              </ProtectedRouteComp>
+              </ProtectedRouteUsersComp>
             }
             />
 
-            {/* IMPORT DATA ROUTE */}
-            <Route path="/import-excel" element={<UploadExcel />} />
-            {/* <Route path="/import-excel" element={<GridImportedComp />} /> */}
-            
+            {/* IMPORT DATA ROUTES */}
+            {/* <Route path="/import-excel" element={<UploadExcel />} /> */}
+            <Route path="/import-excel" element={<GridImportedComp />} />
+
             {/* USER PIN ACTIONS */}
             <Route path="/user-register" element={<RegisterWithPin />} />
-            <Route path="/dashboard-managment" element={<DashboardAdmin />} />
+            {/* <Route path="/dashboard-managment" element={<DashboardAdmin />} /> */}
+
+            {/* ----- USER PIN DASHBOARD PROTECTED ROUTE ----- */}
+            <Route path="/dashboard-managment" element={
+              <ProtectedRouteAdminComponent>
+                <DashboardAdmin />
+              </ProtectedRouteAdminComponent>
+            }
+            />
 
           </Routes>
         </main>
