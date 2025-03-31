@@ -38,8 +38,7 @@ import SurfComp from './private/SurfComp.js';
 
 //USER
 import RegisterWithPin from './UserComponents/RegisterWithPin.js';
-import ProtectedRouteUsersComp from './UserComponents/V1ProtectedRouteUsersComp.js';
-// import ProtectedRouteUsersComp from './UserComponents/ProtectedRouteUsersComp.js';
+import ProtectedRouteUsersComp from './UserComponents/ProtectedRouteUsersComp.js';
 import ProtectedRouteAdminComponent from './UserComponents/ProtectedRouteAdminComponent.js';
 import DashboardAdmin from './UserComponents/DashboardAdmin.js';
 

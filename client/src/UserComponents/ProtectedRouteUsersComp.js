@@ -1,29 +1,26 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom'; // Usamos Navigate para redirigir
-import { jwtDecode } from 'jwt-decode'; // Asegúrate de usar 'jwt-decode'
+import React, { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const URL = process.env.REACT_APP_API_URL_USER;
 
-const ProtectedRouteUsersComp = ({ children }) => {
+const ProtectedRouteComp = ({ children }) => {
     const [timeLeft, setTimeLeft] = useState(null);
     const [showWarning, setShowWarning] = useState(false);
-    const [expired, setExpired] = useState(false);
-    const [isLoggedOut, setIsLoggedOut] = useState(false);
-
+    const [sessionStatus, setSessionStatus] = useState('active'); // 'active', 'expired', 'logged-out'
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    const user = token ? JSON.parse(localStorage.getItem('user')) : null;
 
-    let user;
-    try {
-        user = token ? JSON.parse(localStorage.getItem('user')) : null; // Validar el token ? - Convertir el string de vuelta a un objeto 
-    }
-    catch {
-        user = null;
-    }
+    // Clear session data
+    const clearSession = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+    };
 
-    // Función de Logout
+    // Logout function
     const handleLogout = async () => {
         try {
             if (token) {
@@ -31,11 +28,8 @@ const ProtectedRouteUsersComp = ({ children }) => {
                     headers: { Authorization: `Bearer ${token}` },
                 });
             }
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-
-            console.log("STATE: ", isLoggedOut)
-            setIsLoggedOut(true) // Establecer el estado como logout manual
+            clearSession();
+            setSessionStatus('logged-out');
 
             Swal.fire({
                 icon: "success",
@@ -44,66 +38,86 @@ const ProtectedRouteUsersComp = ({ children }) => {
                 showConfirmButton: true,
                 confirmButtonText: "Ok",
                 timer: 1500,
-            }).then(() => navigate("/")); // Navega a la página de inicio de sesión
+            }).then(() => {
+                navigate("/");
+            });
         } catch (error) {
-            console.error("Error al cerrar sesión: ", error);
-            alert("Hubo un problema al cerrar sesión: ", error);
+            console.error("Error al cerrar sesión:", error);
+            Swal.fire("Error", "Hubo un problema al cerrar sesión.", "error");
         }
     };
 
-    // Decodificar token de forma segura
-    const decodedToken = useMemo(() => {
-        if (!token) return null;
+    // Check authentication status
+    const isAuthenticated = () => {
+        if (!token || !user) {
+            setSessionStatus('expired');
+            return false;
+        }
+
         try {
-            return jwtDecode(token);
-        } catch {
-            return null;
-        }
-    }, [token]);
-
-    useEffect(() => {
-        if (!decodedToken) {
-            setExpired(true);
-            return;
-        }
-
-        const checkAuth = () => {
-            const expirationTime = decodedToken.exp * 1000;
+            const decoded = jwtDecode(token);
+            const expirationTime = decoded.exp * 1000;
             const currentTime = Date.now();
             const remainingTime = expirationTime - currentTime;
 
             if (remainingTime <= 0) {
-                setExpired(true);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Sesión expirada',
-                    text: 'Necesitas iniciar sesión.',
-                    timer: 4000,
-                    timerProgressBar: true,
-                }).then(() => navigate('/'));
-                return;
+                setSessionStatus('expired');
+                clearSession();
+                return false;
             }
 
-            if (remainingTime < 11400000) { // 5 minutos
+            // Show warning if less than 5 minutes remaining
+            if (remainingTime < 11400000) {
                 setShowWarning(true);
-
-                // Calcular horas, minutos y segundos
-                const hours = Math.floor(remainingTime / 3600000); // Calcular horas
-                const minutes = Math.floor((remainingTime % 3600000) / 60000); // Calcular minutos
-                const seconds = Math.floor((remainingTime % 60000) / 1000); // Calcular segundos
-
-                // Establecer el tiempo restante en formato HH:mm:ss
+                const hours = Math.floor(remainingTime / 3600000);
+                const minutes = Math.floor((remainingTime % 3600000) / 60000);
+                const seconds = Math.floor((remainingTime % 60000) / 1000);
                 setTimeLeft(`${hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`);
             } else {
                 setShowWarning(false);
             }
-        };
 
-        const interval = setInterval(checkAuth, 1000);
-        return () => clearInterval(interval);
-    }, [decodedToken, navigate]);
+            return true;
+        } catch (error) {
+            console.log('Token inválido', error);
+            setSessionStatus('expired');
+            clearSession();
+            return false;
+        }
+    };
 
-    if (expired || !decodedToken) {
+    // Handle session status changes
+    useEffect(() => {
+        if (sessionStatus === 'expired') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sesión expirada',
+                text: 'Necesitas iniciar sesión para obtener un token de acceso.',
+                timer: 4000,
+                timerProgressBar: true,
+            }).then(() => navigate('/'));
+        }
+    }, [sessionStatus]);
+
+    // Check token periodically
+    useEffect(() => {
+        if (sessionStatus !== 'logged-out') {
+            const interval = setInterval(() => {
+                isAuthenticated();
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [sessionStatus]);
+
+    // Immediate token validation check
+    useEffect(() => {
+        if (!token || !user) {
+            setSessionStatus('expired');
+        }
+    }, []);
+
+    // Redirect if not active session
+    if (sessionStatus !== 'active') {
         return <Navigate to="/" />;
     }
 
@@ -114,8 +128,8 @@ const ProtectedRouteUsersComp = ({ children }) => {
                     <div className='row'>
                         <div className='col-md-10'>
                             <p className="fw-bold mt-2">
-                                ¡Atención! <strong>{user || "Usuario"}</strong>, su sesión expira en{" "}
-                                <strong>{timeLeft}</strong>
+                                ¡Atención! <strong>{user}</strong>, su sesión expira en{" "}
+                                <strong>{timeLeft}</strong> segundos.
                             </p>
                         </div>
                         <div className='col-md-2'>
@@ -124,8 +138,7 @@ const ProtectedRouteUsersComp = ({ children }) => {
                                 style={{
                                     backgroundColor: "red",
                                     color: "white",
-                                    borderRadius: "7px",
-                                    border: "none",
+                                    border: "3px",
                                     padding: "5px 10px",
                                     cursor: "pointer",
                                 }}
@@ -141,4 +154,4 @@ const ProtectedRouteUsersComp = ({ children }) => {
     );
 };
 
-export default ProtectedRouteUsersComp;
+export default ProtectedRouteComp;
