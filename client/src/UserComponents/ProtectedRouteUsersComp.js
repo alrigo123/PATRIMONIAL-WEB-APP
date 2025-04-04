@@ -128,7 +128,7 @@ const ProtectedRouteComp = ({ children }) => {
                     <div className='row'>
                         <div className='col-md-10'>
                             <p className="fw-bold mt-2">
-                                ¡Atención! <strong>{user}</strong>, su sesión expira en{" "}
+                                ¡Atención! <strong className='fw-bold'>{user}</strong>, su sesión expira en{" "}
                                 <strong>{timeLeft}</strong> segundos.
                             </p>
                         </div>
