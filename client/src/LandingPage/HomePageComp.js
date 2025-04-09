@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginModalComp from "../UserComponents/LoginModalComp"; // Asegúrate de importar el modal
 import { jwtDecode } from "jwt-decode"; // Importa jwt-decode para verificar el token
 import '../styles/Home.css'
+
 const HomePageComp = () => {
 
     const [menuOpen, setMenuOpen] = useState(false); // Estado del menú
